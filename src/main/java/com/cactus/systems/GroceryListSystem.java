@@ -1,4 +1,4 @@
-package com.cactus;
+package com.cactus.systems;
 
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
