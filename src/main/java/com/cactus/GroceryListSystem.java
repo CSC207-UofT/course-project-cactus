@@ -12,7 +12,6 @@ public class GroceryListSystem {
     private GroceryListManager groceryListManager;
     private User currentUser;
     private GroceryList currentGroceryList;
-    private HashMap<Integer, String> groceryListNames;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
@@ -20,7 +19,6 @@ public class GroceryListSystem {
     public GroceryListSystem(){
         groceryListManager = new GroceryListManager();
         userManager = new UserManager();
-        groceryListNames = new HashMap<Integer, String>();
     }
 
     /***
@@ -92,7 +90,6 @@ public class GroceryListSystem {
 
         if (!Objects.isNull(newGroceryList)){
             this.currentGroceryList = newGroceryList;
-            this.groceryListNames.put(newGroceryList.getId(), newGroceryList.getName());
             return true;
         }
         else{
@@ -116,14 +113,19 @@ public class GroceryListSystem {
 
 
     /***
-     * Return a mapping of all the groceryLists from their ID to their names
+     * Return a mapping of all the groceryLists from their name to their ID
      * so that UI can print the names and tell the controller which ID was picked
      *
-     * @return groceryListNames
+     * @return groceryListNameMap
      */
-    public HashMap<Integer, String> getGroceryListNames(){
+    public HashMap<String, Integer> getGroceryListNames(){
+        HashMap<String, Integer> groceryListNameMap = new HashMap<String, Integer>();
 
-        return this.groceryListNames;
+        for(GroceryList groceryList : this.groceryListManager.getGroceryLists()){
+            groceryListNameMap.put(groceryList.getName(), groceryList.getId());
+        }
+
+        return groceryListNameMap;
     }
 
 }
