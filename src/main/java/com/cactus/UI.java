@@ -1,3 +1,6 @@
+/*
+ * UI Class
+ */
 package com.cactus;
 import java.util.Objects;
 import java.util.Scanner;
@@ -13,7 +16,7 @@ public class UI {
      * Get user input from a list of options
      * @return  return int for user input
      */
-    public int getInput() {
+    private int getInput() {
         System.out.println(Constants.INPUT_LINE);
         for (int i = 0; i < Constants.OPTIONS.length; i++) {
             System.out.println(i + ". " + Constants.OPTIONS[i]);
@@ -27,7 +30,7 @@ public class UI {
      * @param max the maximum int that the user can input
      * @return the console input
      */
-    public int getIntInput(int min, int max) {
+    private int getIntInput(int min, int max) {
         Scanner scanner = new Scanner(System.in);
         int input;
         do {
@@ -41,7 +44,7 @@ public class UI {
      * Get string console input from user
      * @return the string console input
      */
-    public String getStringInput(String message) {
+    private String getStringInput(String message) {
         Scanner scanner = new Scanner(System.in);
         String input = new String("");
         do {
@@ -55,10 +58,21 @@ public class UI {
      * Create new user
      * @return  if user was created
      */
-    public boolean createUser() {
-        String name = this.getStringInput(Constants.GET_USERNAME);
+    private boolean createUser() {
+        String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-//        return this.groceryListSystem.newUser(name, password);
+        String name = this.getStringInput(Constants.GET_NAME);
+//        return this.groceryListSystem.newUser(name, username, password);
+        return true; // placeholder
+    }
+
+    /**
+     * Delete given user
+     */
+    private boolean deleteUser() {
+        String username = this.getStringInput(Constants.GET_USERNAME);
+        String password = this.getStringInput(Constants.GET_PASSWORD);
+//        return this.groceryListSystem.deleteUser(username, password);
         return true; // placeholder
     }
 
@@ -66,10 +80,10 @@ public class UI {
      * Log in user
      * @return  if user logged in
      */
-    public boolean login() {
-        String name = this.getStringInput(Constants.GET_USERNAME);
+    private boolean login() {
+        String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-//        return this.groceryListSystem.login(name, password);
+//        return this.groceryListSystem.login(username, password);
         return true; // placeholder
     }
 
@@ -77,7 +91,7 @@ public class UI {
      * Create new grocery list
      * @return  if grocery list was added
      */
-    public boolean createGroceryList() {
+    private boolean createGroceryList() {
         String name = this.getStringInput(Constants.GET_NAME);
 //        return this.groceryListSystem.newGroceryList(name);
         return true; // placeholder
@@ -87,18 +101,25 @@ public class UI {
      * Add item to grocery list
      * @return  if the item was added to a category
      */
-    public boolean addItem() {
-        String category = this.getStringInput(Constants.GET_CATEGORY);
+    private boolean addItem() {
         String item = this.getStringInput(Constants.GET_NAME);
 //        return this.groceryListSystem.newItem(category, item);
         return true; // placeholder
     }
 
     /**
+     * Display all grocery lists
+     */
+    private void displayGroceryLists() {
+        // TODO: display grocery lists by calling method
+    }
+
+    /**
      * Display all grocery items for this user
      */
-    public void displayGroceryItems() {
+    private void displayGroceryItems() {
         System.out.println("Grocery List: ");
+        // Call method from GroceryListSystem which returns a HashMap
 //        String[] items = this.groceryListSystem.getGroceryListNames().values();
 //        for (String item: items) {
 //            System.out.println("| | " + item);
@@ -107,10 +128,26 @@ public class UI {
     }
 
     /**
+     * Display recommendations
+     */
+    private void displayRecommendations() {
+        // TODO: display recommendations by calling method
+    }
+
+    /**
+     * Display header with current user and grocery list information
+     */
+    private void displayHeader() {
+        System.out.println("Current User: "); // TODO: get name of user from GroceryListSystem
+        System.out.println("Current grocery list: "); // TODO: get curr list from GroceryListSystem
+    }
+
+    /**
      * Run UI
      */
     public void run() {
         while(true) {
+            this.displayHeader();
             int optionInput = this.getInput();
             if (optionInput == 0) { // new user
                 boolean done = this.createUser();
@@ -142,18 +179,17 @@ public class UI {
                 }
             } else if (optionInput == 4) { // display grocery items
                 this.displayGroceryItems();
-            } else if (optionInput == 5) { // exit program
+            } else if (optionInput == 5) { // delete user
+                boolean done = this.deleteUser();
+                if (done) {
+                    System.out.println("This user was deleted.");
+                } else {
+                    System.out.println("Sorry, the user was not able to be deleted.");
+                }
+            } else if (optionInput == 6) { // exit program
                 return;
             }
         }
     }
 
-    /**
-     * Main method
-     * @param args
-     */
-    public static void main(String[] args) {
-        UI ui = new UI();
-        ui.run();
-    }
 }
