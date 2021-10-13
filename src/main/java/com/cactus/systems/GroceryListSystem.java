@@ -1,9 +1,11 @@
 package com.cactus.systems;
 
+import com.cactus.managers.UserManager;
 import com.cactus.data.EntityRepository;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 import com.cactus.entities.User;
+import com.cactus.managers.GroceryListManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +102,7 @@ public class GroceryListSystem {
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name){
-        GroceryList newGroceryList = this.groceryListManager.createList(name);
+        GroceryList newGroceryList = this.groceryListManager.createGroceryList(name);
 
         if (!Objects.isNull(newGroceryList)){
             this.currentGroceryList = newGroceryList;
@@ -120,13 +122,12 @@ public class GroceryListSystem {
      * @return true if a new grocery list item was created, false otherwise
      */
     public boolean newItem(String category, String name){
-        GroceryItem newGroceryItem = this.groceryListManager.createItem(name, this.currentGroceryList.getId());
+        GroceryItem newGroceryItem = this.groceryListManager.addItemToGroceryList(name, this.currentGroceryList.getId());
         if(!Objects.isNull(newGroceryItem)){
             return this.repository.saveGroceryItem(newGroceryItem);
         } else {
             return false;
         }
-        ;
     }
 
 
@@ -153,9 +154,9 @@ public class GroceryListSystem {
      * @return groceryItemNames
      * */
     public ArrayList<String> getGroceryItemNames(){
-        ArrayList<String> groceryItemNames = new ArrayList<Stirng>();
+        ArrayList<String> groceryItemNames = new ArrayList<String>();
 
-        for(GroceryItem groceryItem : this.repository.getGroceryItemsByList(this.currentGroceryList.getId())){
+        for(GroceryItem groceryItem : this.repository.getGroceryItemsByList(this.currentGroceryList)){
             groceryItemNames.add(groceryItem.getName());
         }
 

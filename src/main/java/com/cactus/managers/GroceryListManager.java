@@ -5,7 +5,7 @@ import com.cactus.entities.GroceryList;
 
 public class GroceryListManager {
 
-    GroceryListManager() {}
+    public GroceryListManager() {}
 
     public GroceryList createGroceryList(String name) {
         return new GroceryList(name);

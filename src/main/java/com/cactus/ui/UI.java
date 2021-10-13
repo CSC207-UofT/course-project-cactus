@@ -1,7 +1,9 @@
 /*
  * UI Class
  */
-package com.cactus;
+package com.cactus.ui;
+import com.cactus.ui.Constants;
+
 import java.util.Objects;
 import java.util.Scanner;
 

@@ -1,5 +1,8 @@
-package com.cactus;
+package com.cactus.managers;
 
+import com.cactus.entities.User;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -30,7 +33,7 @@ public class UserManager {
 
     public User authenticate(String username, String password) {
         for (User user : this.usersList) {
-            if (user.username.equals(username) & user.password.equals(password)) {
+            if (user.getUsername().equals(username) & user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -52,11 +55,11 @@ public class UserManager {
 
     public User addUser(String name, String username, String password) {
         for (User user:this.usersList){
-            if (user.username.equals(username)){
+            if (user.getUsername().equals(username)){
                 return null;
             }
         }
-        newUser = new User(name, username, password);
+        User newUser = new User(name, username, password);
         this.usersList.add(newUser);
         return newUser;
 
