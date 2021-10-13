@@ -1,6 +1,12 @@
-## Replace this README.md!
+# Cactus
+Grocery management application that currently provides the following functionalities:
+- Create an account
+- Create a grocery list
 
-This is a standard README.md file for you to replace. You'll want to include your own content here!
+## System Requirements
+Java (1.7 or later)
 
-MD (Markdown) files use [Markdown formatting](https://guides.github.com/features/mastering-markdown/): 
-these look very much like .txt files, so you can write them in a very similar way.
+## Using the program
+
+### Running the program
+Run the ```GroceryApp``` class.
