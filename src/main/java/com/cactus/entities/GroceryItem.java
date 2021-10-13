@@ -1,18 +1,20 @@
 /*
  * This file defines a GroceryItem class.
  */
-package com.cactus;
+package com.cactus.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroceryItem {
+public class GroceryItem implements Entity {
 
     private String name;
     private ArrayList<Integer> userIdList;
     private ArrayList<Integer> groceryIdList;
     private Map<Integer, Integer> userMentions;
+
+    private long id;
 
 
     /**
@@ -45,17 +47,18 @@ public class GroceryItem {
         return userMentions;
     }
 
+    public long getId() {
+        return this.id;
+    }
 
-
+    public void setId(long id) {}
 
     public void setName(String name) {
         this.name = name;
     }
 
-
     public void addUserId(int userId) {
         userIdList.add(userId);
-
     }
 
 }

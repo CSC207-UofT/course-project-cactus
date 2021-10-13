@@ -1,15 +1,15 @@
 /*
  * This file defines a User class.
  */
-package com.cactus;
+package com.cactus.entities;
 
-public class User {
+public class User implements Entity {
 
     private String username;
     private String password;
     private String name;
-    private int id;
 
+    private long id;
 
     /**
      * Creates a new User with the given name, username, passward and id number.
@@ -22,7 +22,7 @@ public class User {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.id = (int) Math.floor(Math.random()*(99999999-10000000+1)+10000000);
+        this.id = 0L;
     }
 
     public String getName(){
@@ -34,23 +34,25 @@ public class User {
     public String getPassword(){
         return password;
     }
-    public int getId(){
-        return id;
+
+    public long getId() {
+        return this.id;
     }
 
+//    public void setUsername(String username){
+//        this.username = username;
+//    }
 
-    public void setUsername(String username){
-        this.username = username;
-    }
     public void setName(String name){
         this.name = name;
     }
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         this.password = password;
     }
-    public void setId(int id){
+
+    public void setId(long id) {
         this.id = id;
     }
-
 
 }

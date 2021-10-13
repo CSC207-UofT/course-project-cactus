@@ -1,15 +1,15 @@
 /*
  * This file defines a GroceryList class.
  */
-package com.cactus;
+package com.cactus.entities;
 
 import java.util.ArrayList;
 
-public class GroceryList {
+public class GroceryList implements Entity {
 
     private String name;
-    private int id;
-    private ArrayList<Integer> userIdList;
+    private long id;
+    private ArrayList<Long> userIdList;
 
 
     /**
@@ -19,17 +19,19 @@ public class GroceryList {
      */
     public GroceryList(String name){
         this.name = name;
-        this.id = (int) Math.floor(Math.random()*(99999999-10000000+1)+10000000);
-        this.userIdList = new ArrayList<Integer>();
+        this.id = 0L;
+        this.userIdList = new ArrayList<Long>();
     }
 
     public String getName(){
         return name;
     }
-    public ArrayList<Integer> getUserIdList(){
+
+    public ArrayList<Long> getUserIdList(){
         return userIdList;
     }
-    public int getId(){
+
+    public long getId(){
         return id;
     }
 
@@ -38,11 +40,11 @@ public class GroceryList {
         this.name = name;
     }
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
 
-    public void addUserId(int userId){
+    public void addUserId(long userId){
         userIdList.add(userId);
     }
 }
