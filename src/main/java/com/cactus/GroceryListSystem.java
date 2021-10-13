@@ -1,5 +1,9 @@
 package com.cactus;
 
+import com.cactus.entities.GroceryItem;
+import com.cactus.entities.GroceryList;
+import com.cactus.entities.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -109,8 +113,8 @@ public class GroceryListSystem {
      * @return true if a new grocery list item was created, false otherwise
      */
     public boolean newItem(String category, String name){
-        GroceryListItem newGroceryListItem = this.groceryListManager.createItem(category, name);
-        return !Objects.isNull(newGroceryListItem);
+        GroceryItem newGroceryItem = this.groceryListManager.createItem(category, name);
+        return !Objects.isNull(newGroceryItem);
     }
 
 
@@ -134,16 +138,16 @@ public class GroceryListSystem {
      * Return the list of grocery list item names for the current grocery list
      * so that UI can display them to the user.
      *
-     * @return groceryListItemNames
+     * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryListItemNames(){
-        ArrayList<String> groceryListItemNames = new ArrayList<Stirng>();
+    public ArrayList<String> getGroceryItemNames(){
+        ArrayList<String> groceryItemNames = new ArrayList<Stirng>();
 
-        for(GroceryListItem groceryListItem : this.groceryListManager.getGroceryItem(this.currentGroceryList.id)){
-            groceryListItemNames.add(groceryListItem.getName());
+        for(GroceryItem groceryItem : this.groceryListManager.getGroceryItem(this.currentGroceryList.id)){
+            groceryItemNames.add(groceryItem.getName());
         }
 
-        return groceryListItemNames;
+        return groceryItemNames;
     }
 
 }
