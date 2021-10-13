@@ -2,6 +2,7 @@ package com.cactus;
 
 import java.util.Objects;
 
+
 /***
  * Represents UserManager class which adds, removes and authenticate users.
  */
@@ -57,6 +58,7 @@ public class UserManager {
         }
         newUser = new User(name, username, password);
         this.usersList.add(newUser);
+        // EntityRepository.saveUser(newUser);
         return newUser;
 
     }
