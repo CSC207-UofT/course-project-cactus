@@ -83,7 +83,7 @@ public class EntityRepository {
             ArrayList<GroceryItem> returnList = new ArrayList<>();
 
             for (GroceryItem gItem : groceryItems.values()) {
-                if (gItem.getGroceryListId() == gItem.getId()) {
+                if (gItem.getGroceryListId() == gList.getId()) {
                     returnList.add(gItem);
                 }
             }
@@ -145,7 +145,7 @@ public class EntityRepository {
         long generatedId;
         do {
             generatedId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE) + 1;
-        } while (!map.containsKey(generatedId));
+        } while (map.containsKey(generatedId));
 
         return generatedId;
     }

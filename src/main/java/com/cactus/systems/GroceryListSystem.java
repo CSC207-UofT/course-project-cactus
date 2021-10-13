@@ -102,7 +102,7 @@ public class GroceryListSystem {
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name){
-        GroceryList newGroceryList = this.groceryListManager.createGroceryList(name);
+        GroceryList newGroceryList = this.groceryListManager.createGroceryList(name, this.currentUser.getId());
 
         if (!Objects.isNull(newGroceryList)){
             this.currentGroceryList = newGroceryList;
@@ -121,7 +121,7 @@ public class GroceryListSystem {
      * @param name
      * @return true if a new grocery list item was created, false otherwise
      */
-    public boolean newItem(String category, String name){
+    public boolean newItem(String name){
         GroceryItem newGroceryItem = this.groceryListManager.addItemToGroceryList(name, this.currentGroceryList.getId());
         if(!Objects.isNull(newGroceryItem)){
             return this.repository.saveGroceryItem(newGroceryItem);
