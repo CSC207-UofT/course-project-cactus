@@ -1,4 +1,4 @@
-package com.cactus;
+package com.cactus.ui;
 
 public class Constants {
     public static final String INPUT_LINE = "Please specify your action: ";

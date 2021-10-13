@@ -1,15 +1,19 @@
 /*
  * UI Class
  */
-package com.cactus;
+package com.cactus.ui;
+import com.cactus.systems.GroceryListSystem;
+import com.cactus.ui.Constants;
+
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class UI {
-//    private GroceryListSystem groceryListSystem;
+    private GroceryListSystem groceryListSystem;
 
     public UI(){
-//        this.groceryListSystem = new GroceryListSystem();
+        this.groceryListSystem = new GroceryListSystem();
     }
 
     /**
@@ -62,8 +66,8 @@ public class UI {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
         String name = this.getStringInput(Constants.GET_NAME);
-//        return this.groceryListSystem.newUser(name, username, password);
-        return true; // placeholder
+
+        return this.groceryListSystem.createUser(name, username, password);
     }
 
     /**
@@ -93,8 +97,8 @@ public class UI {
      */
     private boolean createGroceryList() {
         String name = this.getStringInput(Constants.GET_NAME);
-//        return this.groceryListSystem.newGroceryList(name);
-        return true; // placeholder
+
+        return this.groceryListSystem.newGroceryList(name);
     }
 
     /**
@@ -103,8 +107,8 @@ public class UI {
      */
     private boolean addItem() {
         String item = this.getStringInput(Constants.GET_NAME);
-//        return this.groceryListSystem.newItem(category, item);
-        return true; // placeholder
+
+        return this.groceryListSystem.newItem(item);
     }
 
     /**
@@ -120,11 +124,10 @@ public class UI {
     private void displayGroceryItems() {
         System.out.println("Grocery List: ");
         // Call method from GroceryListSystem which returns a HashMap
-//        String[] items = this.groceryListSystem.getGroceryListNames().values();
-//        for (String item: items) {
-//            System.out.println("| | " + item);
-//        }
-        System.out.println("Placeholder"); // placeholder
+        ArrayList<String> items = this.groceryListSystem.getGroceryItemNames();
+        for (String item: items) {
+            System.out.println("| | " + item);
+        }
     }
 
     /**
