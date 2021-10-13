@@ -11,7 +11,7 @@ public class GroceryItem implements Entity {
 
     private String name;
     private ArrayList<Integer> userIdList;
-    private ArrayList<Integer> groceryIdList;
+    private long groceryListId;
     private Map<Integer, Integer> userMentions;
 
     private long id;
@@ -23,12 +23,13 @@ public class GroceryItem implements Entity {
      *
      * @param name A String containing the User's name.
      */
-    public GroceryItem(String name) {
+    public GroceryItem(String name, long groceryListId) {
         this.name = name;
         this.userIdList = new ArrayList<Integer>();
-        this.groceryIdList = new ArrayList<Integer>();
+        this.groceryListId = groceryListId;
         this.userMentions = new HashMap<Integer, Integer>();
 
+        this.id = 0L;
     }
 
     public String getName() {
@@ -39,8 +40,8 @@ public class GroceryItem implements Entity {
         return userIdList;
     }
 
-    public ArrayList<Integer> getGroceryIdList() {
-        return groceryIdList;
+    public long getGroceryListId() {
+        return groceryListId;
     }
 
     public Map<Integer, Integer> getUserMentions() {
@@ -51,7 +52,9 @@ public class GroceryItem implements Entity {
         return this.id;
     }
 
-    public void setId(long id) {}
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;

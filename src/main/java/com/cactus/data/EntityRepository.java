@@ -94,7 +94,6 @@ public class EntityRepository {
         return null;
     }
 
-
     /**
      * Given a new user with an empty id of 0, generate a random id and
      * add to the database. This operation automatically fails if given
