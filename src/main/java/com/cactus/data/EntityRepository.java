@@ -47,9 +47,9 @@ public class EntityRepository {
      * Retrieve a collection of grocery lists that a user has access to.
      * If the user does not exist, this method returns null.
      *
-     * @param user a User in the database
-     * @return all grocery lists belonging to a specified user or null if
-     *         the user does not exist
+     * @param user a User in the database to get the grocery lists of
+     * @return a collection of grocery lists belonging to a specified user,
+     *         or null if the user does not exist
      */
     public Collection<GroceryList> getGroceryListByUser(User user) {
         if (users.containsKey(user.getId())) {
@@ -68,8 +68,30 @@ public class EntityRepository {
         return null;
     }
 
-    public Collection<GroceryItem> getAllGroceryItems() {
-        return groceryItems.values();
+    /**
+     * Retrieve a collection of grocery items belonging to the specified
+     * grocery list. If the given list does not exist, this method returns
+     * null.
+     *
+     * @param gList a grocery list to get the items of
+     * @return a collection of grocery items belonging to a specified user,
+     *         or null if the user does not exist
+     */
+    public Collection<GroceryItem> getGroceryItemsByList(GroceryList gList) {
+        if (groceryLists.containsKey(gList.getId())) {
+
+            ArrayList<GroceryItem> returnList = new ArrayList<>();
+
+            for (GroceryItem gItem : groceryItems.values()) {
+                if (gItem.getGroceryListId() == gItem.getId()) {
+                    returnList.add(gItem);
+                }
+            }
+
+            return returnList;
+        }
+
+        return null;
     }
 
 
@@ -104,6 +126,19 @@ public class EntityRepository {
         }
 
         groceryLists.put(gList.getId(), gList);
+        return true;
+    }
+
+    public boolean saveGroceryItem(GroceryItem gItem) {
+        if (gItem.getId() == 0) {
+            long generatedId = generateId(groceryLists);
+
+            gItem.setId(generatedId);
+        } else {
+            return false;
+        }
+
+        groceryItems.put(gItem.getId(), gItem);
         return true;
     }
 
