@@ -58,7 +58,6 @@ public class UserManager {
         }
         newUser = new User(name, username, password);
         this.usersList.add(newUser);
-        // EntityRepository.saveUser(newUser);
         return newUser;
 
     }
