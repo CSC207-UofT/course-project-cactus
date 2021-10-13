@@ -1,5 +1,6 @@
 package com.cactus.systems;
 
+import com.cactus.data.EntityRepository;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 import com.cactus.entities.User;
@@ -13,6 +14,7 @@ import java.util.Objects;
  */
 public class GroceryListSystem {
 
+    private EntityRepository repository;
     private UserManager userManager;
     private GroceryListManager groceryListManager;
     private User currentUser;
@@ -22,6 +24,7 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     public GroceryListSystem(){
+        repository = new EntityRepository();
         groceryListManager = new GroceryListManager();
         userManager = new UserManager();
     }
@@ -41,9 +44,8 @@ public class GroceryListSystem {
 
         if (!Objects.isNull(newUser)){
             currentUser = newUser;
-            return true;
-        }
-        else{
+            return this.repository.saveUser(newUser);
+        } else{
             return false;
         }
     }
@@ -77,8 +79,7 @@ public class GroceryListSystem {
         if (!Objects.isNull(newUser)){
             this.currentUser = newUser;
             return true;
-        }
-        else{
+        } else{
             return false;
         }
     }
@@ -103,9 +104,8 @@ public class GroceryListSystem {
 
         if (!Objects.isNull(newGroceryList)){
             this.currentGroceryList = newGroceryList;
-            return true;
-        }
-        else{
+            return this.repository.saveGroceryList(newGroceryList);
+        } else {
             return false;
         }
     }
@@ -120,8 +120,13 @@ public class GroceryListSystem {
      * @return true if a new grocery list item was created, false otherwise
      */
     public boolean newItem(String category, String name){
-        GroceryItem newGroceryItem = this.groceryListManager.createItem(category, name);
-        return !Objects.isNull(newGroceryItem);
+        GroceryItem newGroceryItem = this.groceryListManager.createItem(name, this.currentGroceryList.getId());
+        if(!Objects.isNull(newGroceryItem)){
+            return this.repository.saveGroceryItem(newGroceryItem);
+        } else {
+            return false;
+        }
+        ;
     }
 
 
@@ -131,10 +136,10 @@ public class GroceryListSystem {
      *
      * @return groceryListNameMap
      */
-    public HashMap<String, Integer> getGroceryListNames(){
-        HashMap<String, Integer> groceryListNameMap = new HashMap<String, Integer>();
+    public HashMap<String, Long> getGroceryListNames(){
+        HashMap<String, Long> groceryListNameMap = new HashMap<String, Long>();
 
-        for(GroceryList groceryList : this.groceryListManager.getGroceryLists(this.currentUser.id)){
+        for(GroceryList groceryList : this.repository.getGroceryListByUser(this.currentUser)){
             groceryListNameMap.put(groceryList.getName(), groceryList.getId());
         }
 
@@ -150,7 +155,7 @@ public class GroceryListSystem {
     public ArrayList<String> getGroceryItemNames(){
         ArrayList<String> groceryItemNames = new ArrayList<Stirng>();
 
-        for(GroceryItem groceryItem : this.groceryListManager.getGroceryItem(this.currentGroceryList.id)){
+        for(GroceryItem groceryItem : this.repository.getGroceryItemsByList(this.currentGroceryList.getId())){
             groceryItemNames.add(groceryItem.getName());
         }
 
