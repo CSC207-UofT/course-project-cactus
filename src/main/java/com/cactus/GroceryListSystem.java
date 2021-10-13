@@ -84,6 +84,13 @@ public class GroceryListSystem {
     }
 
     /***
+     * Logout the user by removing the current user
+     */
+    public void logout(){
+        this.currentUser = null;
+    }
+
+    /***
      * Given a name from UI, creates a new GroceryList.
      * It will return false when the .createList() function returns a null
      * telling us that the name was already taken
