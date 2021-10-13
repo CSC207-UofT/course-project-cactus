@@ -1,5 +1,6 @@
 package com.cactus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class GroceryListSystem {
      * telling us that the name was already taken or password was not of the correct form.
      *
      * @param name
+     * @param username
      * @param password
      * @return true if a newUser was created
      */
@@ -57,16 +59,16 @@ public class GroceryListSystem {
     }
 
     /***
-     * Given a name and a password, logs in a user and stores the user as current.
+     * Given a username and a password, logs in a user and stores the user as current.
      * It will return false when the .authenticate() function returns null
-     * telling us that the name and password were not a correct login pair.
+     * telling us that the username and password were not a correct login pair.
      *
-     * @param name
+     * @param username
      * @param password
      * @return true if login was successful, false otherwise
      */
-    public boolean login(String name, String password){
-        User newUser = this.userManager.authenticate(name, password);
+    public boolean login(String username, String password){
+        User newUser = this.userManager.authenticate(username, password);
 
         if (!Objects.isNull(newUser)){
             this.currentUser = newUser;
@@ -121,11 +123,27 @@ public class GroceryListSystem {
     public HashMap<String, Integer> getGroceryListNames(){
         HashMap<String, Integer> groceryListNameMap = new HashMap<String, Integer>();
 
-        for(GroceryList groceryList : this.groceryListManager.getGroceryLists()){
+        for(GroceryList groceryList : this.groceryListManager.getGroceryLists(this.currentUser.id)){
             groceryListNameMap.put(groceryList.getName(), groceryList.getId());
         }
 
         return groceryListNameMap;
+    }
+
+    /***
+     * Return the list of grocery list item names for the current grocery list
+     * so that UI can display them to the user.
+     *
+     * @return groceryListItemNames
+     * */
+    public ArrayList<String> getGroceryListItemNames(){
+        ArrayList<String> groceryListItemNames = new ArrayList<Stirng>();
+
+        for(GroceryListItem groceryListItem : this.groceryListManager.getGroceryItem(this.currentGroceryList.id)){
+            groceryListItemNames.add(groceryListItem.getName());
+        }
+
+        return groceryListItemNames;
     }
 
 }
