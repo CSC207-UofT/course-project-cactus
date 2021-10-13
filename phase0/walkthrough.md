@@ -1,5 +1,7 @@
 ## Scenario Walk-through
-####Having a new user create a grocery list:
+
+#### Having a new user create a grocery list:
+
 First, the user will be greeted by the console asking them to create an account with their choice of username, name, and password. 
 The user enters the required info, and the UI class will ask the GroceryListSystem class to create a user. 
 The GroceryListSystem class communicates with the UserManager to create the new user, and the GroceryListSystem stores this in the EntityRepository. 
