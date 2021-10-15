@@ -28,7 +28,7 @@ Following clean architecture allowed us to clearly separate our work, both in te
 
 ### Task Division
 
-##### Caleb (delete header when done)
+Caleb worked on GroceryListSystem (Receiving I/O, processing it by calling use cases, storing data, and passing data back to UI), and is planning to work further on controllers and the logic of the application in general.
 
 Charles worked on EntityRepository (data storage/access), and he is planning to work further on data storage/access, and the backend of our application in general.
 
