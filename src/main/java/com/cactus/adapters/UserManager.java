@@ -1,4 +1,4 @@
-package com.cactus.managers;
+package com.cactus.adapters;
 
 import com.cactus.entities.User;
 

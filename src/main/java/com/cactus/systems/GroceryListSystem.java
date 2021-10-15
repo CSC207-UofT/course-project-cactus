@@ -1,11 +1,11 @@
 package com.cactus.systems;
 
-import com.cactus.managers.UserManager;
+import com.cactus.adapters.UserManager;
 import com.cactus.data.EntityRepository;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 import com.cactus.entities.User;
-import com.cactus.managers.GroceryListManager;
+import com.cactus.adapters.GroceryListManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
