@@ -36,7 +36,5 @@ Charles worked on EntityRepository (data storage/access), and he is planning to 
 
 Grace worked on the UI class and wrote up the specification and progress report. She is planning to work further on a GUI and better navigation between pages.
 
-##### Ronit (delete header when done)
-
-Working on: Entities
-Planning to work on:
+Ronit worked on creating the Entities, (GroceryItem, GroceryList, User). He is planning on working on a recommendation
+system that suggests recurring items for the user to add to their list.
