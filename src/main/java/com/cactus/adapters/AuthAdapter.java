@@ -7,9 +7,11 @@ public interface AuthAdapter {
      * provided username and password.
      *
      * If the login was successful, the Response will have code 200 (OK), and a
-     * payload with the following keys:
-     * - userid
-     * - name
+     * payload with the following entries:
+     * - userid: a string representation of the user' ID (long)
+     * - name: a string representation of the user's name (string)
+     *
+     * The type in parentheses denotes the value's original type.
      *
      * If the login was unsuccessful, the Response will have code 400 (BAD_REQUEST)
      * and a null payload.
@@ -28,8 +30,10 @@ public interface AuthAdapter {
      *
      * If the user was created successfully, the Response will have code 200 (OK),
      * and a payload with the following keys:
-     * - userid
-     * - name
+     * - userid: a string representation of the user' ID (long)
+     * - name: a string representation of the user's name (string)
+     *
+     * The type in parentheses denotes the value's original type.
      *
      * If the user creation was unsuccessful (i.e. username already exists), the
      * Response will have code 400 (BAD_REQUEST) and a null payload.
