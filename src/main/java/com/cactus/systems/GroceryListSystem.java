@@ -26,9 +26,9 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     public GroceryListSystem(){
-        repository = new EntityRepository();
-        groceryListManager = new GroceryListManager();
-        userManager = new UserManager();
+        this.repository = new EntityRepository();
+        this.groceryListManager = new GroceryListManager();
+        this.userManager = new UserManager();
     }
 
     /***
@@ -42,10 +42,10 @@ public class GroceryListSystem {
      * @return true if a newUser was created
      */
     public boolean createUser(String name, String username, String password){
-        User newUser = userManager.addUser(name, username, password);
+        User newUser = this.userManager.addUser(name, username, password);
 
         if (!Objects.isNull(newUser)){
-            currentUser = newUser;
+            this.currentUser = newUser;
             return this.repository.saveUser(newUser);
         } else{
             return false;
@@ -117,7 +117,6 @@ public class GroceryListSystem {
      * It will return false when the .createItem() function returns a null
      * telling us that the name was already taken
      *
-     * @param category
      * @param name
      * @return true if a new grocery list item was created, false otherwise
      */
