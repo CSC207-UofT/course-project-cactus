@@ -6,6 +6,7 @@ import com.cactus.adapters.Response.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /***
  * Represents the system that controls grocery lists and grocery items
@@ -93,6 +94,41 @@ public class GroceryListSystem {
             return false;
         }
     }
+
+    /***
+     * Add grocery items to the current grocery list
+     *
+     * @param items  list of grocery items
+     * @param userid id for the current user
+     * @return true if items were added, false otherwise
+     */
+    public boolean addGroceryItems(List<String> items, long userid){
+        Response setGroceryItemResponse =
+                this.groceryListManager.setGroceryItems(items, this.currentGroceryListId, userid);
+
+        return setGroceryItemResponse.getStatusCode() == Status.OK;
+    }
+
+
+
+    /***
+     * Delete the current list
+     *
+     * @param userid
+     * @return true if the list was successfully deleted and false if list DNE
+     */
+    public boolean deleteGroceryList(long userid){
+        long toBeDeletedListId = this.currentGroceryListId;
+
+        if(exitGroceryList()){
+            Response deleteListResponse = this.groceryListManager.deleteGroceryList(toBeDeletedListId, userid);
+
+            return deleteListResponse.getStatusCode() == Status.OK;
+        }
+
+        return false;
+    }
+
 
 }
 
