@@ -15,6 +15,7 @@ public class Constants {
     public static final int QUIT = 8;
     public static final int CHOOSE_LIST = 9;
     public static final int EXIT_LIST = 10;
+    public static final int DELETE_LIST = 11;
 
     public static final String GET_NAME = "Please enter a name: ";
     public static final String GET_USERNAME = "Please enter a username: ";
@@ -32,11 +33,12 @@ public class Constants {
             entry(DELETE_USER, "Delete user"),
             entry(LOGOUT, "Log out"),
             entry(QUIT, "Exit"),
-            entry(EXIT_LIST, "Exist current list"));
+            entry(EXIT_LIST, "Exit current list"),
+            entry(DELETE_LIST, "Delete current list"));
 
     public static final int[] LOGIN_OPTIONS = {NEW_USER, LOGIN, QUIT};
     public static final int[] LISTS_OPTIONS = {NEW_LIST, CHOOSE_LIST, LISTS, LOGOUT, QUIT};
-    public static final int[] ITEMS_OPTIONS = {NEW_ITEM, ITEMS, EXIT_LIST, LOGOUT, QUIT};
+    public static final int[] ITEMS_OPTIONS = {NEW_ITEM, ITEMS, EXIT_LIST, DELETE_LIST, LOGOUT, QUIT};
 
     public static final int LOGIN_STATE = 0;
     public static final int GROCERY_LISTS_STATE = 1;

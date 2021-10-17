@@ -8,7 +8,13 @@ Our grocery management application allows users to create grocery lists either m
 
 ##### CRC model
 
-Our CRC model has three entity classes (User, GroceryItem, GroceryList), two use cases (UserManager, GroceryListManager), one controller (GroceryListSystem), and one UI (UI) as the command line interface. As the name suggests, the User, GroceryItem, GroceryList class stores all user, grocery item, and grocery list information respectively, which includes a name and an ID. The Manager classes interact with the database to add and remove users and grocery lists/items. The controller directs the manager classes, and the UI directs the controller by getting the user input and displaying any outputs.
+Our CRC model has three entity classes (User, GroceryItem, GroceryList), two use cases (ClassAuthAdapter, ClassGroceryAdapter), two controllers(GroceryListSystem, UserSystem), and one UI (UI) as the command line interface. As the name suggests, the User, GroceryItem, GroceryList class stores all user, grocery item, and grocery list information respectively, which includes fields such as a name and an ID.
+
+All entity classes implement an Entity interface, which specifies that each class must have some way of getting and setting and ID.
+
+The two use case classes, ClassAuthAdapter and ClassGroceryAdapter, each implement an interface, AuthAdapter and GroceryAdapter respectively. This allows for dependency inversion, wherein the controllers need not depend on concrete classes, and instead depends on interfaces which guarantee certain behaviour. We chose this design to allow for easy modification of backend implementations in the future.
+
+The controller directs the manager classes, and the UI directs the controller by getting user input and displaying any outputs.
 
 ##### Scenario walk-through
 
@@ -24,15 +30,15 @@ Where would we store data, especially when we need to create an ID that maps to 
 
 ### Design Strengths
 
-Following clean architecture allowed us to clearly separate our work, both in terms of dividing tasks and code functionalities. For example, by having our UI class only interact with the controller class (GroceryListSystem), we make our code easier to understand on a high level when reading through the UI class.
+Following CLEAN architecture principles allowed us to clearly separate our work, both in terms of dividing tasks and code functionalities. Having interfaces defined allowed for code that depended on that interface to be done concurrently with the development of concrete classes. Furthermore, following the SOLID design principles will allow our code to be easily extended and/or modified in the future. For example, our project is designed with the intent that the actual implementation of controller classes can be modified without any penalties to the UI code.
 
 ### Task Division
 
 Caleb worked on GroceryListSystem (Receiving I/O, processing it by calling use cases, storing data, and passing data back to UI), and is planning to work further on controllers and the logic of the application in general.
 
-Charles worked on EntityRepository (data storage/access), and he is planning to work further on data storage/access, and the backend of our application in general.
+Charles worked on the EntityRepository class (data storage/access), and he is planning to work further on data storage/access, and the backend of our application in general.
 
-##### Dorsa (delete header when done)
+Dorsa worked on ClassAuthAdapter (usecase), and she is planning to work further on usecases.
 
 Grace worked on the UI class and wrote up the specification and progress report. She is planning to work further on a GUI and better navigation between pages.
 

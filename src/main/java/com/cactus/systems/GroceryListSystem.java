@@ -1,153 +1,65 @@
 package com.cactus.systems;
 
-import com.cactus.adapters.UserManager;
-import com.cactus.data.EntityRepository;
-import com.cactus.entities.GroceryItem;
-import com.cactus.entities.GroceryList;
-import com.cactus.entities.User;
-import com.cactus.adapters.GroceryListManager;
+import com.cactus.adapters.*;
+import com.cactus.adapters.Response;
+import com.cactus.adapters.Response.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.List;
 
 /***
- * Represents the system that controls users, grocery lists, and grocery list items
+ * Represents the system that controls grocery lists and grocery items
  */
 public class GroceryListSystem {
 
-    private EntityRepository repository;
-    private UserManager userManager;
-    private GroceryListManager groceryListManager;
-    private User currentUser;
-    private GroceryList currentGroceryList;
+    private GroceryAdapter groceryListManager;
+    long currentGroceryListId;
+
+    private List<String> currentItems;
 
     /***
-     * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
+     * Create a new GroceryListSystem with groceryList managers
      */
-    public GroceryListSystem(){
-        this.repository = new EntityRepository();
-        this.groceryListManager = new GroceryListManager();
-        this.userManager = new UserManager();
-    }
-
-    /***
-     * Given a name and a password, creates a new user and stores the user as current.
-     * It will return false when the .create() function returns null
-     * telling us that the name was already taken or password was not of the correct form.
-     *
-     * @param name
-     * @param username
-     * @param password
-     * @return true if a newUser was created
-     */
-    public boolean createUser(String name, String username, String password){
-        User newUser = this.userManager.addUser(name, username, password);
-
-        if (!Objects.isNull(newUser)){
-            this.currentUser = newUser;
-            return this.repository.saveUser(newUser);
-        } else{
-            return false;
-        }
-    }
-
-    /***
-     * Deletes a given user with username and password.
-     * It will return false when the .deleteUser() function returns false
-     * telling us that the username and password could not be matched to
-     * an existing user to be deleted.
-     *
-     * @param username
-     * @param password
-     * @return true if user was deleted, false otherwise
-     */
-    public boolean deleteUser(String username, String password){
-        return userManager.deleteUser(username, password);
-    }
-
-    /***
-     * Given a username and a password, logs in a user and stores the user as current.
-     * It will return false when the .authenticate() function returns null
-     * telling us that the username and password were not a correct login pair.
-     *
-     * @param username
-     * @param password
-     * @return true if login was successful, false otherwise
-     */
-    public boolean login(String username, String password){
-        User newUser = this.userManager.authenticate(username, password);
-
-        if (!Objects.isNull(newUser)){
-            this.currentUser = newUser;
-            return true;
-        } else{
-            return false;
-        }
-    }
-
-    /***
-     * Logout the user by removing the current user
-     */
-    public void logout(){
-        this.currentUser = null;
-    }
-
-    /***
-     * Exit from the current list
-     */
-    public void exitList(){
-        this.currentGroceryList = null;
+    public GroceryListSystem(GroceryAdapter groceryListManager){
+        this.groceryListManager = groceryListManager;
     }
 
     /***
      * Given a name from UI, creates a new GroceryList.
-     * It will return false when the .createList() function returns a null
+     * It will return false when .createGroceryList() returns a Response with Status that is not "OK"
      * telling us that the name was already taken
      *
      * @param name
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name){
-        GroceryList newGroceryList = this.groceryListManager.createGroceryList(name, this.currentUser.getId());
+    public boolean newGroceryList(String name, long userid){
+        Response groceryListResponse = this.groceryListManager.createGroceryList(name, userid);
 
-        if (!Objects.isNull(newGroceryList)){
-            this.currentGroceryList = newGroceryList;
-            return this.repository.saveGroceryList(newGroceryList);
-        } else {
-            return false;
+        if (groceryListResponse.getStatusCode() == Status.OK) {
+            this.currentGroceryListId = Long.parseLong(groceryListResponse.getPayload().get("listid"));
+            this.currentItems = new ArrayList<String>();
+            return true;
         }
+
+        return false;
     }
 
     /***
-     * Given a category and item name, creates a new item for the current grocery list.
-     * It will return false when the .createItem() function returns a null
-     * telling us that the name was already taken
-     *
-     * @param name
-     * @return true if a new grocery list item was created, false otherwise
-     */
-    public boolean newItem(String name){
-        GroceryItem newGroceryItem = this.groceryListManager.addItemToGroceryList(name, this.currentGroceryList.getId());
-        if(!Objects.isNull(newGroceryItem)){
-            return this.repository.saveGroceryItem(newGroceryItem);
-        } else {
-            return false;
-        }
-    }
-
-
-    /***
-     * Return a mapping of all the groceryLists from their name to their ID
+     * Return a mapping of all the groceryLists from their ID to their name
      * so that UI can print the names and tell the controller which ID was picked
      *
      * @return groceryListNameMap
      */
-    public HashMap<String, Long> getGroceryListNames(){
-        HashMap<String, Long> groceryListNameMap = new HashMap<String, Long>();
+    public HashMap<Long, String> getGroceryListNames(long userid){
+        HashMap<Long, String> groceryListNameMap = new HashMap<Long, String>();
+        HashMap<String, String> groceryListsPayload =
+                this.groceryListManager.getGroceryListsByUser(userid).getPayload();
 
-        for(GroceryList groceryList : this.repository.getGroceryListByUser(this.currentUser)){
-            groceryListNameMap.put(groceryList.getName(), groceryList.getId());
+        for(int i = 0; i < Integer.parseInt(groceryListsPayload.get("length")); i++){
+            long listId = Long.parseLong(groceryListsPayload.get(String.valueOf(i)));
+            String listName = this.groceryListManager.getGroceryList(listId, userid).getPayload().get("name");
+            groceryListNameMap.put(listId, listName);
         }
 
         return groceryListNameMap;
@@ -159,40 +71,77 @@ public class GroceryListSystem {
      *
      * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryItemNames(){
+    public ArrayList<String> getGroceryItemNames(long userid){
         ArrayList<String> groceryItemNames = new ArrayList<String>();
+        HashMap<String, String> groceryListPayload =
+                this.groceryListManager.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
-        for(GroceryItem groceryItem : this.repository.getGroceryItemsByList(this.currentGroceryList)){
-            groceryItemNames.add(groceryItem.getName());
+        for(int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++){
+            String itemName = groceryListPayload.get(String.valueOf(i));
+            groceryItemNames.add(itemName);
         }
 
         return groceryItemNames;
     }
 
     /***
-     * Return the current user's name so that UI can display it.
+     * Exit the list by setting the list id to -1
      *
-     * @return groceryItemNames
-     * */
-    public String getUserName(){
-        if (this.currentUser != null) {
-            return this.currentUser.getName();
-        } else {
-            return "N/A";
+     * @return true if there existed a valid list id before exiting
+     */
+    public boolean exitGroceryList(){
+        if (this.currentGroceryListId != -1){
+            this.currentGroceryListId = -1;
+            return true;
+        } else{
+            return false;
         }
+    }
+
+    /***
+     * Add grocery items to the current grocery list
+     *
+     * @param item a String representing the item to the add to the grocery list
+     * @param userid id for the current user
+     * @return true if items were added, false otherwise
+     */
+    public boolean addGroceryItem(String item, long userid){
+        this.currentItems.add(item);
+
+        Response setGroceryItemResponse =
+                this.groceryListManager.setGroceryItems(this.currentItems, this.currentGroceryListId, userid);
+
+        return setGroceryItemResponse.getStatusCode() == Status.NO_CONTENT;
+    }
+
+
+    /***
+     * Delete the current list
+     *
+     * @param userid
+     * @return true if the list was successfully deleted and false if list DNE
+     */
+    public boolean deleteGroceryList(long userid) {
+        long toBeDeletedListId = this.currentGroceryListId;
+
+        if (exitGroceryList()) {
+            Response deleteListResponse = this.groceryListManager.deleteGroceryList(toBeDeletedListId, userid);
+
+            return deleteListResponse.getStatusCode() == Status.OK;
+        }
+
+        return false;
     }
 
     /***
      * Return the current list name so that UI can display it.
      *
-     * @return groceryItemNames
+     * @return name of grocery list
      * */
     public String getListName(){
-        if (this.currentGroceryList != null) {
-            return this.currentGroceryList.getName();
-        } else {
-            return "N/A";
-        }
+        // TODO return current grocery list name
+        return "N/A - To be implemented";
     }
 
 }
+

@@ -3,6 +3,7 @@
  */
 package com.cactus.ui;
 import com.cactus.systems.GroceryListSystem;
+import com.cactus.systems.UserSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +12,12 @@ import java.util.Scanner;
 
 public class UI {
     private final GroceryListSystem groceryListSystem;
+    private final UserSystem userSystem;
     private int curr_state;
 
-    public UI(){
-        this.groceryListSystem = new GroceryListSystem();
+    public UI(UserSystem userSystem, GroceryListSystem groceryListSystem){
+        this.groceryListSystem = groceryListSystem;
+        this.userSystem = userSystem;
         this.curr_state = Constants.LOGIN_STATE;
     }
 
@@ -86,7 +89,7 @@ public class UI {
         String password = this.getStringInput(Constants.GET_PASSWORD);
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.createUser(name, username, password);
+        return this.userSystem.createUser(name, username, password);
     }
 
     /**
@@ -95,7 +98,8 @@ public class UI {
     private boolean deleteUser() {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-        return this.groceryListSystem.deleteUser(username, password);
+//        return this.groceryListSystem.deleteUser(username, password);
+        return true; // TODO: functionality does not exist in AuthAdapter
     }
 
     /**
@@ -105,7 +109,7 @@ public class UI {
     private boolean login() {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-        return this.groceryListSystem.login(username, password);
+        return this.userSystem.login(username, password);
     }
 
     /**
@@ -113,7 +117,7 @@ public class UI {
      * @return  if user logged out
      */
     private void logout() {
-        this.groceryListSystem.logout();
+//        this.userSystem.logout(); // TODO: functionality does not exist in AuthAdapter
     }
 
     /**
@@ -123,7 +127,7 @@ public class UI {
     private boolean createGroceryList() {
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.newGroceryList(name);
+        return this.groceryListSystem.newGroceryList(name, this.userSystem.getCurrentUserId());
     }
 
     /**
@@ -133,14 +137,22 @@ public class UI {
     private boolean addItem() {
         String item = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.newItem(item);
+        return this.groceryListSystem.addGroceryItem(item, this.userSystem.getCurrentUserId());
     }
 
     /**
      * Exit current list to list of grocery lists
      */
     private boolean exitList() {
-        this.groceryListSystem.exitList();
+        this.groceryListSystem.exitGroceryList();
+        return true;
+    }
+
+    /**
+     * Exit current list to list of grocery lists
+     */
+    private boolean deleteList() {
+        this.groceryListSystem.deleteGroceryList(this.userSystem.getCurrentUserId());
         return true;
     }
 
@@ -148,11 +160,11 @@ public class UI {
      * Display all grocery lists
      */
     private void displayGroceryLists() {
-        HashMap<String, Long>lists = this.groceryListSystem.getGroceryListNames();
+        HashMap<Long, String> lists = this.groceryListSystem.getGroceryListNames(this.userSystem.getCurrentUserId());
         if (lists.size() == 0) {
             System.out.println("You have no lists!");
         } else {
-            for (String name:lists.keySet()) {
+            for (String name : lists.values()) {
                 System.out.println("--" + name + "--");
             }
         }
@@ -162,12 +174,12 @@ public class UI {
      * Display all grocery items for this user
      */
     private void displayGroceryItems() {
-        ArrayList<String>items = this.groceryListSystem.getGroceryItemNames();
+        ArrayList<String> items = this.groceryListSystem.getGroceryItemNames(this.userSystem.getCurrentUserId());
         if (items.size() == 0) {
             System.out.println("You have no items in this list!");
         } else {
             for (String name:items) {
-                System.out.println("| |" + name);
+                System.out.println("| | " + name);
             }
         }
     }
@@ -176,7 +188,7 @@ public class UI {
      * Display header with current user and grocery list information
      */
     private void displayHeader() {
-        System.out.println("Current User: " + this.groceryListSystem.getUserName());
+        System.out.println("Current User: " + this.userSystem.getUserName());
         System.out.println("Current grocery list: " + this.groceryListSystem.getListName());
     }
 
@@ -229,6 +241,9 @@ public class UI {
             } else if (optionInput == Constants.EXIT_LIST) {
                 done = this.exitList();
                 if (done) {this.curr_state = Constants.GROCERY_LISTS_STATE;}
+            } else if (optionInput == Constants.DELETE_LIST) {
+               done = this.deleteList();
+               if (done) {this.curr_state = Constants.GROCERY_LISTS_STATE;}
             } else if (optionInput == Constants.QUIT) {
                 return;
             }

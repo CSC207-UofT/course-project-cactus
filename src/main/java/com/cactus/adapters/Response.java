@@ -1,6 +1,7 @@
 package com.cactus.adapters;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Response {
 
@@ -41,5 +42,19 @@ public class Response {
 
     public HashMap<String, String> getPayload() {
         return this.payload;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Response response = (Response) o;
+        return code == response.code && Objects.equals(payload, response.payload);
     }
 }
