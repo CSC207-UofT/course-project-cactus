@@ -94,6 +94,13 @@ public class GroceryListSystem {
     }
 
     /***
+     * Exit from the current list
+     */
+    public void exitList(){
+        this.currentGroceryList = null;
+    }
+
+    /***
      * Given a name from UI, creates a new GroceryList.
      * It will return false when the .createList() function returns a null
      * telling us that the name was already taken
@@ -117,7 +124,6 @@ public class GroceryListSystem {
      * It will return false when the .createItem() function returns a null
      * telling us that the name was already taken
      *
-     * @param category
      * @param name
      * @return true if a new grocery list item was created, false otherwise
      */
@@ -161,6 +167,32 @@ public class GroceryListSystem {
         }
 
         return groceryItemNames;
+    }
+
+    /***
+     * Return the current user's name so that UI can display it.
+     *
+     * @return groceryItemNames
+     * */
+    public String getUserName(){
+        if (this.currentUser != null) {
+            return this.currentUser.getName();
+        } else {
+            return "N/A";
+        }
+    }
+
+    /***
+     * Return the current list name so that UI can display it.
+     *
+     * @return groceryItemNames
+     * */
+    public String getListName(){
+        if (this.currentGroceryList != null) {
+            return this.currentGroceryList.getName();
+        } else {
+            return "N/A";
+        }
     }
 
 }
