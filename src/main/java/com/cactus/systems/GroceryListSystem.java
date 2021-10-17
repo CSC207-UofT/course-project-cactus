@@ -30,13 +30,15 @@ public class GroceryListSystem {
      * @param name
      * @return true if a new groceryList was created, false otherwise
      */
-    public Response newGroceryList(String name, long userid){
+    public boolean newGroceryList(String name, long userid){
         Response groceryListResponse = this.groceryListManager.createGroceryList(name, userid);
 
-        if (groceryListResponse.getStatusCode() == Status.OK)
+        if (groceryListResponse.getStatusCode() == Status.OK) {
             this.currentGroceryListId = Long.parseLong(groceryListResponse.getPayload().get("listid"));
+            return true;
+        }
 
-        return groceryListResponse;
+        return false;
     }
 
     /***

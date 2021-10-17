@@ -28,13 +28,15 @@ public class UserSystem {
      * @param password a String containing the password of the new user
      * @return true if a newUser was created
      */
-    public Response createUser(String name, String username, String password){
+    public boolean createUser(String name, String username, String password) {
         Response userResponse = this.userManager.create(name, username, password);
 
-        if (userResponse.getStatusCode() == Status.OK)
+        if (userResponse.getStatusCode() == Status.OK){
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
+            return true;
+        }
 
-        return userResponse;
+        return false;
     }
 
     /***
@@ -46,14 +48,15 @@ public class UserSystem {
      * @param password
      * @return true if login was successful, false otherwise
      */
-    public Response login(String username, String password){
+    public boolean login(String username, String password){
         Response userResponse = this.userManager.login(username, password);
 
         if (userResponse.getStatusCode() == Status.OK){
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
+            return true;
         }
 
-        return userResponse;
+        return false;
     }
 
     /***
