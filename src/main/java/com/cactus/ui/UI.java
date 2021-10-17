@@ -6,10 +6,7 @@ import com.cactus.systems.GroceryListSystem;
 import com.cactus.systems.UserSystem;
 import com.cactus.ui.Constants;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class UI {
     private GroceryListSystem groceryListSystem;
@@ -120,8 +117,8 @@ public class UI {
     private void displayGroceryLists() {
         System.out.println("Grocery Lists: ");
         // Call method from GroceryListSystem which returns a HashMap
-        HashMap<Long, String> lists = this.groceryListSystem.getGroceryListNames(this.userSystem.getCurrentUserId());
-        for (String list: lists.values()) {
+        List<String> lists = this.groceryListSystem.getGroceryListNames(this.userSystem.getCurrentUserId());
+        for (String list: lists) {
             System.out.println("| | " + list);
         }
     }
