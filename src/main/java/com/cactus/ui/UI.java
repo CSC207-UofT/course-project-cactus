@@ -15,6 +15,11 @@ public class UI {
     private final UserSystem userSystem;
     private int curr_state;
 
+    /**
+     * Initialize UI
+     * @param userSystem the user system for running this instance
+     * @param groceryListSystem the grocery list system for running this instance
+     */
     public UI(UserSystem userSystem, GroceryListSystem groceryListSystem){
         this.groceryListSystem = groceryListSystem;
         this.userSystem = userSystem;
@@ -116,8 +121,9 @@ public class UI {
      * Log out user
      * @return  if user logged out
      */
-    private void logout() {
+    private boolean logout() {
 //        this.userSystem.logout(); // TODO: functionality does not exist in AuthAdapter
+        return false;
     }
 
     /**
@@ -235,8 +241,7 @@ public class UI {
                 done = this.deleteUser();
                 if (done) {this.curr_state = Constants.LOGIN_STATE;}
             } else if (optionInput == Constants.LOGOUT) {
-                this.logout();
-                done = true;
+                done = this.logout();
                 this.curr_state = Constants.LOGIN_STATE;
             } else if (optionInput == Constants.EXIT_LIST) {
                 done = this.exitList();

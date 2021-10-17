@@ -21,7 +21,7 @@ public class GroceryListSystem {
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
-    public GroceryListSystem(GroceryAdapter groceryListManager){
+    public GroceryListSystem(GroceryAdapter groceryListManager) {
         this.groceryListManager = groceryListManager;
     }
 
@@ -30,10 +30,10 @@ public class GroceryListSystem {
      * It will return false when .createGroceryList() returns a Response with Status that is not "OK"
      * telling us that the name was already taken
      *
-     * @param name
+     * @param name given name
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, long userid){
+    public boolean newGroceryList(String name, long userid) {
         Response groceryListResponse = this.groceryListManager.createGroceryList(name, userid);
 
         if (groceryListResponse.getStatusCode() == Status.OK) {
@@ -51,12 +51,12 @@ public class GroceryListSystem {
      *
      * @return groceryListNameMap
      */
-    public HashMap<Long, String> getGroceryListNames(long userid){
+    public HashMap<Long, String> getGroceryListNames(long userid) {
         HashMap<Long, String> groceryListNameMap = new HashMap<Long, String>();
         HashMap<String, String> groceryListsPayload =
                 this.groceryListManager.getGroceryListsByUser(userid).getPayload();
 
-        for(int i = 0; i < Integer.parseInt(groceryListsPayload.get("length")); i++){
+        for (int i = 0; i < Integer.parseInt(groceryListsPayload.get("length")); i++) {
             long listId = Long.parseLong(groceryListsPayload.get(String.valueOf(i)));
             String listName = this.groceryListManager.getGroceryList(listId, userid).getPayload().get("name");
             groceryListNameMap.put(listId, listName);
@@ -71,12 +71,12 @@ public class GroceryListSystem {
      *
      * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryItemNames(long userid){
+    public ArrayList<String> getGroceryItemNames(long userid) {
         ArrayList<String> groceryItemNames = new ArrayList<String>();
         HashMap<String, String> groceryListPayload =
                 this.groceryListManager.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
-        for(int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++){
+        for (int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++) {
             String itemName = groceryListPayload.get(String.valueOf(i));
             groceryItemNames.add(itemName);
         }
@@ -89,11 +89,11 @@ public class GroceryListSystem {
      *
      * @return true if there existed a valid list id before exiting
      */
-    public boolean exitGroceryList(){
-        if (this.currentGroceryListId != -1){
+    public boolean exitGroceryList() {
+        if (this.currentGroceryListId != -1) {
             this.currentGroceryListId = -1;
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -105,7 +105,7 @@ public class GroceryListSystem {
      * @param userid id for the current user
      * @return true if items were added, false otherwise
      */
-    public boolean addGroceryItem(String item, long userid){
+    public boolean addGroceryItem(String item, long userid) {
         this.currentItems.add(item);
 
         Response setGroceryItemResponse =
@@ -118,7 +118,7 @@ public class GroceryListSystem {
     /***
      * Delete the current list
      *
-     * @param userid
+     * @param userid given userId
      * @return true if the list was successfully deleted and false if list DNE
      */
     public boolean deleteGroceryList(long userid) {
@@ -138,7 +138,7 @@ public class GroceryListSystem {
      *
      * @return name of grocery list
      * */
-    public String getListName(){
+    public String getListName() {
         // TODO return current grocery list name
         return "N/A - To be implemented";
     }

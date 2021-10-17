@@ -8,14 +8,14 @@ import com.cactus.adapters.Response.Status;
  * Represents the system that controls users
  */
 public class UserSystem {
-    private AuthAdapter userManager;
+    private final AuthAdapter userManager;
 
     long currentUserId;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(AuthAdapter userManager){
+    public UserSystem(AuthAdapter userManager) {
         this.userManager = userManager;
     }
 
@@ -37,7 +37,7 @@ public class UserSystem {
     public boolean createUser(String name, String username, String password) {
         Response userResponse = this.userManager.create(name, username, password);
 
-        if (userResponse.getStatusCode() == Status.OK){
+        if (userResponse.getStatusCode() == Status.OK) {
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
             return true;
         }
@@ -50,14 +50,14 @@ public class UserSystem {
      * It will return false when .authenticate() returns a Response with Status that is not "OK"
      * telling us that the username and password were not a correct login pair.
      *
-     * @param username
-     * @param password
+     * @param username given username
+     * @param password given password
      * @return true if login was successful, false otherwise
      */
-    public boolean login(String username, String password){
+    public boolean login(String username, String password) {
         Response userResponse = this.userManager.login(username, password);
 
-        if (userResponse.getStatusCode() == Status.OK){
+        if (userResponse.getStatusCode() == Status.OK) {
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
             return true;
         }
@@ -71,10 +71,10 @@ public class UserSystem {
      * @return true if there existed a valid user id before exiting
      */
     public boolean logout() {
-        if (this.currentUserId != -1){
+        if (this.currentUserId != -1) {
             this.currentUserId = -1;
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -84,7 +84,7 @@ public class UserSystem {
      *
      * @return name of user
      * */
-    public String getUserName(){
+    public String getUserName() {
         // TODO return current user name
         return "N/A - To be implemented";
     }

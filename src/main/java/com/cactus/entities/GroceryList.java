@@ -5,6 +5,9 @@ package com.cactus.entities;
 
 import java.util.ArrayList;
 
+/**
+ * Grocery List Entity
+ */
 public class GroceryList implements Entity {
 
     private String name;

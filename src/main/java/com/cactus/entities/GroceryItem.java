@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Grocery Item Entity
+ */
 public class GroceryItem implements Entity {
 
     private String name;

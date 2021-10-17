@@ -9,11 +9,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Repository class which stores all data
+ */
+
 public class EntityRepository {
 
-    private HashMap<Long, User> users;
-    private HashMap<Long, GroceryList> groceryLists;
-    private HashMap<Long, GroceryItem> groceryItems;
+    private final HashMap<Long, User> users;
+    private final HashMap<Long, GroceryList> groceryLists;
+    private final HashMap<Long, GroceryItem> groceryItems;
 
     public EntityRepository() {
         users = new HashMap<>();
@@ -49,7 +53,7 @@ public class EntityRepository {
      *
      * @param user a User in the database to get the grocery lists of
      * @return a collection of grocery lists belonging to a specified user,
-     *         or null if the user does not exist
+     * or null if the user does not exist
      */
     public Collection<GroceryList> getGroceryListByUser(User user) {
         if (users.containsKey(user.getId())) {
@@ -75,7 +79,7 @@ public class EntityRepository {
      *
      * @param gList a grocery list to get the items of
      * @return a collection of grocery items belonging to a specified user,
-     *         or null if the user does not exist
+     * or null if the user does not exist
      */
     public Collection<GroceryItem> getGroceryItemsByList(GroceryList gList) {
         if (groceryLists.containsKey(gList.getId())) {
@@ -115,6 +119,12 @@ public class EntityRepository {
         return true;
     }
 
+    /**
+     * Saves given grocery list to repository
+     *
+     * @param gList given grocery list
+     * @return if saved
+     */
     public boolean saveGroceryList(GroceryList gList) {
         if (gList.getId() == 0) {
             long generatedId = generateId(groceryLists);
@@ -128,6 +138,12 @@ public class EntityRepository {
         return true;
     }
 
+    /**
+     * Delete given grocery list from repository
+     *
+     * @param listId given grocery list
+     * @return if deleted
+     */
     public boolean deleteGroceryList(long listId) {
         if (groceryLists.containsKey(listId)) {
             groceryLists.remove(listId);
@@ -137,6 +153,12 @@ public class EntityRepository {
         }
     }
 
+    /**
+     * Save single grocery item
+     *
+     * @param gItem given grocery item
+     * @return if saved
+     */
     public boolean saveGroceryItem(GroceryItem gItem) {
         if (gItem.getId() == 0) {
             long generatedId = generateId(groceryLists);
@@ -150,6 +172,12 @@ public class EntityRepository {
         return true;
     }
 
+    /**
+     * Delete given grocery item
+     *
+     * @param itemId given grocery item
+     * @return if deleted
+     */
     public boolean deleteGroceryItem(long itemId) {
         if (groceryItems.containsKey(itemId)) {
             groceryItems.remove(itemId);
@@ -159,6 +187,12 @@ public class EntityRepository {
         }
     }
 
+    /**
+     * Generate id for given Object
+     *
+     * @param map map of existing ids
+     * @return generatedId the id given to the object
+     */
     private <T> long generateId(HashMap<Long, T> map) {
         long generatedId;
         do {

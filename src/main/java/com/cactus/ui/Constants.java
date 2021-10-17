@@ -1,6 +1,10 @@
+/*
+ * Command Line UI Constants
+ */
 package com.cactus.ui;
 
 import java.util.Map;
+
 import static java.util.Map.entry;
 
 public class Constants {
