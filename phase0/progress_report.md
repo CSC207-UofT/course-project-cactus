@@ -32,7 +32,7 @@ Caleb worked on GroceryListSystem (Receiving I/O, processing it by calling use c
 
 Charles worked on EntityRepository (data storage/access), and he is planning to work further on data storage/access, and the backend of our application in general.
 
-##### Dorsa (delete header when done)
+Dorsa worked on ClassAuthAdapter (usecase), and she is planning to work further on usecases.
 
 Grace worked on the UI class and wrote up the specification and progress report. She is planning to work further on a GUI and better navigation between pages.
 
