@@ -1,14 +1,11 @@
 package com.cactus.systems;
 
 import com.cactus.adapters.*;
-import com.cactus.entities.GroceryItem;
-import com.cactus.entities.GroceryList;
 import com.cactus.adapters.Response;
 import com.cactus.adapters.Response.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 /***
  * Represents the system that controls grocery lists and grocery items

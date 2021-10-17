@@ -4,9 +4,6 @@ import com.cactus.adapters.AuthAdapter;
 import com.cactus.adapters.Response;
 import com.cactus.adapters.Response.Status;
 
-import java.util.HashMap;
-import java.util.Objects;
-
 /***
  * Represents the system that controls users
  */
