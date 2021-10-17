@@ -74,8 +74,7 @@ public class GroceryListSystem {
                 this.groceryListManager.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
         for(int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++){
-            long itemId = Integer.parseInt(groceryListPayload.get(i));
-            String itemName = this.groceryListManager.getItem(itemId).getPayload().get("name");
+            String itemName = groceryListPayload.get(i);
             groceryItemNames.add(itemName);
         }
 
