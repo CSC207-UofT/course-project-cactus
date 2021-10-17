@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +39,7 @@ public class GroceryListSystemTest {
         groceryListSystem.newGroceryList("List 3", userSystem.currentUserId);
         groceryListSystem.newGroceryList("List 4", userSystem.currentUserId);
 
-        ArrayList<String> expected = new ArrayList<String>();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("List 1");
         expected.add("List 2");
         expected.add("List 3");
@@ -57,7 +55,7 @@ public class GroceryListSystemTest {
     public void testGetGroceryItemNames() {
         groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
 
-        List<String> expected = new ArrayList<String>();
+        List<String> expected = new ArrayList<>();
         expected.add("Item 1");
         expected.add("Item 2");
         expected.add("Item 3");

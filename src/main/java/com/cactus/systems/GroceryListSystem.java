@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class GroceryListSystem {
 
-    private GroceryAdapter groceryAdapter;
+    private final GroceryAdapter groceryAdapter;
     long currentGroceryListId;
     HashMap<String, Long> currentListNamesMap;
 
@@ -40,7 +40,7 @@ public class GroceryListSystem {
 
         if (groceryListResponse.getStatusCode() == Status.OK) {
             this.currentGroceryListId = Long.parseLong(groceryListResponse.getPayload().get("listid"));
-            this.currentItems = new ArrayList<String>();
+            this.currentItems = new ArrayList<>();
             return true;
         }
 
@@ -54,8 +54,8 @@ public class GroceryListSystem {
      * @return groceryListNameMap
      */
     public ArrayList<String> getGroceryListNames(long userid){
-        this.currentListNamesMap = new HashMap<String, Long>();
-        ArrayList<String> listNames = new ArrayList<String>();
+        this.currentListNamesMap = new HashMap<>();
+        ArrayList<String> listNames = new ArrayList<>();
         HashMap<String, String> groceryListsPayload =
                 this.groceryAdapter.getGroceryListsByUser(userid).getPayload();
 
@@ -76,7 +76,7 @@ public class GroceryListSystem {
      * @return groceryItemNames
      * */
     public ArrayList<String> getGroceryItemNames(long userid){
-        ArrayList<String> groceryItemNames = new ArrayList<String>();
+        ArrayList<String> groceryItemNames = new ArrayList<>();
         HashMap<String, String> groceryListPayload =
                 this.groceryAdapter.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
@@ -140,7 +140,7 @@ public class GroceryListSystem {
     public boolean deleteGroceryList(long userid){
         long toBeDeletedListId = this.currentGroceryListId;
 
-        if(exitGroceryList(new ArrayList<String>(), userid)){
+        if(exitGroceryList(new ArrayList<>(), userid)){
             Response deleteListResponse = this.groceryAdapter.deleteGroceryList(toBeDeletedListId, userid);
 
             return deleteListResponse.getStatusCode() == Status.OK;

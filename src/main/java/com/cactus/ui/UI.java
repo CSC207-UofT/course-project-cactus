@@ -4,13 +4,12 @@
 package com.cactus.ui;
 import com.cactus.systems.GroceryListSystem;
 import com.cactus.systems.UserSystem;
-import com.cactus.ui.Constants;
 
 import java.util.*;
 
 public class UI {
-    private GroceryListSystem groceryListSystem;
-    private UserSystem userSystem;
+    private final GroceryListSystem groceryListSystem;
+    private final UserSystem userSystem;
 
     public UI(UserSystem userSystem, GroceryListSystem groceryListSystem){
         this.groceryListSystem = groceryListSystem;
@@ -51,7 +50,7 @@ public class UI {
      */
     private String getStringInput(String message) {
         Scanner scanner = new Scanner(System.in);
-        String input = new String("");
+        String input;
         do {
             System.out.println(message);
             input = scanner.nextLine();

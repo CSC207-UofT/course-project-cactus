@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class ClassGroceryAdapter implements GroceryAdapter {
 
-    private EntityRepository repository;
+    private final EntityRepository repository;
 
     public ClassGroceryAdapter(EntityRepository repository) {
         this.repository = repository;
@@ -122,7 +122,7 @@ public class ClassGroceryAdapter implements GroceryAdapter {
 
             if (target != null) {
                 GroceryItem[] existingItems = repository.getGroceryItemsByList(target).toArray(new GroceryItem[0]);
-                ArrayList<String> inputItems = new ArrayList<String>(items);
+                ArrayList<String> inputItems = new ArrayList<>(items);
 
                 for (GroceryItem item : existingItems) {
                     if (!inputItems.contains(item.getName())) {

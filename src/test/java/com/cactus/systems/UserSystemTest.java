@@ -2,16 +2,13 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.adapters.ClassAuthAdapter;
-import com.cactus.adapters.UserManager;
 import com.cactus.data.EntityRepository;
-import com.cactus.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@Disabled // TODO: rewrite using adapters
 class UserSystemTest {
     static UserSystem userSystem;
 

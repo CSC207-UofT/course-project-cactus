@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class ClassAuthAdapter implements AuthAdapter{
 
-    private EntityRepository repository;
+    private final EntityRepository repository;
 
     /***
      * Creates a new ClassAuthAdapter with the given repository.
@@ -29,7 +29,7 @@ public class ClassAuthAdapter implements AuthAdapter{
         Collection<User> users = this.repository.getAllUsers();
         for (User user : users) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                HashMap<String, String> credential = new HashMap<String, String>();
+                HashMap<String, String> credential = new HashMap<>();
                 credential.put("userid", String.valueOf(user.getId()));
                 credential.put("name", user.getName());
                 return new Response(Response.Status.OK, credential);
@@ -48,7 +48,7 @@ public class ClassAuthAdapter implements AuthAdapter{
             }
             User newUser = new User(name, username, password);
             this.repository.saveUser(newUser);
-            HashMap<String, String> credential = new HashMap<String, String>();
+            HashMap<String, String> credential = new HashMap<>();
             credential.put("userid", String.valueOf(newUser.getId()));
             credential.put("name", name);
             return new Response(Response.Status.OK, credential);

@@ -10,9 +10,9 @@ import java.util.Map;
 public class GroceryItem implements Entity {
 
     private String name;
-    private ArrayList<Integer> userIdList;
-    private long groceryListId;
-    private Map<Integer, Integer> userMentions;
+    private final ArrayList<Integer> userIdList;
+    private final long groceryListId;
+    private final Map<Integer, Integer> userMentions;
 
     private long id;
 
@@ -25,9 +25,9 @@ public class GroceryItem implements Entity {
      */
     public GroceryItem(String name, long groceryListId) {
         this.name = name;
-        this.userIdList = new ArrayList<Integer>();
+        this.userIdList = new ArrayList<>();
         this.groceryListId = groceryListId;
-        this.userMentions = new HashMap<Integer, Integer>();
+        this.userMentions = new HashMap<>();
 
         this.id = 0L;
     }

@@ -9,7 +9,7 @@ public class GroceryList implements Entity {
 
     private String name;
     private long id;
-    private ArrayList<Long> userIdList;
+    private final ArrayList<Long> userIdList;
 
 
     /**
@@ -20,7 +20,7 @@ public class GroceryList implements Entity {
     public GroceryList(String name){
         this.name = name;
         this.id = 0L;
-        this.userIdList = new ArrayList<Long>();
+        this.userIdList = new ArrayList<>();
     }
 
     public String getName(){

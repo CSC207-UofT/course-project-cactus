@@ -9,7 +9,7 @@ import com.cactus.adapters.Response.Status;
  */
 public class UserSystem {
 
-    private AuthAdapter authAdapter;
+    private final AuthAdapter authAdapter;
     long currentUserId;
 
     /***

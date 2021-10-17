@@ -22,7 +22,7 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    public Response login(String username, String password);
+    Response login(String username, String password);
 
     /**
      * Returns a Response object with the results of a create user operation done
@@ -45,5 +45,5 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    public Response create(String username, String password, String name);
+    Response create(String username, String password, String name);
 }

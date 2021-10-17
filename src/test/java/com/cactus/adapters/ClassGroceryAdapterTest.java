@@ -53,7 +53,7 @@ class ClassGroceryAdapterTest {
         @Test
         void setGroceryItemsNoUser() {
             Response expected = new Response(Response.Status.BAD_REQUEST);
-            Response actual = cga.setGroceryItems(new ArrayList<String>(Arrays.asList("item1", "item2")), 1234L,
+            Response actual = cga.setGroceryItems(new ArrayList<>(Arrays.asList("item1", "item2")), 1234L,
                     1234L);
 
             assertEquals(expected, actual);
@@ -92,7 +92,7 @@ class ClassGroceryAdapterTest {
         @Test
         void setGroceryItemsNoUser() {
             Response expected = new Response(Response.Status.BAD_REQUEST);
-            Response actual = cga.setGroceryItems(new ArrayList<String>(Arrays.asList("item1", "item2")),
+            Response actual = cga.setGroceryItems(new ArrayList<>(Arrays.asList("item1", "item2")),
                     1234L, userid);
 
             assertEquals(expected, actual);
@@ -180,12 +180,12 @@ class ClassGroceryAdapterTest {
         @Test
         void setGroceryItemValidInput() {
             Response expected = new Response(Response.Status.NO_CONTENT);
-            Response actual = cga.setGroceryItems(new ArrayList<String>(List.of("Milk")), listid, userid);
+            Response actual = cga.setGroceryItems(new ArrayList<>(List.of("Milk")), listid, userid);
 
             User user = er.getUserById(userid);
             GroceryList list = er.getGroceryListByUser(user).toArray(new GroceryList[0])[0];
 
-            Collection<String> expectedItems = new ArrayList<String>(List.of("Milk"));
+            Collection<String> expectedItems = new ArrayList<>(List.of("Milk"));
             Collection<String> actualItems = er.getGroceryItemsByList(list).stream().map(GroceryItem::getName).collect(Collectors.toList());
 
             assertEquals(expected, actual);

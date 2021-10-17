@@ -27,7 +27,7 @@ public class ClassAuthAdapterTest {
 
     @Test
     public void testLoginSuccess(){
-        HashMap<String, String> credentials = new HashMap<String, String>();
+        HashMap<String, String> credentials = new HashMap<>();
         credentials.put("userid", "dorsa21");
         credentials.put("name", "dorsa");
         Response actual = classAuthAdapter.login("dorsa21", "Hello!");
@@ -51,7 +51,7 @@ public class ClassAuthAdapterTest {
 
     @Test
     public void testCreateSuccess(){
-        HashMap<String, String> credentials = new HashMap<String, String>();
+        HashMap<String, String> credentials = new HashMap<>();
         credentials.put("userid", "dorsa80");
         credentials.put("name", "dori");
         Response actual = classAuthAdapter.create("dorsa80", "Hi!", "dori");
@@ -62,7 +62,7 @@ public class ClassAuthAdapterTest {
 
     @Test
     public void testCreateSamePassword(){
-        HashMap<String, String> credentials = new HashMap<String, String>();
+        HashMap<String, String> credentials = new HashMap<>();
         credentials.put("userid", "dorsa80");
         credentials.put("name", "dori");
         Response actual = classAuthAdapter.create("dorsa80", "Hello!", "dori");
@@ -73,7 +73,7 @@ public class ClassAuthAdapterTest {
 
     @Test
     public void testCreateSameName(){
-        HashMap<String, String> credentials = new HashMap<String, String>();
+        HashMap<String, String> credentials = new HashMap<>();
         credentials.put("userid", "dorsa80");
         credentials.put("name", "dorsa");
         Response actual = classAuthAdapter.create("dorsa80", "Hi!", "dorsa");

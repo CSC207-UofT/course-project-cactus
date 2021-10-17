@@ -11,9 +11,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class EntityRepository {
 
-    private HashMap<Long, User> users;
-    private HashMap<Long, GroceryList> groceryLists;
-    private HashMap<Long, GroceryItem> groceryItems;
+    private final HashMap<Long, User> users;
+    private final HashMap<Long, GroceryList> groceryLists;
+    private final HashMap<Long, GroceryItem> groceryItems;
 
     public EntityRepository() {
         users = new HashMap<>();

@@ -15,7 +15,7 @@ public class Response {
         NOT_FOUND (404),
         ERROR (500);
 
-        private int code;
+        private final int code;
 
         Status(int code) {
             this.code = code;

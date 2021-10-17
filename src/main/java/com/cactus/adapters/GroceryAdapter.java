@@ -22,7 +22,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the user ID to fetch lists for
      * @return       a Response to the request to get grocery lists for the user
      */
-    public Response getGroceryListsByUser(long userid);
+    Response getGroceryListsByUser(long userid);
 
     /**
      * Returns a Response object with the results of a grocery list fetch operation
@@ -45,7 +45,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the user the list belongs to
      * @return       a Response to the grocery list get operation
      */
-    public Response getGroceryList(long listid, long userid);
+    Response getGroceryList(long listid, long userid);
 
     /**
      * Returns a Response object with the results of a create grocery list operation
@@ -66,7 +66,7 @@ public interface GroceryAdapter {
      *                     list
      * @return         a Response to the grocery list creation operation
      */
-    public Response createGroceryList(String nameList, long userid);
+    Response createGroceryList(String nameList, long userid);
 
     /**
      * Returns a Response object with the results of a set grocery item operation done
@@ -84,7 +84,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the list's owner
      * @return       a Response to the set grocery item operation
      */
-    public Response setGroceryItems(List<String> items, long listid, long userid);
+    Response setGroceryItems(List<String> items, long listid, long userid);
 
     /**
      * Returns a Response object with the results of a delete grocery list operation done
@@ -100,6 +100,6 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the grocery list's owner
      * @return       a Response to the grocery list deletion operation
      */
-    public Response deleteGroceryList(long listid, long userid);
+    Response deleteGroceryList(long listid, long userid);
 
 }
