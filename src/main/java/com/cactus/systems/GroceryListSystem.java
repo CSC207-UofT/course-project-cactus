@@ -111,9 +111,8 @@ public class GroceryListSystem {
         Response setGroceryItemResponse =
                 this.groceryListManager.setGroceryItems(this.currentItems, this.currentGroceryListId, userid);
 
-        return setGroceryItemResponse.getStatusCode() == Status.OK;
+        return setGroceryItemResponse.getStatusCode() == Status.NO_CONTENT;
     }
-
 
 
     /***
