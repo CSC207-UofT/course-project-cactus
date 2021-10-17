@@ -28,7 +28,7 @@ Following clean architecture allowed us to clearly separate our work, both in te
 
 ### Task Division
 
-##### Caleb (delete header when done)
+Caleb worked on GroceryListSystem (Receiving I/O, processing it by calling use cases, storing data, and passing data back to UI), and is planning to work further on controllers and the logic of the application in general.
 
 Charles worked on EntityRepository (data storage/access), and he is planning to work further on data storage/access, and the backend of our application in general.
 
@@ -36,7 +36,5 @@ Charles worked on EntityRepository (data storage/access), and he is planning to 
 
 Grace worked on the UI class and wrote up the specification and progress report. She is planning to work further on a GUI and better navigation between pages.
 
-##### Ronit (delete header when done)
-
-Working on: Entities
-Planning to work on:
+Ronit worked on creating the Entities, (GroceryItem, GroceryList, User). He is planning on working on a recommendation
+system that suggests recurring items for the user to add to their list.

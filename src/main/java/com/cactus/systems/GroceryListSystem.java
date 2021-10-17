@@ -1,11 +1,11 @@
 package com.cactus.systems;
 
-import com.cactus.managers.UserManager;
+import com.cactus.adapters.UserManager;
 import com.cactus.data.EntityRepository;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 import com.cactus.entities.User;
-import com.cactus.managers.GroceryListManager;
+import com.cactus.adapters.GroceryListManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,9 +26,9 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     public GroceryListSystem(){
-        repository = new EntityRepository();
-        groceryListManager = new GroceryListManager();
-        userManager = new UserManager();
+        this.repository = new EntityRepository();
+        this.groceryListManager = new GroceryListManager();
+        this.userManager = new UserManager();
     }
 
     /***
@@ -42,10 +42,10 @@ public class GroceryListSystem {
      * @return true if a newUser was created
      */
     public boolean createUser(String name, String username, String password){
-        User newUser = userManager.addUser(name, username, password);
+        User newUser = this.userManager.addUser(name, username, password);
 
         if (!Objects.isNull(newUser)){
-            currentUser = newUser;
+            this.currentUser = newUser;
             return this.repository.saveUser(newUser);
         } else{
             return false;
