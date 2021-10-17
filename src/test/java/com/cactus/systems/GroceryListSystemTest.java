@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,27 +38,6 @@ public class GroceryListSystemTest {
     }
 
     @Test
-    public void testNewGroceryListSameName() {
-        groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
-        assertFalse(groceryListSystem.newGroceryList("List 1", userSystem.currentUserId));
-        // TODO: Do not allow same list names
-    }
-
-    @Test
-    public void testNewItemDefault() {
-        groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
-        assertTrue(groceryListSystem.newItem("Item 1"));
-        // TODO: Do not allow same item names
-    }
-
-    @Test
-    public void testNewItemSameName() {
-        groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
-        groceryListSystem.newItem("Item 1");
-        assertFalse(groceryListSystem.newItem("Item 1"));
-    }
-
-    @Test
     public void testGetGroceryListNames() {
         groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
         groceryListSystem.newGroceryList("List 2", userSystem.currentUserId);
@@ -78,15 +58,15 @@ public class GroceryListSystemTest {
     @Test
     public void testGetGroceryItemNames() {
         groceryListSystem.newGroceryList("List 1", userSystem.currentUserId);
-        groceryListSystem.newItem("Item 1");
-        groceryListSystem.newItem("Item 2");
-        groceryListSystem.newItem("Item 3");
-        groceryListSystem.newItem("Item 4");
+        List<String> expected = new ArrayList<String>();
+        expected.add("Item 1");
+        expected.add("Item 2");
+        expected.add("Item 3");
+        expected.add("Item 4");
+        groceryListSystem.addGroceryItems(expected, userSystem.currentUserId);
 
-        String[] expected = {"Item 1", "Item 2", "Item 3", "Item 4"};
-        String[] actual = groceryListSystem.getGroceryItemNames(userSystem.currentUserId).toArray(new String[4]);
-        Arrays.sort(actual);
+        List<String> actual = groceryListSystem.getGroceryItemNames(userSystem.currentUserId);
 
-        assertArrayEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

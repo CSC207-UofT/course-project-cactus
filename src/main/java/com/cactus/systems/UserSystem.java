@@ -8,14 +8,14 @@ import com.cactus.adapters.Response.Status;
  * Represents the system that controls users
  */
 public class UserSystem {
-    private AuthAdapter userManager;
+    private AuthAdapter authAdapter;
     long currentUserId;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(AuthAdapter userManager){
-        this.userManager = userManager;
+    public UserSystem(AuthAdapter authAdapter){
+        this.authAdapter = authAdapter;
     }
 
     /***
@@ -29,7 +29,7 @@ public class UserSystem {
      * @return true if a newUser was created
      */
     public boolean createUser(String name, String username, String password) {
-        Response userResponse = this.userManager.create(name, username, password);
+        Response userResponse = this.authAdapter.create(name, username, password);
 
         if (userResponse.getStatusCode() == Status.OK){
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
@@ -49,7 +49,7 @@ public class UserSystem {
      * @return true if login was successful, false otherwise
      */
     public boolean login(String username, String password){
-        Response userResponse = this.userManager.login(username, password);
+        Response userResponse = this.authAdapter.login(username, password);
 
         if (userResponse.getStatusCode() == Status.OK){
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
