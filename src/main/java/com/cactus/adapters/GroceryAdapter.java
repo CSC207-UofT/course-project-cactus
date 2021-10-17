@@ -17,7 +17,7 @@ public interface GroceryAdapter {
      * The type in parentheses denotes the value's original type.
      *
      * If the request was unsuccessful (i.e. the user does not exist), then the Response
-     * will have code 400 (BAD_REQUEST) and a null payload.
+     * will have code 404 (NOT_FOUND) and a null payload.
      *
      * @param userid a long representing the user ID to fetch lists for
      * @return       a Response to the request to get grocery lists for the user
@@ -57,6 +57,9 @@ public interface GroceryAdapter {
      * - name: a string containing the list's name (string)
      *
      * The type in parentheses denotes the value's original type.
+     *
+     * If the operation was unsuccessful (i.e. the given user ID is invalid), then the
+     * Response will have code 400 (BAD_REQUEST) and a null payload.
      *
      * @param nameList a String containing the name of the new grocery list
      * @param userid   a long representing the ID of the user creating the
