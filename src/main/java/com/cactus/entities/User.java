@@ -3,6 +3,9 @@
  */
 package com.cactus.entities;
 
+/**
+ * User Entity
+ */
 public class User implements Entity {
 
     private final String username;

@@ -3,6 +3,9 @@ package com.cactus.adapters;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * Response class for actions
+ */
 public class Response {
 
     private final Status code;

@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/***
+ * Represents ClassGroceryAdapter which implements GroceryAdapter interface.
+ */
+
 public class ClassGroceryAdapter implements GroceryAdapter {
 
     private final EntityRepository repository;

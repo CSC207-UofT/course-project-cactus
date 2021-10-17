@@ -37,7 +37,7 @@ public class UserSystem {
     public boolean createUser(String name, String username, String password) {
         Response userResponse = this.authAdapter.create(name, username, password);
 
-        if (userResponse.getStatusCode() == Status.OK){
+        if (userResponse.getStatusCode() == Status.OK) {
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
             return true;
         }
@@ -54,10 +54,10 @@ public class UserSystem {
      * @param password the password of the user logging in
      * @return true if login was successful, false otherwise
      */
-    public boolean login(String username, String password){
+    public boolean login(String username, String password) {
         Response userResponse = this.authAdapter.login(username, password);
 
-        if (userResponse.getStatusCode() == Status.OK){
+        if (userResponse.getStatusCode() == Status.OK) {
             this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
             return true;
         }
@@ -71,12 +71,22 @@ public class UserSystem {
      * @return true if there existed a valid user id before exiting
      */
     public boolean logout() {
-        if (this.currentUserId != -1){
+        if (this.currentUserId != -1) {
             this.currentUserId = -1;
             return true;
-        } else{
+        } else {
             return false;
         }
+    }
+
+    /***
+     * Return the current user's name so that UI can display it.
+     *
+     * @return name of user
+     * */
+    public String getUserName() {
+        // TODO return current user name
+        return "N/A - To be implemented";
     }
 
 }
