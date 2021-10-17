@@ -128,6 +128,15 @@ public class EntityRepository {
         return true;
     }
 
+    public boolean deleteGroceryList(long listId) {
+        if (groceryLists.containsKey(listId)) {
+            groceryLists.remove(listId);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean saveGroceryItem(GroceryItem gItem) {
         if (gItem.getId() == 0) {
             long generatedId = generateId(groceryLists);
@@ -139,6 +148,15 @@ public class EntityRepository {
 
         groceryItems.put(gItem.getId(), gItem);
         return true;
+    }
+
+    public boolean deleteGroceryItem(long itemId) {
+        if (groceryItems.containsKey(itemId)) {
+            groceryItems.remove(itemId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private <T> long generateId(HashMap<Long, T> map) {
