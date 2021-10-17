@@ -77,7 +77,7 @@ public class GroceryListSystem {
                 this.groceryListManager.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
         for(int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++){
-            String itemName = groceryListPayload.get(i);
+            String itemName = groceryListPayload.get(String.valueOf(i));
             groceryItemNames.add(itemName);
         }
 
@@ -105,7 +105,7 @@ public class GroceryListSystem {
      * @param userid id for the current user
      * @return true if items were added, false otherwise
      */
-    public boolean addGroceryItems(String item, long userid){
+    public boolean addGroceryItem(String item, long userid){
         this.currentItems.add(item);
 
         Response setGroceryItemResponse =
