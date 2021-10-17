@@ -3,17 +3,21 @@
  */
 package com.cactus.ui;
 import com.cactus.systems.GroceryListSystem;
+import com.cactus.systems.UserSystem;
 import com.cactus.ui.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class UI {
     private GroceryListSystem groceryListSystem;
+    private UserSystem userSystem;
 
-    public UI(){
-        this.groceryListSystem = new GroceryListSystem();
+    public UI(UserSystem userSystem, GroceryListSystem groceryListSystem){
+        this.groceryListSystem = groceryListSystem;
+        this.userSystem = userSystem;
     }
 
     /**
@@ -67,7 +71,7 @@ public class UI {
         String password = this.getStringInput(Constants.GET_PASSWORD);
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.createUser(name, username, password);
+        return this.userSystem.createUser(name, username, password);
     }
 
     /**
@@ -77,7 +81,7 @@ public class UI {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
 //        return this.groceryListSystem.deleteUser(username, password);
-        return true; // placeholder
+        return true; // TODO: functionality does not exist in AuthAdapter
     }
 
     /**
@@ -87,8 +91,7 @@ public class UI {
     private boolean login() {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-//        return this.groceryListSystem.login(username, password);
-        return true; // placeholder
+        return this.userSystem.login(username, password);
     }
 
     /**
@@ -98,7 +101,7 @@ public class UI {
     private boolean createGroceryList() {
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.newGroceryList(name);
+        return this.groceryListSystem.newGroceryList(name, this.userSystem.getCurrentUserId());
     }
 
     /**
@@ -108,23 +111,28 @@ public class UI {
     private boolean addItem() {
         String item = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.newItem(item);
+        return this.groceryListSystem.addGroceryItem(item, this.userSystem.getCurrentUserId());
     }
 
     /**
      * Display all grocery lists
      */
     private void displayGroceryLists() {
-        // TODO: display grocery lists by calling method
+        System.out.println("Grocery Lists: ");
+        // Call method from GroceryListSystem which returns a HashMap
+        HashMap<Long, String> lists = this.groceryListSystem.getGroceryListNames(this.userSystem.getCurrentUserId());
+        for (String list: lists.values()) {
+            System.out.println("| | " + list);
+        }
     }
 
     /**
-     * Display all grocery items for this user
+     * Display all grocery items for the currently selected list
      */
     private void displayGroceryItems() {
         System.out.println("Grocery List: ");
         // Call method from GroceryListSystem which returns a HashMap
-        ArrayList<String> items = this.groceryListSystem.getGroceryItemNames();
+        ArrayList<String> items = this.groceryListSystem.getGroceryItemNames(this.userSystem.getCurrentUserId());
         for (String item: items) {
             System.out.println("| | " + item);
         }
@@ -150,7 +158,7 @@ public class UI {
      */
     public void run() {
         while(true) {
-            this.displayHeader();
+//            this.displayHeader(); // TODO: implement
             int optionInput = this.getInput();
             if (optionInput == 0) { // new user
                 boolean done = this.createUser();

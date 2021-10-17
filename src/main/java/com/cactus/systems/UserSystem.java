@@ -9,6 +9,7 @@ import com.cactus.adapters.Response.Status;
  */
 public class UserSystem {
     private AuthAdapter userManager;
+
     long currentUserId;
 
     /***
@@ -16,6 +17,11 @@ public class UserSystem {
      */
     public UserSystem(AuthAdapter userManager){
         this.userManager = userManager;
+    }
+
+    // TODO: unCLEAN
+    public long getCurrentUserId() {
+        return currentUserId;
     }
 
     /***
