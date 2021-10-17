@@ -24,7 +24,7 @@ public class GroceryListSystem {
 
     /***
      * Given a name from UI, creates a new GroceryList.
-     * It will return false when the .createList() function returns a null
+     * It will return false when .createGroceryList() returns a Response with Status that is not "OK"
      * telling us that the name was already taken
      *
      * @param name
