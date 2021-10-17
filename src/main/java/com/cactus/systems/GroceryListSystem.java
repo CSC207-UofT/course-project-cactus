@@ -15,6 +15,7 @@ public class GroceryListSystem {
 
     private GroceryAdapter groceryListManager;
     long currentGroceryListId;
+    HashMap<String, Long> currentListNamesMap;
 
     private List<String> currentItems;
 
@@ -30,7 +31,8 @@ public class GroceryListSystem {
      * It will return false when .createGroceryList() returns a Response with Status that is not "OK"
      * telling us that the name was already taken
      *
-     * @param name
+     * @param name the name of the list to be created
+     * @param userid id of the user that is creating the list
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name, long userid){
@@ -51,18 +53,20 @@ public class GroceryListSystem {
      *
      * @return groceryListNameMap
      */
-    public HashMap<Long, String> getGroceryListNames(long userid){
-        HashMap<Long, String> groceryListNameMap = new HashMap<Long, String>();
+    public ArrayList<String> getGroceryListNames(long userid){
+        this.currentListNamesMap = new HashMap<String, Long>();
+        ArrayList<String> listNames = new ArrayList<String>();
         HashMap<String, String> groceryListsPayload =
                 this.groceryListManager.getGroceryListsByUser(userid).getPayload();
 
         for(int i = 0; i < Integer.parseInt(groceryListsPayload.get("length")); i++){
             long listId = Integer.parseInt(groceryListsPayload.get(i));
             String listName = this.groceryListManager.getGroceryList(listId, userid).getPayload().get("name");
-            groceryListNameMap.put(listId, listName);
+            this.currentListNamesMap.put(listName, listId);
+            listNames.add(listName);
         }
 
-        return groceryListNameMap;
+        return listNames;
     }
 
     /***
@@ -119,7 +123,7 @@ public class GroceryListSystem {
     /***
      * Delete the current list
      *
-     * @param userid
+     * @param userid the id of the user that the to be deleted list belongs to
      * @return true if the list was successfully deleted and false if list DNE
      */
     public boolean deleteGroceryList(long userid){

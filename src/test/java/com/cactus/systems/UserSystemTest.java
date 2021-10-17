@@ -1,7 +1,9 @@
 package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
+import com.cactus.adapters.ClassAuthAdapter;
 import com.cactus.adapters.UserManager;
+import com.cactus.data.EntityRepository;
 import com.cactus.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +15,9 @@ class UserSystemTest {
 
     @BeforeEach
     public void setUp() {
-        AuthAdapter userManager = new UserManager();
-        userSystem = new UserSystem(userManager);
+        EntityRepository repository = new EntityRepository();
+        AuthAdapter authAdapter = new ClassAuthAdapter(repository);
+        userSystem = new UserSystem(authAdapter);
     }
 
     @Test
@@ -29,7 +32,7 @@ class UserSystemTest {
 
     @Test
     public void testCreateUserSameUsername() {
-        this.userSystem.createUser("Caleb", "calebxcaleb", "password");
+        userSystem.createUser("Caleb", "calebxcaleb", "password");
         assertFalse(userSystem.createUser("Sadler", "calebxcaleb", "123"));
     }
 
