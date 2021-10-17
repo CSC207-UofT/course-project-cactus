@@ -158,7 +158,7 @@ public class UI {
      */
     public void run() {
         while(true) {
-            this.displayHeader();
+//            this.displayHeader(); // TODO: implement
             int optionInput = this.getInput();
             if (optionInput == 0) { // new user
                 boolean done = this.createUser();
