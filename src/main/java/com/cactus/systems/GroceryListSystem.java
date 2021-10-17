@@ -16,6 +16,8 @@ public class GroceryListSystem {
     private GroceryAdapter groceryListManager;
     long currentGroceryListId;
 
+    private List<String> currentItems;
+
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
@@ -36,6 +38,7 @@ public class GroceryListSystem {
 
         if (groceryListResponse.getStatusCode() == Status.OK) {
             this.currentGroceryListId = Long.parseLong(groceryListResponse.getPayload().get("listid"));
+            this.currentItems = new ArrayList<String>();
             return true;
         }
 
@@ -98,13 +101,15 @@ public class GroceryListSystem {
     /***
      * Add grocery items to the current grocery list
      *
-     * @param items  list of grocery items
+     * @param item a String representing the item to the add to the grocery list
      * @param userid id for the current user
      * @return true if items were added, false otherwise
      */
-    public boolean addGroceryItems(List<String> items, long userid){
+    public boolean addGroceryItems(String item, long userid){
+        this.currentItems.add(item);
+
         Response setGroceryItemResponse =
-                this.groceryListManager.setGroceryItems(items, this.currentGroceryListId, userid);
+                this.groceryListManager.setGroceryItems(this.currentItems, this.currentGroceryListId, userid);
 
         return setGroceryItemResponse.getStatusCode() == Status.OK;
     }
