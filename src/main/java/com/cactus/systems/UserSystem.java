@@ -44,8 +44,8 @@ public class UserSystem {
      * It will return false when .authenticate() returns a Response with Status that is not "OK"
      * telling us that the username and password were not a correct login pair.
      *
-     * @param username
-     * @param password
+     * @param username the username of the user logging in
+     * @param password the password of the user logging in
      * @return true if login was successful, false otherwise
      */
     public boolean login(String username, String password){

@@ -17,8 +17,6 @@ public class GroceryListSystem {
     long currentGroceryListId;
     HashMap<String, Long> currentListNamesMap;
 
-    private List<String> currentItems;
-
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
@@ -40,7 +38,6 @@ public class GroceryListSystem {
 
         if (groceryListResponse.getStatusCode() == Status.OK) {
             this.currentGroceryListId = Long.parseLong(groceryListResponse.getPayload().get("listid"));
-            this.currentItems = new ArrayList<String>();
             return true;
         }
 
@@ -60,7 +57,7 @@ public class GroceryListSystem {
                 this.groceryListManager.getGroceryListsByUser(userid).getPayload();
 
         for(int i = 0; i < Integer.parseInt(groceryListsPayload.get("length")); i++){
-            long listId = Integer.parseInt(groceryListsPayload.get(i));
+            long listId = Integer.parseInt(groceryListsPayload.get(Integer.toString(i)));
             String listName = this.groceryListManager.getGroceryList(listId, userid).getPayload().get("name");
             this.currentListNamesMap.put(listName, listId);
             listNames.add(listName);
@@ -81,7 +78,7 @@ public class GroceryListSystem {
                 this.groceryListManager.getGroceryList(this.currentGroceryListId, userid).getPayload();
 
         for(int i = 0; i < Integer.parseInt(groceryListPayload.get("length")); i++){
-            String itemName = groceryListPayload.get(i);
+            String itemName = groceryListPayload.get(Integer.toString(i));
             groceryItemNames.add(itemName);
         }
 
@@ -91,10 +88,15 @@ public class GroceryListSystem {
     /***
      * Exit the list by setting the list id to -1
      *
+     * @param items list of strings representing the items to be added to the grocery list
+     * @param userid the id of the user that is using the current list
      * @return true if there existed a valid list id before exiting
      */
-    public boolean exitGroceryList(){
+    public boolean exitGroceryList(List<String> items, long userid){
         if (this.currentGroceryListId != -1){
+            if(!this.addGroceryItems(items, userid)){
+                return false;
+            }
             this.currentGroceryListId = -1;
             return true;
         } else{
@@ -105,15 +107,13 @@ public class GroceryListSystem {
     /***
      * Add grocery items to the current grocery list
      *
-     * @param item a String representing the item to the add to the grocery list
+     * @param items a List of strings representing the items to the added to the grocery list
      * @param userid id for the current user
      * @return true if items were added, false otherwise
      */
-    public boolean addGroceryItems(String item, long userid){
-        this.currentItems.add(item);
-
+    public boolean addGroceryItems(List<String> items, long userid){
         Response setGroceryItemResponse =
-                this.groceryListManager.setGroceryItems(this.currentItems, this.currentGroceryListId, userid);
+                this.groceryListManager.setGroceryItems(items, this.currentGroceryListId, userid);
 
         return setGroceryItemResponse.getStatusCode() == Status.OK;
     }
@@ -129,7 +129,7 @@ public class GroceryListSystem {
     public boolean deleteGroceryList(long userid){
         long toBeDeletedListId = this.currentGroceryListId;
 
-        if(exitGroceryList()){
+        if(exitGroceryList(new ArrayList<String>(), userid)){
             Response deleteListResponse = this.groceryListManager.deleteGroceryList(toBeDeletedListId, userid);
 
             return deleteListResponse.getStatusCode() == Status.OK;
