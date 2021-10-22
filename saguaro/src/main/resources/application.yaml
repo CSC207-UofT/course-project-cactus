@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/test
+    username: usr
+    password: pass
+
+  h2:
+    console.enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

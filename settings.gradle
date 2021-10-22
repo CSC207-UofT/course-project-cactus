@@ -1,2 +1,3 @@
 rootProject.name = 'course-project-cactus'
+include 'saguaro'
 
