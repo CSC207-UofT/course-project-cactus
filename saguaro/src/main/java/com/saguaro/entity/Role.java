@@ -2,10 +2,8 @@ package com.saguaro.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Role implements GrantedAuthority {
@@ -15,7 +13,10 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    String name;
+    private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
 
     public Role() {}
 
@@ -32,7 +33,19 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
+    }
+
+    public Collection<User> getUsers() {
+        return users;
     }
 }

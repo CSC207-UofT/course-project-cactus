@@ -27,7 +27,7 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll();
+                .antMatchers("/h2-console/**", "/login*", "/register").permitAll();
 
         http.headers().frameOptions().disable(); // needed for h2 console
     }

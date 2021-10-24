@@ -3,6 +3,8 @@
  */
 package com.saguaro.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,10 +22,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @JsonIgnore
     private String password;
+
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(
+            fetch = FetchType.EAGER
+            )
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(
@@ -35,10 +41,12 @@ public class User {
                     referencedColumnName = "id"
             )
     )
-    private Collection<Role> role;
+    private Collection<Role> roles;
+
+    private String token;
 
     public User() {
-        this.role = new ArrayList<>();
+        this.roles = new ArrayList<>();
     }
 
     /**
@@ -55,8 +63,8 @@ public class User {
         this.username = username;
         this.password = password;
 
-        this.role = new ArrayList<Role>();
-        this.role.add(new Role("ROLE_USER"));
+        this.roles = new ArrayList<Role>();
+        this.roles.add(new Role("ROLE_USER"));
     }
 
     public String getName(){
@@ -69,6 +77,10 @@ public class User {
 
     public String getPassword(){
         return password;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getId() {
@@ -87,7 +99,15 @@ public class User {
         this.name = name;
     }
 
-    public void setRole(String role) {
-        this.role.add(new Role(role));
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
