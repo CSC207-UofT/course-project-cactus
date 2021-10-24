@@ -9,4 +9,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * to the in-memory database. We specify that the repository will
      * hold Users, with its ID (primary key) being of type Long.
      */
+    User findUserByUsername(String username);
 }

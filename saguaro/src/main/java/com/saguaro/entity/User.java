@@ -3,6 +3,7 @@
  */
 package com.saguaro.entity;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -10,14 +11,17 @@ import javax.persistence.Id;
  * User Entity
  */
 @javax.persistence.Entity
-public class User implements Entity {
+public class User {
 
+    @Id
+    @GeneratedValue
+    private long id;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
     private String password;
     private String name;
-
-    @Id @GeneratedValue
-    private long id;
 
     public User() {}
 
@@ -38,28 +42,17 @@ public class User implements Entity {
     public String getName(){
         return name;
     }
+
     public String getUsername(){
         return username;
     }
+
     public String getPassword(){
         return password;
     }
 
-    @Override
     public long getId() {
         return this.id;
     }
 
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
 }
