@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Grocery Item Entity
  */
-public class GroceryItem implements Entity {
+public class GroceryItem {
 
     private String name;
     private final ArrayList<Integer> userIdList;
