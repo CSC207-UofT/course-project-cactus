@@ -66,10 +66,10 @@ public class UserController {
     }
 
     /**
-     * @return all users in the database
+     * @return test endpoint
      */
-    @GetMapping("/users")
-    List<User> all() {
-        return null;
+    @GetMapping("/test")
+    public String all() {
+        return "test";
     }
 }

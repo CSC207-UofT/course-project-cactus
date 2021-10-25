@@ -26,10 +26,10 @@ public class UserService {
         User user = userRepository.findUserByUsername(username);
 
         if (user != null) {
-            if (passwordEncoder.encode(password).equals(user.getPassword())) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 String newToken = UUID.randomUUID().toString();
                 user.setToken(newToken);
-
+                userRepository.save(user);
                 return user;
             }
         }
@@ -46,5 +46,9 @@ public class UserService {
         newUser.addRole(userRole);
 
         return userRepository.save(newUser);
+    }
+
+    public User findByToken(String token) {
+        return userRepository.findUserByToken(token);
     }
 }
