@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,12 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public void logout(String username) {
+        User user = userRepository.findUserByUsername(username);
+        user.setToken(null);
+        userRepository.save(user);
     }
 
     public User registerNewUser(String username, String password, String name) {

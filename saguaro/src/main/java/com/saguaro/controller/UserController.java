@@ -1,12 +1,12 @@
 package com.saguaro.controller;
 
 import com.saguaro.entity.User;
-import com.saguaro.repository.UserRepository;
 import com.saguaro.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class UserController {
@@ -63,6 +63,15 @@ public class UserController {
         }
 
         String password;
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        userService.logout(username);
     }
 
     /**

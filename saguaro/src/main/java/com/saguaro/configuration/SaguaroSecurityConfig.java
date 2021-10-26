@@ -25,7 +25,9 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
     TokenAuthenticationProvider provider;
 
     private static final RequestMatcher REQUEST_MATCHER = new OrRequestMatcher(
-            new AntPathRequestMatcher("/test*")
+            new AntPathRequestMatcher("/test*"),
+            new AntPathRequestMatcher("/api/*"),
+            new AntPathRequestMatcher("/logout*")
     );
 
     @Override
@@ -44,6 +46,7 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .logout().disable()
                 .csrf().disable()
                 .formLogin().disable()
                 .authenticationProvider(provider)
