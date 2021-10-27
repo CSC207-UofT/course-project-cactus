@@ -44,6 +44,10 @@ public class UserService {
     }
 
     public User registerNewUser(String username, String password, String name) {
+        if (userRepository.existsByUsername(username)) {
+            return null;
+        }
+
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setPassword(passwordEncoder.encode(password));
