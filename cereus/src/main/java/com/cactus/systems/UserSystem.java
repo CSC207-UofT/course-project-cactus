@@ -1,8 +1,8 @@
 package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
-import com.cactus.adapters.Response;
-import com.cactus.adapters.Response.Status;
+import com.cactus.entities.User;
+import java.util.Objects;
 
 /***
  * Represents the system that controls users
@@ -26,7 +26,7 @@ public class UserSystem {
 
     /***
      * Given a name and a password, creates a new user and stores the user as current.
-     * It will return false when .create() returns a Response with Status that is not "OK"
+     * It will return false when .create() returns no user
      * telling us that the name was already taken or password was not of the correct form.
      *
      * @param name     a String containing the name of the new user
@@ -35,14 +35,7 @@ public class UserSystem {
      * @return true if a newUser was created
      */
     public boolean createUser(String name, String username, String password) {
-        Response userResponse = this.authAdapter.create(name, username, password);
-
-        if (userResponse.getStatusCode() == Status.OK) {
-            this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
-            return true;
-        }
-
-        return false;
+        return updateCurrentUser(this.authAdapter.create(name, username, password));
     }
 
     /***
@@ -55,10 +48,19 @@ public class UserSystem {
      * @return true if login was successful, false otherwise
      */
     public boolean login(String username, String password) {
-        Response userResponse = this.authAdapter.login(username, password);
+        return updateCurrentUser(this.authAdapter.login(username, password));
+    }
 
-        if (userResponse.getStatusCode() == Status.OK) {
-            this.currentUserId = Long.parseLong(userResponse.getPayload().get("userid"));
+    /***
+     * checks whether user exists and if so makes that user
+     * the current user and returns true
+     *
+     * @param user the user that is being logged in
+     * @return true if user exists
+     */
+    private boolean updateCurrentUser(User user){
+        if (!Objects.isNull(user)) {
+            this.currentUserId = user.getId();
             return true;
         }
 
@@ -85,8 +87,7 @@ public class UserSystem {
      * @return name of user
      * */
     public String getUserName() {
-        // TODO return current user name
-        return "N/A - To be implemented";
+        return this.authAdapter.getUser(this.currentUserId).getName();
     }
 
 }
