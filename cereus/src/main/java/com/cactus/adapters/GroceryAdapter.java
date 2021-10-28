@@ -1,5 +1,8 @@
 package com.cactus.adapters;
 
+import com.cactus.entities.GroceryItem;
+import com.cactus.entities.GroceryList;
+
 import java.util.List;
 
 public interface GroceryAdapter {
@@ -22,7 +25,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the user ID to fetch lists for
      * @return       a Response to the request to get grocery lists for the user
      */
-    Response getGroceryListsByUser(long userid);
+    List<GroceryList> getGroceryListsByUser(long userid);
 
     /**
      * Returns a Response object with the results of a grocery list fetch operation
@@ -45,7 +48,16 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the user the list belongs to
      * @return       a Response to the grocery list get operation
      */
-    Response getGroceryList(long listid, long userid);
+    GroceryList getGroceryList(long listid, long userid);
+
+    /**
+     * get a list of grocery items that belong to the given list
+     *
+     * @param listid id of the list which holds the items you are getting
+     * @param userid id of the user who holds the list
+     * @return a list of grocery items
+     */
+    List<GroceryItem> getGroceryItems(long listid, long userid);
 
     /**
      * Returns a Response object with the results of a create grocery list operation
@@ -66,7 +78,7 @@ public interface GroceryAdapter {
      *                     list
      * @return         a Response to the grocery list creation operation
      */
-    Response createGroceryList(String nameList, long userid);
+    GroceryList createGroceryList(String nameList, long userid);
 
     /**
      * Returns a Response object with the results of a set grocery item operation done
@@ -84,7 +96,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the list's owner
      * @return       a Response to the set grocery item operation
      */
-    Response setGroceryItems(List<String> items, long listid, long userid);
+    boolean setGroceryItems(List<String> items, long listid, long userid);
 
     /**
      * Returns a Response object with the results of a delete grocery list operation done
@@ -100,6 +112,6 @@ public interface GroceryAdapter {
      * @param userid a long representing the ID of the grocery list's owner
      * @return       a Response to the grocery list deletion operation
      */
-    Response deleteGroceryList(long listid, long userid);
+    boolean deleteGroceryList(long listid, long userid);
 
 }

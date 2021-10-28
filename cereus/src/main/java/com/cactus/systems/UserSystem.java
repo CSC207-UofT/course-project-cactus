@@ -59,7 +59,7 @@ public class UserSystem {
      * @return true if user exists
      */
     private boolean updateCurrentUser(User user){
-        if (!Objects.isNull(user)) {
+        if (user != null) {
             this.currentUserId = user.getId();
             return true;
         }
