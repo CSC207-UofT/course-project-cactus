@@ -85,7 +85,7 @@ public class UserController {
      * @return test endpoint
      */
     @GetMapping("/test")
-    public String all() {
+    public String test() {
         return "test";
     }
 }
