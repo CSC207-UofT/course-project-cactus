@@ -1,4 +1,5 @@
 package com.cactus.adapters;
+import com.cactus.entities.User;
 
 public interface AuthAdapter {
 
@@ -22,7 +23,7 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    Response login(String username, String password);
+    User login(String username, String password);
 
     /**
      * Returns a Response object with the results of a create user operation done
@@ -45,5 +46,12 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    Response create(String username, String password, String name);
+    User create(String username, String password, String name);
+
+    /***
+     * A getter for users to be used in the controller
+     *
+     * @param userId the id of the user that you want
+     */
+    User getUser(long userId);
 }
