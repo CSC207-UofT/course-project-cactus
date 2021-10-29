@@ -3,23 +3,21 @@
  */
 package com.cactus.ui;
 import com.cactus.systems.GroceryListSystem;
+import com.cactus.systems.UserInteractFacade;
 import com.cactus.systems.UserSystem;
 
 import java.util.*;
 
 public class UI {
-    private final GroceryListSystem groceryListSystem;
-    private final UserSystem userSystem;
+    private final UserInteractFacade userInteractFacade;
     private int curr_state;
 
     /**
      * Initialize UI
-     * @param userSystem the user system for running this instance
-     * @param groceryListSystem the grocery list system for running this instance
+     * @param userInteractFacade the user interaction facede for running this instance
      */
-    public UI(UserSystem userSystem, GroceryListSystem groceryListSystem){
-        this.groceryListSystem = groceryListSystem;
-        this.userSystem = userSystem;
+    public UI(UserInteractFacade userInteractFacade){
+        this.userInteractFacade = userInteractFacade;
         this.curr_state = Constants.LOGIN_STATE;
     }
 
@@ -91,7 +89,7 @@ public class UI {
         String password = this.getStringInput(Constants.GET_PASSWORD);
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.userSystem.createUser(name, username, password);
+        return this.userInteractFacade.createUser(name, username, password);
     }
 
     /**
@@ -111,7 +109,7 @@ public class UI {
     private boolean login() {
         String username = this.getStringInput(Constants.GET_USERNAME);
         String password = this.getStringInput(Constants.GET_PASSWORD);
-        return this.userSystem.login(username, password);
+        return this.userInteractFacade.login(username, password);
     }
 
     /**
@@ -130,7 +128,7 @@ public class UI {
     private boolean createGroceryList() {
         String name = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.newGroceryList(name, this.userSystem.getCurrentUserId());
+        return this.userInteractFacade.newGroceryList(name);
     }
 
     /**
@@ -140,14 +138,14 @@ public class UI {
     private boolean addItem() {
         String item = this.getStringInput(Constants.GET_NAME);
 
-        return this.groceryListSystem.addGroceryItem(item, this.userSystem.getCurrentUserId());
+        return this.userInteractFacade.addGroceryItem(item);
     }
 
     /**
      * Exit current list to list of grocery lists
      */
     private boolean exitList() {
-        this.groceryListSystem.exitGroceryList();
+        this.userInteractFacade.exitGroceryList();
         return true;
     }
 
@@ -155,7 +153,7 @@ public class UI {
      * Exit current list to list of grocery lists
      */
     private boolean deleteList() {
-        this.groceryListSystem.deleteGroceryList(this.userSystem.getCurrentUserId());
+        this.userInteractFacade.deleteGroceryList();
         return true;
     }
 
@@ -163,7 +161,7 @@ public class UI {
      * Display all grocery lists
      */
     private void displayGroceryLists() {
-        List<String> lists = this.groceryListSystem.getGroceryListNames(this.userSystem.getCurrentUserId());
+        List<String> lists = this.userInteractFacade.getGroceryListNames();
         if (lists.size() == 0) {
             System.out.println("You have no lists!");
         } else {
@@ -177,7 +175,7 @@ public class UI {
      * Display all grocery items for this user
      */
     private void displayGroceryItems() {
-        ArrayList<String> items = this.groceryListSystem.getGroceryItemNames(this.userSystem.getCurrentUserId());
+        ArrayList<String> items = this.userInteractFacade.getGroceryItemNames();
         if (items.size() == 0) {
             System.out.println("You have no items in this list!");
         } else {
@@ -191,8 +189,8 @@ public class UI {
      * Display header with current user and grocery list information
      */
     private void displayHeader() {
-        System.out.println("Current User: " + this.userSystem.getUserName());
-        System.out.println("Current grocery list: " + this.groceryListSystem.getListName());
+        System.out.println("Current User: " + this.userInteractFacade.getUserName());
+        System.out.println("Current grocery list: " + this.userInteractFacade.getListName());
     }
 
     /**

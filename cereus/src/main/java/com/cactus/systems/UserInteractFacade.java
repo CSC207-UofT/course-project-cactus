@@ -6,7 +6,6 @@ import java.util.List;
 public class UserInteractFacade {
     UserSystem userSystem;
     GroceryListSystem groceryListSystem;
-    long currentUserId;
 
     /**
      * Creates a new UserInteractFacade object
@@ -20,6 +19,10 @@ public class UserInteractFacade {
     }
 
     // UserSystem methods
+
+    private long getCurrentUserId(){
+        return this.userSystem.getCurrentUserId();
+    }
 
     /**
      * Create user using UserSystem's createUser method
@@ -71,7 +74,7 @@ public class UserInteractFacade {
      * @return true if grocery list was successfully created
      */
     public boolean newGroceryList(String name) {
-        return this.groceryListSystem.newGroceryList(name, this.currentUserId);
+        return this.groceryListSystem.newGroceryList(name, this.getCurrentUserId());
     }
 
     /**
@@ -80,7 +83,7 @@ public class UserInteractFacade {
      * @return a list of grocery list names belonging to the current user
      */
     public ArrayList<String> getGroceryListNames() {
-        return this.groceryListSystem.getGroceryListNames(this.currentUserId);
+        return this.groceryListSystem.getGroceryListNames(this.getCurrentUserId());
     }
 
     /**
@@ -89,7 +92,7 @@ public class UserInteractFacade {
      * @return a list of grocery item names belonging to the current list
      */
     public ArrayList<String> getGroceryItemNames() {
-        return this.groceryListSystem.getGroceryItemNames(this.currentUserId);
+        return this.groceryListSystem.getGroceryItemNames(this.getCurrentUserId());
     }
 
     // TODO: figure out why there are two methods for exiting
@@ -101,7 +104,7 @@ public class UserInteractFacade {
      * @return true if list was successfully exited and the items were added to the list
      */
     public boolean exitGroceryList(List<String> items){
-        return this.groceryListSystem.exitGroceryList(items, this.currentUserId);
+        return this.groceryListSystem.exitGroceryList(items, this.getCurrentUserId());
     }
 
     /**
@@ -120,7 +123,7 @@ public class UserInteractFacade {
      * @return true of item was successfully added
      */
     public boolean addGroceryItem(String item) {
-        return this.groceryListSystem.addGroceryItem(item, this.currentUserId);
+        return this.groceryListSystem.addGroceryItem(item, this.getCurrentUserId());
     }
 
     /**
@@ -130,7 +133,7 @@ public class UserInteractFacade {
      * @return true of item was successfully added
      */
     public boolean addGroceryItems(List<String> items){
-        return this.groceryListSystem.addGroceryItems(items, this.currentUserId);
+        return this.groceryListSystem.addGroceryItems(items, this.getCurrentUserId());
     }
 
     // TODO: make this method require a grocery list id
@@ -140,7 +143,7 @@ public class UserInteractFacade {
      * @return true if grocery list was successfully deleted
      */
     public boolean deleteGroceryList() {
-        return this.groceryListSystem.deleteGroceryList(this.currentUserId);
+        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId());
     }
 
     /**
@@ -149,7 +152,7 @@ public class UserInteractFacade {
      * @return Name of the current grocery list
      */
     public String getListName() {
-        return this.groceryListSystem.getListName();
+        return this.groceryListSystem.getListName(getCurrentUserId());
     }
 
 }
