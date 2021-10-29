@@ -1,6 +1,8 @@
 package com.saguaro.service;
 
+import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
+import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +13,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT) // TODO: see if can switch to strict
 class UserServiceTest {
 
     @InjectMocks
@@ -28,12 +35,17 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Mock
+    private RoleRepository roleRepository;
+
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     private AutoCloseable closeable;
 
     private String username;
     private String password;
+    private String name;
+    private Role role;
     private User user;
 
     @BeforeEach
@@ -42,10 +54,14 @@ class UserServiceTest {
 
         username = "username";
         password = "password";
+        name = "name";
+        role = new Role("ROLE_USER");
 
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
+        user.setName(name);
+        user.addRole(role);
 
         when(userRepository.findUserByUsername(username)).thenReturn(user);
     }
@@ -100,6 +116,10 @@ class UserServiceTest {
 
     @Nested
     class LogoutTest {
+        /*
+        We assume that the username passed to logout is valid, since one must
+        be authenticated to logout.
+         */
 
         @Test
         void testLogout() {
@@ -110,9 +130,59 @@ class UserServiceTest {
         }
     }
 
-    void registerNewUser() {
+    @Nested
+    class RegisterTest {
+
+        @BeforeEach
+        void setUpRegister() {
+            when(roleRepository.findRoleByName("ROLE_USER")).thenReturn(role);
+            when(passwordEncoder.encode(anyString())).thenReturn(password);
+            when(userRepository.save(any(User.class))).thenAnswer(ans -> ans.getArgument(0));
+        }
+
+        @Test
+        void testValidRegister() {
+            User newUser = userService.registerNewUser(username, password, name);
+
+            assertEquals(user, newUser);
+        }
+
+        @Test
+        void testRegisterExistingUser() {
+            User newUser = userService.registerNewUser(username, password, name);
+
+            assertNull(newUser);
+        }
     }
 
-    void findByToken() {
+    @Nested
+    class FindByTokenTest {
+
+        private String token;
+
+        @BeforeEach
+        void setUpFindByToken() {
+            token = "token";
+
+            user.setToken(token);
+        }
+
+        @Test
+        void testTokenExists() {
+            when(userRepository.findUserByToken(token)).thenReturn(user);
+
+            User actual = userService.findByToken(token);
+
+            assertEquals(token, actual.getToken());
+        }
+
+        @Test
+        void testTokenDoesNotExist() {
+            when(userRepository.findUserByToken(token)).thenReturn(null);
+
+            User actual = userService.findByToken(token);
+
+            assertNull(actual);
+        }
     }
 }

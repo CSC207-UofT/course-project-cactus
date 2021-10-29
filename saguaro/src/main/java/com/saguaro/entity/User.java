@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * User Entity
@@ -136,5 +137,18 @@ public class User implements UserDetails {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id
+                && username.equals(user.username)
+                && password.equals(user.password)
+                && name.equals(user.name)
+                && roles.equals(user.roles)
+                && Objects.equals(token, user.token);
     }
 }
