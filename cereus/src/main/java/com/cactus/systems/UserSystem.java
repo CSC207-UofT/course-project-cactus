@@ -10,7 +10,7 @@ import java.util.Objects;
 public class UserSystem {
 
     private final AuthAdapter authAdapter;
-    long currentUserId;
+    User currentUser;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
@@ -19,9 +19,13 @@ public class UserSystem {
         this.authAdapter = authAdapter;
     }
 
-    // TODO: unCLEAN
+    /**
+     * Get the current user's id
+     *
+     * @return id of the current user
+     */
     public long getCurrentUserId() {
-        return currentUserId;
+        return currentUser.getId();
     }
 
     /***
@@ -60,7 +64,7 @@ public class UserSystem {
      */
     private boolean updateCurrentUser(User user){
         if (user != null) {
-            this.currentUserId = user.getId();
+            this.currentUser = user;
             return true;
         }
 
@@ -73,8 +77,8 @@ public class UserSystem {
      * @return true if there existed a valid user id before exiting
      */
     public boolean logout() {
-        if (this.currentUserId != -1) {
-            this.currentUserId = -1;
+        if (this.currentUser != null) {
+            this.currentUser = null;
             return true;
         } else {
             return false;
@@ -87,7 +91,7 @@ public class UserSystem {
      * @return name of user
      * */
     public String getUserName() {
-        return this.authAdapter.getUser(this.currentUserId).getName();
+        return this.currentUser.getName();
     }
 
 }

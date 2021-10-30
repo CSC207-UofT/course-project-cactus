@@ -9,6 +9,7 @@ import com.cactus.adapters.ClassGroceryAdapter;
 import com.cactus.adapters.GroceryAdapter;
 import com.cactus.data.EntityRepository;
 import com.cactus.systems.GroceryListSystem;
+import com.cactus.systems.UserInteractFacade;
 import com.cactus.systems.UserSystem;
 import com.cactus.ui.UI;
 
@@ -20,8 +21,9 @@ public class GroceryApp {
         GroceryAdapter groceryAdapter = new ClassGroceryAdapter(er);
         GroceryListSystem groceryListSystem = new GroceryListSystem(groceryAdapter);
         UserSystem userSystem = new UserSystem(authAdapter);
+        UserInteractFacade userInteractFacade = new UserInteractFacade(userSystem, groceryListSystem);
 
-        UI ui = new UI(userSystem, groceryListSystem);
+        UI ui = new UI(userInteractFacade);
         ui.run();
     }
 
