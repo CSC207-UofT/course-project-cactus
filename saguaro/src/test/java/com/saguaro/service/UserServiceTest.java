@@ -13,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
@@ -25,7 +23,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT) // TODO: see if can switch to strict
 class UserServiceTest {
 
     @InjectMocks
@@ -62,8 +59,6 @@ class UserServiceTest {
         user.setPassword(password);
         user.setName(name);
         user.addRole(role);
-
-        when(userRepository.findUserByUsername(username)).thenReturn(user);
     }
 
     @AfterEach
@@ -73,6 +68,11 @@ class UserServiceTest {
 
     @Nested
     class LoginTest {
+
+        @BeforeEach()
+        void setUpLogin() {
+            when(userRepository.findUserByUsername(username)).thenReturn(user);
+        }
 
         @Test
         void testValidLoginCreatesValidToken() {
@@ -116,6 +116,12 @@ class UserServiceTest {
 
     @Nested
     class LogoutTest {
+
+        @BeforeEach()
+        void setUpLogout() {
+            when(userRepository.findUserByUsername(username)).thenReturn(user);
+        }
+
         /*
         We assume that the username passed to logout is valid, since one must
         be authenticated to logout.
@@ -133,15 +139,13 @@ class UserServiceTest {
     @Nested
     class RegisterTest {
 
-        @BeforeEach
-        void setUpRegister() {
+        @Test
+        void testValidRegister() {
+            when(userRepository.existsByUsername(username)).thenReturn(false);
             when(roleRepository.findRoleByName("ROLE_USER")).thenReturn(role);
             when(passwordEncoder.encode(anyString())).thenReturn(password);
             when(userRepository.save(any(User.class))).thenAnswer(ans -> ans.getArgument(0));
-        }
 
-        @Test
-        void testValidRegister() {
             User newUser = userService.registerNewUser(username, password, name);
 
             assertEquals(user, newUser);
@@ -149,6 +153,8 @@ class UserServiceTest {
 
         @Test
         void testRegisterExistingUser() {
+            when(userRepository.existsByUsername(username)).thenReturn(true);
+
             User newUser = userService.registerNewUser(username, password, name);
 
             assertNull(newUser);
