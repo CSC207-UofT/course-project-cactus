@@ -20,6 +20,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue
+    @Column(name = "USER_ID")
     private long id;
 
     @Column(nullable = false, unique = true)
@@ -48,8 +49,12 @@ public class User implements UserDetails {
 
     private String token;
 
+    @OneToMany(mappedBy = "user")
+    private Collection<GroceryList> lists;
+
     public User() {
         this.roles = new ArrayList<>();
+        this.lists = new ArrayList<>();
     }
 
     /**
@@ -70,12 +75,53 @@ public class User implements UserDetails {
         this.roles.add(new Role("ROLE_USER"));
     }
 
+    public long getId() {
+        return this.id;
+    }
+
     public String getName(){
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUsername(){
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.addUser(this);
+    }
+
+    void addGroceryList(GroceryList list) {
+        this.lists.add(list);
+    }
+
+    void removeGroceryList(GroceryList list) {
+        this.lists.remove(list);
     }
 
     @Override
@@ -101,42 +147,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
-    }
-
-    public String getPassword(){
-        return password;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
-    public String getToken() {
-        return this.token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     @Override
