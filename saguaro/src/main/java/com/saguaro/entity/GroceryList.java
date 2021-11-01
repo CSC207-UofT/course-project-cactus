@@ -4,8 +4,9 @@
 package com.saguaro.entity;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Grocery List Entity
@@ -20,19 +21,19 @@ public class GroceryList {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
             joinColumns = @JoinColumn(
                     name = "LIST_ID",
-                    referencedColumnName = "id"
+                    referencedColumnName = "LIST_ID"
             ),
             inverseJoinColumns = @JoinColumn(
                     name = "ITEM_NAME",
                     referencedColumnName = "name"
             )
     )
-    private Collection<GroceryItem> items;
+    private Set<GroceryItem> items;
 
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
@@ -62,8 +63,10 @@ public class GroceryList {
     }
 
     public void setUser(User user) {
-        this.user = user;
-        user.addGroceryList(this);
+        if (this.user == null) {
+            this.user = user;
+            this.user.addGroceryList(this);
+        }
     }
 
     public void addItem(GroceryItem item) {
@@ -74,5 +77,18 @@ public class GroceryList {
     public void removeItem(GroceryItem item) {
         this.items.remove(item);
         item.removeList(this);
+    }
+
+    @PreRemove
+    void removeListFromUser() {
+        this.user.removeGroceryList(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroceryList that = (GroceryList) o;
+        return id == that.id && items.equals(that.items) && Objects.equals(name, that.name) && Objects.equals(user, that.user);
     }
 }

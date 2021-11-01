@@ -19,7 +19,6 @@ public class GroceryItem {
     @ManyToMany(mappedBy = "items")
     private Collection<GroceryList> list;
 
-
     /**
      * Creates a new GroceryItem
      **/
@@ -43,5 +42,13 @@ public class GroceryItem {
 
     void removeList(GroceryList list) {
         this.list.remove(list);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroceryItem that = (GroceryItem) o;
+        return name.equals(that.name);
     }
 }

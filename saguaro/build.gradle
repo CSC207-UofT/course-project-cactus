@@ -49,6 +49,7 @@ test {
 }
 
 tasks.register('integrationTest', Test) {
+    useJUnitPlatform()
     description = 'Run integration tests'
     group = 'verification'
 

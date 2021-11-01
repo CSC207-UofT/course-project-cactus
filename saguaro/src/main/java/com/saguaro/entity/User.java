@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,14 +32,12 @@ public class User implements UserDetails {
 
     private String name;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER
-            )
+    @ManyToMany
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(
                     name = "user_id",
-                    referencedColumnName = "id"
+                    referencedColumnName = "user_id"
             ),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id",
@@ -50,29 +49,11 @@ public class User implements UserDetails {
     private String token;
 
     @OneToMany(mappedBy = "user")
-    private Collection<GroceryList> lists;
+    private List<GroceryList> lists;
 
     public User() {
         this.roles = new ArrayList<>();
         this.lists = new ArrayList<>();
-    }
-
-    /**
-     * Creates a new User with the given name, username, password and id number.
-     *
-     * @param name A String containing the User's name.
-     * @param username A String containing the User's username.
-     * @param password A String containing the User's password.
-     *
-     * @deprecated Use explicit setters to set attributes
-     */
-    public User(String name, String username, String password){
-        this.name = name;
-        this.username = username;
-        this.password = password;
-
-        this.roles = new ArrayList<Role>();
-        this.roles.add(new Role("ROLE_USER"));
     }
 
     public long getId() {
@@ -114,6 +95,10 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
         role.addUser(this);
+    }
+
+    public List<GroceryList> getGroceryLists() {
+        return this.lists;
     }
 
     void addGroceryList(GroceryList list) {
