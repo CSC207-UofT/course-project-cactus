@@ -6,6 +6,7 @@ package com.saguaro.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Grocery Item Entity
@@ -22,7 +23,9 @@ public class GroceryItem {
     /**
      * Creates a new GroceryItem
      **/
-    public GroceryItem() {}
+    public GroceryItem() {
+        this.list = new HashSet<>();
+    }
 
     public String getName() {
         return name;
@@ -32,7 +35,7 @@ public class GroceryItem {
         this.name = name;
     }
 
-    public Collection<GroceryList> getList() {
+    public Collection<GroceryList> getLists() {
         return list;
     }
 

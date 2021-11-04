@@ -4,9 +4,9 @@
 package com.saguaro.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Grocery List Entity
@@ -21,7 +21,11 @@ public class GroceryList {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+//            CascadeType.PERSIST,
+//            CascadeType.REMOVE,
+//            CascadeType.MERGE
+    })
     @JoinTable(
             name = "LIST_ITEMS",
             joinColumns = @JoinColumn(
@@ -33,7 +37,7 @@ public class GroceryList {
                     referencedColumnName = "name"
             )
     )
-    private Set<GroceryItem> items;
+    private List<GroceryItem> items;
 
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
@@ -43,7 +47,7 @@ public class GroceryList {
      * Creates a new GroceryList.
      */
     public GroceryList(){
-        this.items = new HashSet<>();
+        this.items = new ArrayList<>();
     }
 
     public long getId() {
@@ -69,14 +73,19 @@ public class GroceryList {
         }
     }
 
+    public List<GroceryItem> getItems() {
+        return this.items;
+    }
+
     public void addItem(GroceryItem item) {
         this.items.add(item);
         item.addList(this);
     }
 
     public void removeItem(GroceryItem item) {
-        this.items.remove(item);
-        item.removeList(this);
+        if (this.items.remove(item)) {
+            item.removeList(this);
+        }
     }
 
     @PreRemove
