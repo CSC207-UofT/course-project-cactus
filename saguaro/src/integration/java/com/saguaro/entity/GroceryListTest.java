@@ -90,14 +90,6 @@ public class GroceryListTest {
                     savedList.addItem(item);
                     entityManager.persistAndFlush(savedList);
                 });
-
-//                GroceryItem savedItem = entityManager.find(GroceryItem.class, "Bread");
-//
-//                assertEquals(1, savedList.getItems().size());
-//                assertTrue(savedList.getItems().contains(savedItem));
-//
-//                assertEquals(1, savedItem.getLists().size());
-//                assertTrue(savedItem.getLists().contains(savedList));
             }
 
             @Test
@@ -116,47 +108,56 @@ public class GroceryListTest {
                 assertTrue(savedItem.getLists().contains(savedList));
             }
 
-            @Test
-            void testRemovingValidItem() {
-                // set up list with item
-                GroceryItem item = new GroceryItem();
-                item.setName("Bread");
-                GroceryItem savedItem = entityManager.persistFlushFind(item);
+            @Nested
+            class ExistingItemTest {
 
-                savedList.addItem(savedItem);
-                entityManager.persistAndFlush(savedList);
+                GroceryItem savedItem;
 
-                // test remove
-                savedList.removeItem(savedItem);
-                entityManager.persistAndFlush(savedList);
+                @BeforeEach
+                void setUpExistingItem() {
+                    GroceryItem item = new GroceryItem();
+                    item.setName("Bread");
+                    savedItem = entityManager.persistFlushFind(item);
 
-                assertEquals(0, savedList.getItems().size());
+                    savedList.addItem(savedItem);
+                    entityManager.persistAndFlush(savedList);
+                }
 
-                assertEquals(0, savedItem.getLists().size());
-            }
+                @Test
+                void testRemovingValidItem() {
+                    // test remove
+                    savedList.removeItem(savedItem);
+                    entityManager.persistAndFlush(savedList);
 
-            @Test
-            void testRemovingInvalidItem() {
-                // set up list with item
-                GroceryItem item = new GroceryItem();
-                item.setName("Bread");
-                GroceryItem savedItem = entityManager.persistFlushFind(item);
+                    assertEquals(0, savedList.getItems().size());
 
-                savedList.addItem(savedItem);
-                entityManager.persistAndFlush(savedList);
+                    assertEquals(0, savedItem.getLists().size());
+                }
 
-                // test remove with new item
-                GroceryItem newItem = new GroceryItem();
-                newItem.setName("Milk");
+                @Test
+                void testRemovingInvalidItem() {
+                    // test remove with new item
+                    GroceryItem newItem = new GroceryItem();
+                    newItem.setName("Milk");
 
-                savedList.removeItem(newItem);
-                entityManager.persistAndFlush(savedList);
+                    savedList.removeItem(newItem);
+                    entityManager.persistAndFlush(savedList);
 
-                assertEquals(1, savedList.getItems().size());
-                assertTrue(savedList.getItems().contains(savedItem));
+                    assertEquals(1, savedList.getItems().size());
+                    assertTrue(savedList.getItems().contains(savedItem));
 
-                assertEquals(1, savedItem.getLists().size());
-                assertTrue(savedItem.getLists().contains(savedList));
+                    assertEquals(1, savedItem.getLists().size());
+                    assertTrue(savedItem.getLists().contains(savedList));
+                }
+
+                @Test
+                void testDeleteListRemovesFromItems() {
+                    entityManager.remove(savedList);
+                    entityManager.flush();
+                    savedItem = entityManager.refresh(savedItem);
+
+                    assertTrue(savedItem.getLists().isEmpty());
+                }
             }
         }
     }

@@ -91,6 +91,10 @@ public class GroceryList {
     @PreRemove
     void removeListFromUser() {
         this.user.removeGroceryList(this);
+
+        for (GroceryItem item: items) {
+            item.removeList(this);
+        }
     }
 
     @Override
