@@ -1,7 +1,6 @@
 package com.saguaro.controller;
 
 import com.saguaro.entity.GroceryList;
-import com.saguaro.entity.User;
 import com.saguaro.service.GroceryService;
 import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -10,22 +9,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class GroceryController {
 
     private final GroceryService groceryService;
 
-    private final UserService userService;
-
     public GroceryController(GroceryService groceryService, UserService userService) {
         this.groceryService = groceryService;
-        this.userService = userService;
     }
 
     @GetMapping("api/all-lists")
-    public List<String> getLists() {
+    public Map<Long, String> getLists() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
@@ -44,17 +40,18 @@ public class GroceryController {
     }
 
     @PostMapping("api/create-list")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void createNewList(@RequestParam("name") String name) {
+    public GroceryList createNewList(@RequestParam("name") String name) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
-        groceryService.createNewList(name, username);
+        return groceryService.createNewList(name, username);
     }
 
     @PostMapping("api/save-list")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void saveList(@RequestParam("id") long id) {
-        // TODO: finish
+    public GroceryList saveList(@RequestBody GroceryList list) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.saveList(list, username);
     }
 }

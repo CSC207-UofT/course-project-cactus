@@ -4,9 +4,12 @@
 package com.saguaro.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Grocery Item Entity
@@ -17,14 +20,20 @@ public class GroceryItem {
     @Id
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "items")
-    private Collection<GroceryList> list;
+    private Collection<GroceryList> lists;
 
     /**
      * Creates a new GroceryItem
      **/
     public GroceryItem() {
-        this.list = new HashSet<>();
+        this.lists = new HashSet<>();
+    }
+
+    public GroceryItem(String name) {
+        this.name = name;
+        this.lists = new HashSet<>();
     }
 
     public String getName() {
@@ -36,15 +45,15 @@ public class GroceryItem {
     }
 
     public Collection<GroceryList> getLists() {
-        return list;
+        return lists;
     }
 
     void addList(GroceryList list) {
-        this.list.add(list);
+        this.lists.add(list);
     }
 
     void removeList(GroceryList list) {
-        this.list.remove(list);
+        this.lists.remove(list);
     }
 
     @Override
@@ -53,5 +62,10 @@ public class GroceryItem {
         if (o == null || getClass() != o.getClass()) return false;
         GroceryItem that = (GroceryItem) o;
         return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

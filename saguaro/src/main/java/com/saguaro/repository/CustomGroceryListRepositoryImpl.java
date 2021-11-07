@@ -22,6 +22,8 @@ public class CustomGroceryListRepositoryImpl implements CustomGroceryListReposit
         for (GroceryItem item : entity.getItems()) {
             if (!entityManager.contains(item)) {
                 entityManager.persist(item);
+            } else {
+
             }
         }
         entityManager.flush();

@@ -3,6 +3,8 @@
  */
 package com.saguaro.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,7 @@ public class GroceryList {
 
     private String name;
 
-    @ManyToMany(cascade = {
-//            CascadeType.PERSIST,
-//            CascadeType.REMOVE,
-//            CascadeType.MERGE
-    })
+    @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
             joinColumns = @JoinColumn(
@@ -39,6 +37,7 @@ public class GroceryList {
     )
     private List<GroceryItem> items;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
     private User user;
