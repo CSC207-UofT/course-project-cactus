@@ -5,9 +5,13 @@ import com.saguaro.entity.User;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -58,7 +62,22 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User findByToken(String token) {
-        return userRepository.findUserByToken(token);
+    @Transactional(readOnly = true)
+    public UserDetails findByToken(String token) {
+        User user = userRepository.findUserByToken(token);
+
+        if (user == null) {
+            return null;
+        }
+
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+        return buildSpringUser(user, authorities); // roles are loaded lazily, so fetch them here for use
+    }
+
+    private org.springframework.security.core.userdetails.User buildSpringUser(User user, Collection<? extends GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getToken(), true, true, true, true, authorities
+        );
     }
 }

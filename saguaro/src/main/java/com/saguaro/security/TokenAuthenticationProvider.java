@@ -8,6 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,13 +20,14 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = authentication.getCredentials().toString();
-        User user = userService.findByToken(token);
+        UserDetails userDetails = userService.findByToken(token);
 
-        if (user == null) {
+        if (userDetails == null) {
             throw new BadCredentialsException("Cannot find user by token");
         }
 
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getToken(), user.getAuthorities());
+        // notice that in this instance, the token is stored into the password field of UserDetails
+        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     @Override
