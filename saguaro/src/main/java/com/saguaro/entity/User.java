@@ -5,7 +5,6 @@ package com.saguaro.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.Objects;
  * User Entity
  */
 @javax.persistence.Entity
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue
@@ -48,6 +47,7 @@ public class User implements UserDetails {
 
     private String token;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<GroceryList> lists;
 
@@ -109,27 +109,6 @@ public class User implements UserDetails {
         this.lists.remove(list);
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
     }
