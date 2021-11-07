@@ -54,4 +54,10 @@ public class GroceryController {
 
         return groceryService.saveList(list, username);
     }
+
+    @DeleteMapping("api/delete-list")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteList(@RequestParam("id") long id) {
+        groceryService.removeList(id);
+    }
 }

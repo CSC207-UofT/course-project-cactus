@@ -76,4 +76,9 @@ public class GroceryService {
         return groceryListRepository.save(oldList);
     }
 
+    public void removeList(long id) {
+        GroceryList list = groceryListRepository.findGroceryListById(id);
+        groceryListRepository.delete(list);
+    }
+
 }

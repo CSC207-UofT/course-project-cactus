@@ -88,7 +88,7 @@ public class GroceryList {
     }
 
     @PreRemove
-    void removeListFromUser() {
+    void removeList() {
         this.user.removeGroceryList(this);
 
         for (GroceryItem item: items) {
