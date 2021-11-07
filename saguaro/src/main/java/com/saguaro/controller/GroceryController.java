@@ -47,7 +47,7 @@ public class GroceryController {
         return groceryService.createNewList(name, username);
     }
 
-    @PostMapping("api/save-list")
+    @PutMapping("api/save-list")
     public GroceryList saveList(@RequestBody GroceryList list) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
