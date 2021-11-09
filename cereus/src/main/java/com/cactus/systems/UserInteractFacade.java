@@ -1,5 +1,6 @@
 package com.cactus.systems;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ public class UserInteractFacade {
      * @param userSystem controller for user use cases
      * @param groceryListSystem controller for grocery list use cases
      */
-    public UserInteractFacade(UserSystem userSystem, GroceryListSystem groceryListSystem) {
+    @Inject
+    public UserInteractFacade() {
         this.userSystem = userSystem;
         this.groceryListSystem = groceryListSystem;
     }

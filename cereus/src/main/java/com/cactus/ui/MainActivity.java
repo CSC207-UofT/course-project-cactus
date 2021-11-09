@@ -7,6 +7,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.cactus.systems.UserInteractFacade;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +17,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText password;
     private Button loginButton;
     private Button signupButton;
-    //Private UserInteractFacade userFacade;
+
+
+    @Inject
+    UserInteractFacade userFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         signupButton = findViewById(R.id.signup);
-        //userFacade = USERFACADE;
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 String givenUsername = username.getText().toString();
                 String givenPassword = password.getText().toString();
 
-                Toast.makeText(MainActivity.this, "Logging in " + givenUsername, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, userFacade.test(), Toast.LENGTH_LONG).show();
 
 //                if (userFacade.login.equals(true)){
 //                    Intent intent = new Intent(MainActivity.this, OptionsActivity.class);

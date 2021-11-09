@@ -10,6 +10,7 @@ import java.util.Objects;
 public class UserSystem {
 
     private final AuthAdapter authAdapter;
+
     User currentUser;
 
     /***
