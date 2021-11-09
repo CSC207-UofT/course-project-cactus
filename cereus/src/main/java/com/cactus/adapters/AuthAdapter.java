@@ -1,5 +1,9 @@
 package com.cactus.adapters;
 import com.cactus.entities.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public interface AuthAdapter {
 
@@ -23,7 +27,7 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    User login(String username, String password);
+    User login(String username, String password) throws IOException, InterruptedException, URISyntaxException;
 
     /**
      * Returns a Response object with the results of a create user operation done
@@ -46,12 +50,7 @@ public interface AuthAdapter {
      *
      * @see Response
      */
-    User create(String username, String password, String name);
+    User create(String username, String password, String name) throws IOException, URISyntaxException, InterruptedException;
 
-    /***
-     * A getter for users to be used in the controller
-     *
-     * @param userId the id of the user that you want
-     */
-    User getUser(long userId);
+
 }
