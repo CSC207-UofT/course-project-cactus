@@ -14,8 +14,7 @@ public class UserInteractFacade {
      * @param userSystem controller for user use cases
      * @param groceryListSystem controller for grocery list use cases
      */
-    @Inject
-    public UserInteractFacade() {
+    public UserInteractFacade(UserSystem userSystem, GroceryListSystem groceryListSystem) {
         this.userSystem = userSystem;
         this.groceryListSystem = groceryListSystem;
     }
