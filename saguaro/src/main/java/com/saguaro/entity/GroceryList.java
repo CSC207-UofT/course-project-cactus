@@ -77,8 +77,10 @@ public class GroceryList {
     }
 
     public void addItem(GroceryItem item) {
-        this.items.add(item);
-        item.addList(this);
+        if (!this.items.contains(item)) {
+            this.items.add(item);
+            item.addList(this);
+        }
     }
 
     public void removeItem(GroceryItem item) {
