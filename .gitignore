@@ -91,3 +91,6 @@ fabric.properties
 
 # Database persistence
 /data
+
+# Local Android sdk location
+**/local.properties
