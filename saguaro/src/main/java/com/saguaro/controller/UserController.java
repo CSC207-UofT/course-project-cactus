@@ -80,12 +80,4 @@ public class UserController {
 
         userService.logout(username);
     }
-
-    /**
-     * @return test endpoint
-     */
-    @GetMapping("/test")
-    public String test() {
-        return "test";
-    }
 }

@@ -3,68 +3,69 @@
  */
 package com.saguaro.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Grocery Item Entity
  */
+@Entity
 public class GroceryItem {
 
+    @Id
     private String name;
-    private final ArrayList<Integer> userIdList;
-    private final long groceryListId;
-    private final Map<Integer, Integer> userMentions;
 
-    private long id;
-
+    @JsonIgnore
+    @ManyToMany(mappedBy = "items")
+    private Collection<GroceryList> lists;
 
     /**
-     * Creates a new GroceryItem with the given name and id number and
-     * capacity.
-     *
-     * @param name A String containing the User's name.
-     */
-    public GroceryItem(String name, long groceryListId) {
-        this.name = name;
-        this.userIdList = new ArrayList<>();
-        this.groceryListId = groceryListId;
-        this.userMentions = new HashMap<>();
+     * Creates a new GroceryItem
+     **/
+    public GroceryItem() {
+        this.lists = new HashSet<>();
+    }
 
-        this.id = 0L;
+    public GroceryItem(String name) {
+        this.name = name;
+        this.lists = new HashSet<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public ArrayList<Integer> getUserIdList() {
-        return userIdList;
-    }
-
-    public long getGroceryListId() {
-        return groceryListId;
-    }
-
-    public Map<Integer, Integer> getUserMentions() {
-        return userMentions;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void addUserId(int userId) {
-        userIdList.add(userId);
+    public Collection<GroceryList> getLists() {
+        return lists;
     }
 
+    void addList(GroceryList list) {
+        this.lists.add(list);
+    }
+
+    void removeList(GroceryList list) {
+        this.lists.remove(list);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroceryItem that = (GroceryItem) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 }

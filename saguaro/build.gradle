@@ -19,18 +19,43 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    integration {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    integrationImplementation.extendsFrom implementation
+    integrationRuntimeOnly.extendsFrom runtimeOnly
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.5'
     runtimeOnly 'com.h2database:h2:1.4.200'
 
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.5'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.6'
-    testImplementation 'org.springframework.security:spring-security-test:5.5.3'
+
+    integrationImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.6'
+    integrationImplementation 'org.springframework.security:spring-security-test:5.5.3'
 
 }
 
 test {
     useJUnitPlatform()
 }
+
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform()
+    description = 'Run integration tests'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest

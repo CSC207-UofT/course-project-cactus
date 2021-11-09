@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
@@ -177,16 +178,17 @@ class UserServiceTest {
         void testTokenExists() {
             when(userRepository.findUserByToken(token)).thenReturn(user);
 
-            User actual = userService.findByToken(token);
+            UserDetails actual = userService.findByToken(token);
 
-            assertEquals(token, actual.getToken());
+            // token is stored into the password field of UserDetails
+            assertEquals(token, actual.getPassword());
         }
 
         @Test
         void testTokenDoesNotExist() {
             when(userRepository.findUserByToken(token)).thenReturn(null);
 
-            User actual = userService.findByToken(token);
+            UserDetails actual = userService.findByToken(token);
 
             assertNull(actual);
         }

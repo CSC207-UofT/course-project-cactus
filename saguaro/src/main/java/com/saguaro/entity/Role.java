@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Role implements GrantedAuthority {
@@ -21,9 +21,12 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-    public Role() {}
+    public Role() {
+        this.users = new ArrayList<>();
+    }
 
     public Role(String name) {
+        this.users = new ArrayList<>();
         this.name = name;
     }
 
@@ -36,20 +39,16 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setUsers(Collection<User> users) {
-        this.users = users;
-    }
-
     public Collection<User> getUsers() {
         return users;
+    }
+
+    void addUser(User user) {
+        this.users.add(user);
     }
 
     @Override
