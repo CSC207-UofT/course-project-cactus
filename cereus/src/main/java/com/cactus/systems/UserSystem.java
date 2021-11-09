@@ -2,22 +2,26 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.entities.User;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Objects;
 
 /***
  * Represents the system that controls users
  */
+@Singleton
 public class UserSystem {
 
-    private final AuthAdapter authAdapter;
+    @Inject
+    AuthAdapter authAdapter;
 
     User currentUser;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(AuthAdapter authAdapter){
-        this.authAdapter = authAdapter;
+    public UserSystem(){
     }
 
     /**
