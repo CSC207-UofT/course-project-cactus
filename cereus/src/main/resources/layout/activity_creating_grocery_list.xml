@@ -7,4 +7,22 @@
         android:layout_height="match_parent"
         tools:context=".CreatingGroceryListActivity">
 
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/groceryListName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.349"
+            android:hint="Enter grocery list name"/>
+    <Button
+            android:text="Create Grocery List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/addListNameButton"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groceryListName"
+            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.253"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
