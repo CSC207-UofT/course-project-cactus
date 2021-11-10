@@ -14,10 +14,12 @@ public class SignupActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private Button signupButton;
-    // Private UserInteractFacade userFacade;
+    @Inject
+    private UserInteractFacade userFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -25,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
         username = findViewById(R.id.newUsername);
         password = findViewById(R.id.newPassword);
         signupButton = findViewById(R.id.signupButton);
-        //userFacade = USERFACADE;
+
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,13 +38,13 @@ public class SignupActivity extends AppCompatActivity {
 
                 Toast.makeText(SignupActivity.this, "Registering in " + givenUsername, Toast.LENGTH_LONG).show();
 
-//                if (userFacade.createUser.equals(true)){
-//                    Intent intent = new Intent(SignupActivity.this, OptionsActivity.class);
-//                    startActivity(intent);
-//
-//                }else{
-//                    Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
-//                }
+                if (userFacade.createUser.equals(true)){
+                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                }else{
+                   Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

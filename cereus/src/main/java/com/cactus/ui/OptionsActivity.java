@@ -11,10 +11,12 @@ public class OptionsActivity extends AppCompatActivity {
     private Button newGroceryList;
     private Button groceryLists;
     private Button logoutButton;
-    // private UserInteractFacade facade;
+    @Inject
+    private UserInteractFacade facade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
