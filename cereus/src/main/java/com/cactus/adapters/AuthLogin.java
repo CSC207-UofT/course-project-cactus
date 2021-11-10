@@ -25,7 +25,6 @@ public class AuthLogin implements  AuthAdapter{
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(login);
-        System.out.println(requestBody);
         HttpClient client = HttpClient.newHttpClient();
         URI uri = new URIBuilder("http://localhost:8080/login").addParameter("username",
                 username).addParameter("password", password).build();
@@ -35,8 +34,8 @@ public class AuthLogin implements  AuthAdapter{
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper finalMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        System.out.println(response.statusCode());
+        ObjectMapper finalMapper = new
+                ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return finalMapper.readValue(response.body(), User.class);
 
     }
@@ -50,7 +49,6 @@ public class AuthLogin implements  AuthAdapter{
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(login);
-        System.out.println(requestBody);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("http://localhost:8080/register"))
@@ -58,9 +56,7 @@ public class AuthLogin implements  AuthAdapter{
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.statusCode());
         ObjectMapper finalMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        System.out.println(finalMapper.readValue(response.body(), User.class));
         return login(username, password);
 
     }
@@ -76,7 +72,6 @@ public class AuthLogin implements  AuthAdapter{
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.statusCode());
         return response.statusCode() == 204;
     }
 
