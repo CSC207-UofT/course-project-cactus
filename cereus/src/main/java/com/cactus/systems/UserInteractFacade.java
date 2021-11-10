@@ -15,12 +15,11 @@ public class UserInteractFacade {
 
     /**
      * Creates a new UserInteractFacade object
-     *
-     * @param userSystem controller for user use cases
-     * @param groceryListSystem controller for grocery list use cases
      */
     @Inject
     public UserInteractFacade() {
+        userSystem = new UserSystem();
+        groceryListSystem = new GroceryListSystem();
     }
 
     // UserSystem methods

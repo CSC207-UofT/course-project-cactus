@@ -30,7 +30,7 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with groceryList managers
      */
     public GroceryListSystem(){
-//        this.groceryAdapter = groceryAdapter;
+        this.groceryAdapter = new WebGroceryAdapter();
     }
 
     /***
