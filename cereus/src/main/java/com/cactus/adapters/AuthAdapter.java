@@ -52,5 +52,5 @@ public interface AuthAdapter {
      */
     User create(String username, String password, String name) throws IOException, URISyntaxException, InterruptedException;
 
-
+    boolean logout(String token) throws IOException, InterruptedException, URISyntaxException;
 }

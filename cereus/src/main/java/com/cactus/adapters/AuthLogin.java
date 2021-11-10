@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -63,5 +64,21 @@ public class AuthLogin implements  AuthAdapter{
         return login(username, password);
 
     }
+
+    @Override
+    public boolean logout(String token) throws IOException, InterruptedException, URISyntaxException {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/logout"))
+                .setHeader("Authorization", token)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        return response.statusCode() == 204;
+    }
+
 
 }
