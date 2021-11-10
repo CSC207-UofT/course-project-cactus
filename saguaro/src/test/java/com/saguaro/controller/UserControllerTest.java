@@ -132,7 +132,7 @@ class UserControllerTest {
     @Nested
     class TestLogout {
         @Test
-        void logout() throws Exception {
+        void testLogout() throws Exception {
             Authentication authentication = mock(Authentication.class);
             SecurityContext securityContext = mock(SecurityContext.class);
             when(securityContext.getAuthentication()).thenReturn(authentication);

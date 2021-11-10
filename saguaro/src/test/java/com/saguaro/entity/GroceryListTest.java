@@ -40,7 +40,7 @@ class GroceryListTest {
     }
 
     @Nested
-    class TestSetUser {
+    class SetUserTest {
 
         private User user;
         private GroceryList list;
@@ -70,7 +70,7 @@ class GroceryListTest {
     }
 
     @Nested
-    class TestAddItem {
+    class AddItemTest {
 
         private GroceryList list;
         private GroceryItem item;
@@ -103,7 +103,7 @@ class GroceryListTest {
     }
 
     @Nested
-    class TestRemoveItem {
+    class RemoveItemTest {
 
         private GroceryList list;
         private GroceryItem item;
@@ -137,7 +137,7 @@ class GroceryListTest {
     }
 
     @Nested
-    class TestEquals {
+    class EqualsTest {
 
         User user;
 
