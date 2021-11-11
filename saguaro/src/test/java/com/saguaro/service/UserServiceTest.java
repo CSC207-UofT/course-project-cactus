@@ -3,6 +3,7 @@ package com.saguaro.service;
 import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
 import com.saguaro.exception.InvalidLoginException;
+import com.saguaro.exception.InvalidParamException;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -155,9 +156,9 @@ class UserServiceTest {
         void testRegisterExistingUser() {
             when(userRepository.existsByUsername(username)).thenReturn(true);
 
-            assertThrows(InvalidLoginException.class, () -> {
+            assertThrows(InvalidParamException.class, () -> {
                 userService.registerNewUser(username, password, name);
-            }, "Cannot register user: " + username + "; username already exists");
+            });
         }
     }
 

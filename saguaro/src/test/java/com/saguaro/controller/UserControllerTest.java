@@ -2,6 +2,8 @@ package com.saguaro.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saguaro.entity.User;
+import com.saguaro.exception.InvalidLoginException;
+import com.saguaro.exception.InvalidParamException;
 import com.saguaro.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -26,6 +28,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -44,6 +47,7 @@ class UserControllerTest {
         JacksonTester.initFields(this, new ObjectMapper());
 
         mvc = MockMvcBuilders.standaloneSetup(userController)
+                .setControllerAdvice(new SaguaroExceptionHandler())
                 .build();
     }
 
@@ -61,28 +65,24 @@ class UserControllerTest {
 
             when(userService.login(username, password)).thenReturn(user);
 
-            MockHttpServletResponse response = mvc.perform(
-                    post("/login")
+            mvc.perform(post("/login")
                             .queryParam("username", "username")
                             .queryParam("password", "password")
-            ).andReturn().getResponse();
-
-            assertEquals(response.getStatus(), HttpStatus.OK.value());
-            assertEquals(response.getContentAsString(),
-                    jsonUser.write(user).getJson());
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
         }
 
         @Test
         void testInvalidLogin() throws Exception {
-            when(userService.login(anyString(), anyString())).thenReturn(null);
+            when(userService.login(anyString(), anyString())).thenThrow(InvalidLoginException.class);
 
-            MockHttpServletResponse response = mvc.perform(
-                    post("/login")
+            mvc.perform(post("/login")
                             .queryParam("username", "username")
                             .queryParam("password", "password")
-            ).andReturn().getResponse();
-
-            assertEquals(response.getStatus(), HttpStatus.NOT_FOUND.value());
+                    ).andExpect(result -> assertTrue(result.getResolvedException()
+                            instanceof InvalidLoginException))
+                    .andExpect(status().isUnauthorized());
         }
     }
 
@@ -102,32 +102,29 @@ class UserControllerTest {
 
             when(userService.registerNewUser(username, password, name)).thenReturn(user);
 
-            MockHttpServletResponse response = mvc.perform(
-                    post("/register")
+            mvc.perform(post("/register")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"username\":\"username\"" +
                                     ",\"password\":\"password\"" +
                                     ",\"name\":\"name\"}")
-            ).andReturn().getResponse();
-
-            assertEquals(response.getStatus(), HttpStatus.OK.value());
-            assertEquals(response.getContentAsString(),
-                    jsonUser.write(user).getJson());
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
         }
 
         @Test
         void testRegisterExistingUser() throws Exception {
-            when(userService.registerNewUser(anyString(), anyString(), anyString())).thenReturn(null);
+            when(userService.registerNewUser(anyString(), anyString(), anyString())).thenThrow(InvalidParamException.class);
 
-            MockHttpServletResponse response = mvc.perform(
-                    post("/register")
+
+            mvc.perform(post("/register")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"username\":\"username\"" +
                                     ",\"password\":\"password\"" +
                                     ",\"name\":\"name\"}")
-            ).andReturn().getResponse();
-
-            assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
+                    ).andExpect(result -> assertTrue(result.getResolvedException()
+                            instanceof InvalidParamException))
+                    .andExpect(status().isConflict());
         }
     }
 
@@ -141,12 +138,9 @@ class UserControllerTest {
             SecurityContextHolder.setContext(securityContext);
 
 
-            MockHttpServletResponse response = mvc.perform(
-                    post("/logout")
-                            .header("Authentication", "token")
-            ).andReturn().getResponse();
-
-            assertEquals(response.getStatus(), HttpStatus.NO_CONTENT.value());
+            mvc.perform(post("/logout")
+                    .header("Authentication", "token")
+            ).andExpect(status().isNoContent());
         }
     }
 }
