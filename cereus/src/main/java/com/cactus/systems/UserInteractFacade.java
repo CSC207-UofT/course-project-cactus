@@ -7,20 +7,17 @@ import java.util.List;
 
 @Singleton
 public class UserInteractFacade {
-    @Inject
-    UserSystem userSystem;
+    private final UserSystem userSystem;
 
-    @Inject
-    GroceryListSystem groceryListSystem;
+    private final GroceryListSystem groceryListSystem;
 
     /**
      * Creates a new UserInteractFacade object
-     *
-     * @param userSystem controller for user use cases
-     * @param groceryListSystem controller for grocery list use cases
      */
     @Inject
-    public UserInteractFacade() {
+    public UserInteractFacade(UserSystem userSystem, GroceryListSystem groceryListSystem) {
+        this.userSystem = userSystem;
+        this.groceryListSystem = groceryListSystem;
     }
 
     // UserSystem methods

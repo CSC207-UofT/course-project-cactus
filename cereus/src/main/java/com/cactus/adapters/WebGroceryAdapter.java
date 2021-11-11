@@ -3,9 +3,14 @@ package com.cactus.adapters;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class WebGroceryAdapter implements GroceryAdapter {
+
+    @Inject
+    public WebGroceryAdapter() {}
+
     @Override
     public List<GroceryList> getGroceryListsByUser(long userid) {
         return null;

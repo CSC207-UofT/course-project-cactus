@@ -1,7 +1,6 @@
 package com.cactus.ui;
 
 import android.content.Intent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
 
-
     @Inject
     UserInteractFacade userInteractFacade;
 
@@ -34,28 +32,25 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         signupButton = findViewById(R.id.signup);
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
-                startActivity(intent);
-
-            }
+        signupButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+            startActivity(intent);
         });
 
         loginButton.setOnClickListener(view -> {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-//                if (userFacade.login.equals(true)){
-//                    Intent intent = new Intent(MainActivity.this, OptionsActivity.class);
-//                    startActivity(intent);
-//
-//                }else{
-//                    Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
-//                }
+                if (userInteractFacade.login(givenUsername, givenPassword)){
+                    Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
+                    startActivity(intent);
 
+                }else{
+                    Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
+                }
 
+//            Intent intent = new Intent(MainActivity.this, DisplayingListActivity.class);
+//            startActivity(intent);
         });
 
     }

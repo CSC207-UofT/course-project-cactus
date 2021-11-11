@@ -13,15 +13,16 @@ import java.util.Objects;
 @Singleton
 public class UserSystem {
 
-    @Inject
-    AuthAdapter authAdapter;
+    private final AuthAdapter authAdapter;
 
     User currentUser;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(){
+    @Inject
+    public UserSystem(AuthAdapter authAdapter){
+        this.authAdapter = authAdapter;
     }
 
     /**

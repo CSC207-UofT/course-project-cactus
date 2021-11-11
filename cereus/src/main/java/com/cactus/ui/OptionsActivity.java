@@ -5,16 +5,21 @@ import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.cactus.systems.UserInteractFacade;
+
+import javax.inject.Inject;
 
 public class OptionsActivity extends AppCompatActivity {
 
     private Button newGroceryList;
     private Button groceryLists;
     private Button logoutButton;
-    // private UserInteractFacade facade;
+    @Inject
+    UserInteractFacade facade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 

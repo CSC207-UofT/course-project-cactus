@@ -11,19 +11,19 @@ import dagger.Provides;
 
 @Module
 public abstract class AppModule {
-    @Provides
-    static TestClass provideTestClass() {
-        return new TestClass();
-    }
+//    @Provides
+//    static TestClass provideTestClass() {
+//        return new TestClass();
+//    }
 
-    @Provides
-    static UserInteractFacade provideFacade() {
-        return new UserInteractFacade();
-    }
-
-    @Binds
-    abstract AuthAdapter bindAuthAdapter(WebAuthAdapter impl);
+//    @Provides
+//    static UserInteractFacade provideFacade() {
+//        return new UserInteractFacade();
+//    }
 
     @Binds
-    abstract GroceryAdapter bindGroceryAdapter(WebGroceryAdapter impl);
+    public abstract AuthAdapter bindAuthAdapter(WebAuthAdapter impl);
+
+    @Binds
+    public abstract GroceryAdapter bindGroceryAdapter(WebGroceryAdapter impl);
 }
