@@ -27,13 +27,14 @@ public class DisplayingListsActivity extends AppCompatActivity {
         addListButton = findViewById(R.id.addListButton);
 
         ArrayList<String> items = userInteractFacade.getGroceryListNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, android.R.id.text1, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-                System.out.println("You clicked list " + id + " called " + items.get(position));
+                items.remove(items.get(position));
+                ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             }
         });
         listView.setAdapter(adapter);
