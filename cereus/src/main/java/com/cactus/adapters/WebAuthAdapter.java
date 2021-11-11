@@ -16,10 +16,10 @@ import java.util.HashMap;
 
 
 /**
- * The AuthLogin class implements the AuthAdapter Interface by interacting with a server
+ * The WebAuthAdapter class implements the AuthAdapter Interface by interacting with a server
  * that stores our Users and Grocery Lists.
  */
-public class AuthLogin implements  AuthAdapter{
+public class WebAuthAdapter implements  AuthAdapter{
 
     /**
      * Returns a User object that corresponds to the provided username and password.
