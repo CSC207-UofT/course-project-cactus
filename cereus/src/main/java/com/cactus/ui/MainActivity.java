@@ -34,13 +34,10 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         signupButton = findViewById(R.id.signup);
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
-                startActivity(intent);
-
-            }
+        signupButton.setOnClickListener(view -> {
+            Toast.makeText(MainActivity.this, "Why no work!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+            startActivity(intent);
         });
 
         loginButton.setOnClickListener(view -> {

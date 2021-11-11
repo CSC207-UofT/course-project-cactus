@@ -1,7 +1,5 @@
 package com.cactus.ui;
 
-import android.content.Intent;
-import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +8,7 @@ import com.cactus.systems.UserInteractFacade;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-public class DisplayingListActivity extends AppCompatActivity {
+public class DisplayingListsActivity extends AppCompatActivity {
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -24,9 +22,9 @@ public class DisplayingListActivity extends AppCompatActivity {
     }
 
     private void populateListView(){
-        ArrayList<String> items = userInteractFacade.getGroceryItemNames();
+        ArrayList<String> items = userInteractFacade.getGroceryListNames();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_view, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view, items);
 
         ListView list = (ListView) findViewById(R.id.listViewDisplayList);
         list.setAdapter(adapter);
