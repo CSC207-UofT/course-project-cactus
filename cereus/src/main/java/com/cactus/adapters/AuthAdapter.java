@@ -1,21 +1,14 @@
 package com.cactus.adapters;
 import com.cactus.entities.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 
 public interface AuthAdapter {
 
     /**
      * Returns a User object that corresponds to the provided username and password.
-     *
-     * If the login was successful, the Response will have code 200 (OK), and a
-     * payload with the following entries:
-     * - userid: a string representation of the user' ID (long)
-     * - name: a string representation of the user's name (string)
-     *
-     * The type in parentheses denotes the value's original type.
      *
      * If the username and password do not correspond to an existing User,
      * then a User object is returned with null values for its attributes, and no login takes place
@@ -28,10 +21,11 @@ public interface AuthAdapter {
      */
     User login(String username, String password) throws IOException, InterruptedException, URISyntaxException;
 
+
     /**
      * Returns a User object created with the provided username, password, and name.
      *
-     * Note: the resulting user object is also logged in as the current user, and no further call to login
+     * Note: the resulting user object is also logged in as the current user, and no further call to log in the User
      * is required
      *
      * If the user has the same username and password (but different name)
@@ -48,6 +42,7 @@ public interface AuthAdapter {
      * @see User
      */
     User create(String username, String password, String name) throws IOException, URISyntaxException, InterruptedException;
+
 
     /**
      * Returns whether the User object with the corresponding token is successfully logged out of the application.
