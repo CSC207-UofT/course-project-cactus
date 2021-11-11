@@ -2,6 +2,7 @@ package com.saguaro.controller;
 
 import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.exception.InvalidParamException;
+import com.saguaro.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,12 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
                 e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
+    @ExceptionHandler(value = {
+            ResourceNotFoundException.class
+    })
+    ResponseEntity<Object> handle(ResourceNotFoundException e, WebRequest request) {
 
+        return handleExceptionInternal(e,
+                e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 }

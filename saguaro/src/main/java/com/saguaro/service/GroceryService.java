@@ -3,6 +3,7 @@ package com.saguaro.service;
 import com.saguaro.entity.GroceryItem;
 import com.saguaro.entity.GroceryList;
 import com.saguaro.entity.User;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.GroceryItemRepository;
 import com.saguaro.repository.GroceryListRepository;
 import com.saguaro.repository.UserRepository;
@@ -34,8 +35,16 @@ public class GroceryService {
                 .collect(Collectors.toMap(GroceryList::getId, GroceryList::getName));
     }
 
-    public GroceryList getListById(long id) {
-        return groceryListRepository.findGroceryListById(id);
+    public GroceryList getListById(long id, String username)
+            throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        GroceryList list = groceryListRepository.findGroceryListById(id);
+
+        if (list == null || !user.equals(list.getUser())) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
+        }
+
+        return list;
     }
 
     public GroceryList createNewList(String name, String username) {
@@ -48,12 +57,13 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
-    public GroceryList saveList(GroceryList list, String username) {
+    public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException{
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
 
-        if (user == null || oldList == null || !user.equals(oldList.getUser())) {
-            return null;
+        if (oldList == null || !user.equals(oldList.getUser())) {
+            throw new ResourceNotFoundException(GroceryList.class,
+                    String.valueOf(list.getId()), user);
         }
 
         HashSet<GroceryItem> foundItems = new HashSet<>();
@@ -76,8 +86,14 @@ public class GroceryService {
         return groceryListRepository.save(oldList);
     }
 
-    public void removeList(long id) {
+    public void removeList(long id, String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
         GroceryList list = groceryListRepository.findGroceryListById(id);
+
+        if (list == null || !user.equals(list.getUser())) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
+        }
+
         groceryListRepository.delete(list);
     }
 
