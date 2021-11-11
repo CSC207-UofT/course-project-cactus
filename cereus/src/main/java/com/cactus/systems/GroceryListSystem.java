@@ -29,9 +29,7 @@ public class GroceryListSystem {
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
-    public GroceryListSystem(){
-        this.groceryAdapter = new WebGroceryAdapter();
-    }
+    public GroceryListSystem(){}
 
     /***
      * Given a name from UI, creates a new GroceryList.

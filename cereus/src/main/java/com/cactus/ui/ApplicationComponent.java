@@ -7,4 +7,7 @@ import dagger.Component;
 })
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
+    void inject(SignupActivity signupActivity);
+    void inject(CreatingGroceryListActivity creatingGroceryListActivity);
+    void inject(OptionsActivity optionsActivity);
 }

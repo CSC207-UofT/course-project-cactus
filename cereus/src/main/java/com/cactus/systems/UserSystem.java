@@ -1,7 +1,6 @@
 package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
-import com.cactus.adapters.WebAuthAdapter;
 import com.cactus.entities.User;
 
 import javax.inject.Inject;
@@ -22,9 +21,7 @@ public class UserSystem {
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(){
-        authAdapter = new WebAuthAdapter();
-    }
+    public UserSystem(){}
 
     /**
      * Get the current user's id

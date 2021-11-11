@@ -23,6 +23,7 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -30,7 +31,6 @@ public class SignupActivity extends AppCompatActivity {
         username = findViewById(R.id.newUsername);
         password = findViewById(R.id.newPassword);
         signupButton = findViewById(R.id.button);
-        //userFacade = USERFACADE;
 
         signupButton.setOnClickListener(view -> {
             String givenName = name.getText().toString();
@@ -45,6 +45,7 @@ public class SignupActivity extends AppCompatActivity {
 
             }else{
                 Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
+
             }
         });
     }

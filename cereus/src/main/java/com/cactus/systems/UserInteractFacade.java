@@ -17,10 +17,7 @@ public class UserInteractFacade {
      * Creates a new UserInteractFacade object
      */
     @Inject
-    public UserInteractFacade() {
-        userSystem = new UserSystem();
-        groceryListSystem = new GroceryListSystem();
-    }
+    public UserInteractFacade() {}
 
     // UserSystem methods
 
