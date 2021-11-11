@@ -52,7 +52,7 @@ public class UserService {
     public User registerNewUser(String username, String password, String name)
             throws InvalidParamException {
         if (userRepository.existsByUsername(username)) {
-            throw new InvalidParamException("Cannot register user: " + username + "; username already exists");
+            throw new InvalidParamException("Could not register user: " + username + "; username already exists");
         }
 
         User newUser = new User();
