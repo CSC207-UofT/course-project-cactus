@@ -12,12 +12,13 @@ import java.sql.Timestamp;
 /**
  * User Entity
  */
-public class User {
+public class User implements Entity{
 
     private String username;
     private String password;
     private String name;
     private String token;
+    private long id;
 
     /**
      * Creates a new User with the given name, username, password and id number.
@@ -26,13 +27,15 @@ public class User {
      * @param username A String containing the User's username.
      * @param password A String containing the User's password.
      * @param token A String containing a token to signify User was successfully retrieved from server
+     * @param id A long value serving as an identifier for the User.
      */
 
-    public User(String name, String username, String password, String token){
+    public User(String name, String username, String password, String token, long id){
         this.name = name;
         this.username = username;
         this.password = password;
         this.token = token;
+        this.id = id;
     }
 
     public User(){
@@ -50,6 +53,9 @@ public class User {
     public String getToken(){
         return token;
     }
+    public long getId(){
+        return id;
+    }
     public void setName(String name){
         this.name = name;
     }
@@ -62,9 +68,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    public void setId(long id){
+        this.id = id;
+    }
     @Override
     public String toString(){
-        return "The user's name is: " + name + " and has a username of " + username + "and token of " + token;
+        return "Name: " + name +
+                "\nUsername: " + username +
+                "\nPassword: " + password +
+                "\nToken: " + token +
+                "\nId: " + id;
     }
 }

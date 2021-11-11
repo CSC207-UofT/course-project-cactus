@@ -27,7 +27,9 @@ public class AuthLogin implements  AuthAdapter{
      * The username and password is sent to a server to return the User corresponding to the username and password.
      *
      * If the username and password do not correspond to an existing User,
-     * then a User object is returned with null values for its attributes, and no login takes place.
+     * then null is returned, and no login takes place.
+     *
+     * Note: the password is not present in the User, and a null value is in place
      *
      * @param username a String containing the username of the user to be logged in
      * @param password a String containing the password to validate
@@ -36,14 +38,29 @@ public class AuthLogin implements  AuthAdapter{
      * @see User
      */
     @Override
-    public User login(String username, String password) throws IOException, InterruptedException, URISyntaxException {
+    public User login(String username, String password) {
         HashMap<String, String> login = new HashMap<>();
         login.put("username", username);
         login.put("password", password);
-
-        URI uri = new URIBuilder("http://localhost:8080/login").addParameter("username",
+        URI uri;
+        try{
+            uri = new URIBuilder("http://localhost:8080/login").addParameter("username",
                 username).addParameter("password", password).build();
-        return sendRequest(login, uri);
+            }
+        catch(URISyntaxException u) {
+            return null;
+        }
+        User user;
+        try {
+            user = sendRequest(login, uri);
+        }
+        catch(IOException | InterruptedException i){
+            return null;
+        }
+        if (user.getToken() == null) {
+            return null;
+        }
+        return user;
 
     }
 
@@ -55,13 +72,17 @@ public class AuthLogin implements  AuthAdapter{
      *
      * The username, name and password is sent to a server to check if the username doesn't correspond to an existing
      * user.
+     *
      * If the user has the same username and password (but different name)
      * as one that already exists, then that person is logged in and no creation takes place.
      *
      * If the user has the same username and different password as an existing user,
-     * then a User object is returned with null values for its attributes, and no creation or login takes place.
+     * then null is returned and no creation or login takes place.
      *
-     * If the username has a different username, then a User object corresponding to the given information is returned.
+     * If the username has a different username, then a User object corresponding to the given information is created,
+     * and returned.
+     *
+     * Note: the password is not present in the User, and a null value is in place
      *
      * @param username a String containing the username of the new user
      * @param password a String containing the password of the new user
@@ -71,13 +92,23 @@ public class AuthLogin implements  AuthAdapter{
      * @see User
      */
     @Override
-    public User create(String username, String password, String name) throws IOException, URISyntaxException, InterruptedException {
+    public User create(String username, String password, String name) {
         HashMap<String, String> create = new HashMap<>();
         create.put("username", username);
         create.put("password", password);
         create.put("name", name);
-        URI uri = new URI("http://localhost:8080/register");
-        sendRequest(create, uri);
+        URI uri;
+        try{
+            uri = new URI("http://localhost:8080/register");
+        }catch(URISyntaxException u) {
+            return null;
+        }
+        try {
+            sendRequest(create, uri);
+        }
+        catch(IOException | InterruptedException i){
+            return null;
+        }
         return login(username, password);
 
     }
@@ -121,21 +152,33 @@ public class AuthLogin implements  AuthAdapter{
      * If the token corresponds to no User object, then the User is not logged out and the function returns false.
      *
      * @param token    a String containing a token unique to every User, stored in the User class
-     * @return         whether the User corresponding to the token is logged out or not
+     * @return         a boolean signifying whether the User corresponding to the token is logged out or not
      *
      * @see User
      */
     @Override
-    public boolean logout(String token) throws IOException, InterruptedException, URISyntaxException {
+    public boolean logout(String token) {
         HttpClient client = HttpClient.newHttpClient();
-
+        URI uri;
+        try{
+            uri = new URI("http://localhost:8080/logout");
+        }
+        catch(URISyntaxException u){
+            return false;
+        }
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://localhost:8080/logout"))
+                .uri(uri)
                 .setHeader("Authorization", token)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
+        catch(IOException | InterruptedException i){
+            return false;
+        }
         return response.statusCode() == 204;
     }
 
