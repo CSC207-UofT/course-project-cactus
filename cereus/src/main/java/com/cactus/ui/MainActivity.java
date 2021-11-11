@@ -41,16 +41,13 @@ public class MainActivity extends AppCompatActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-                if (userInteractFacade.login(givenUsername, givenPassword)){
-                    Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
-                    startActivity(intent);
+            if (userInteractFacade.login(givenUsername, givenPassword)){
+                Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
+                startActivity(intent);
 
-                }else{
-                    Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
-                }
-
-//            Intent intent = new Intent(MainActivity.this, DisplayingListActivity.class);
-//            startActivity(intent);
+            }else{
+                Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
+            }
         });
 
     }

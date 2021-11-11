@@ -37,8 +37,6 @@ public class SignupActivity extends AppCompatActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-//                Toast.makeText(SignupActivity.this, "Registering in " + givenUsername, Toast.LENGTH_LONG).show();
-
             if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)){
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);

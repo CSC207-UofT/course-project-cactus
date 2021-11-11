@@ -66,6 +66,11 @@ public class GroceryListSystem {
         List<GroceryList> groceryLists =
                 this.groceryAdapter.getGroceryListsByUser(userid);
 
+        groceryLists = new ArrayList<GroceryList>();
+        groceryLists.add(new GroceryList("Apple"));
+        groceryLists.add(new GroceryList("Banana"));
+        groceryLists.add(new GroceryList("Melon"));
+
         for(GroceryList groceryList : groceryLists){
             this.currentListNamesMap.put(groceryList.getName(), groceryList.getId());
             listNames.add(groceryList.getName());
