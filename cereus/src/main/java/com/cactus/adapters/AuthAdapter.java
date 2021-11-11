@@ -25,14 +25,9 @@ public interface AuthAdapter {
     /**
      * Returns a User object created with the provided username, password, and name.
      *
-     * Note: the resulting user object is also logged in as the current user, and no further call to log in the User
-     * is required
      *
-     * If the user has the same username and password (but different name)
-     * as one that already exists, then that person is logged in and no creation takes place.
+     * If the user has the same username as one that already exists, then null is returned and no creation takes place.
      *
-     * If the user has the same username and different password as an existing user,
-     * then null is returned and no creation or login takes place.
      *
      * If the username has a different username, then a User object corresponding to the given information is created,
      * and returned

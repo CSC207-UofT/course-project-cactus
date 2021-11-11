@@ -67,22 +67,18 @@ public class AuthLogin implements  AuthAdapter{
     /**
      * Returns a User object created with the provided username, password, and name.
      *
-     * Note: the resulting user object is also logged in as the current user, and no further call to log in the User
-     * is required
      *
-     * The username, name and password is sent to a server to check if the username doesn't correspond to an existing
-     * user.
+     * The username, name and password is sent to a server.
      *
-     * If the user has the same username and password (but different name)
-     * as one that already exists, then that person is logged in and no creation takes place.
+     * First, it checks if the username corresponds to an existing user. If it does, the function returns null, and no
+     * user creation takes place.
      *
-     * If the user has the same username and different password as an existing user,
-     * then null is returned and no creation or login takes place.
      *
      * If the username has a different username, then a User object corresponding to the given information is created,
      * and returned.
      *
-     * Note: the password is not present in the User, and a null value is in place
+     * Note: the password is not present in the User, and a null value is in place. The token has not been set yet, and
+     * is also null.
      *
      * @param username a String containing the username of the new user
      * @param password a String containing the password of the new user
@@ -103,13 +99,14 @@ public class AuthLogin implements  AuthAdapter{
         }catch(URISyntaxException u) {
             return null;
         }
+        User user;
         try {
-            sendRequest(create, uri);
+            user = sendRequest(create, uri);
         }
         catch(IOException | InterruptedException i){
             return null;
         }
-        return login(username, password);
+        return user;
 
     }
 
@@ -141,6 +138,9 @@ public class AuthLogin implements  AuthAdapter{
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         ObjectMapper finalMapper =
                 new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        if (response.statusCode() != 200){
+            return null;
+        }
         return finalMapper.readValue(response.body(), User.class);
     }
 
