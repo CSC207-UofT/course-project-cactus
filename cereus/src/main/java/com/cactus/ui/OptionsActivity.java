@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.cactus.systems.UserInteractFacade;
+
+import javax.inject.Inject;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -12,7 +15,7 @@ public class OptionsActivity extends AppCompatActivity {
     private Button groceryLists;
     private Button logoutButton;
     @Inject
-    private UserInteractFacade facade;
+    UserInteractFacade facade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

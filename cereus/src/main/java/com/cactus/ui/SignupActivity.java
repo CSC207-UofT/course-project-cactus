@@ -7,6 +7,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.cactus.systems.UserInteractFacade;
+
+import javax.inject.Inject;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -15,7 +18,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText password;
     private Button signupButton;
     @Inject
-    private UserInteractFacade userFacade;
+    UserInteractFacade userFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,7 @@ public class SignupActivity extends AppCompatActivity {
                 String givenUsername = username.getText().toString();
                 String givenPassword = password.getText().toString();
 
-                Toast.makeText(SignupActivity.this, "Registering in " + givenUsername, Toast.LENGTH_LONG).show();
-
-                if (userFacade.createUser.equals(true)){
+                if (userFacade.createUser(givenName, givenUsername, givenPassword)){
                     Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                     startActivity(intent);
 
