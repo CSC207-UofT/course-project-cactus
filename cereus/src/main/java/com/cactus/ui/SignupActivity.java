@@ -40,7 +40,7 @@ public class SignupActivity extends AppCompatActivity {
 //                Toast.makeText(SignupActivity.this, "Registering in " + givenUsername, Toast.LENGTH_LONG).show();
 
             if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)){
-                Intent intent = new Intent(SignupActivity.this, OptionsActivity.class);
+                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);
 
             }else{

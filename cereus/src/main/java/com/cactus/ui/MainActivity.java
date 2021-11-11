@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             String givenPassword = password.getText().toString();
 
                 if (userInteractFacade.login(givenUsername, givenPassword)){
-                    Intent intent = new Intent(MainActivity.this, OptionsActivity.class);
+                    Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
                     startActivity(intent);
 
                 }else{
