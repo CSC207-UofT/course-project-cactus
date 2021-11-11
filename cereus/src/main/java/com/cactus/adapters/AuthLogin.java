@@ -57,9 +57,6 @@ public class AuthLogin implements  AuthAdapter{
         catch(IOException | InterruptedException i){
             return null;
         }
-        if (user.getToken() == null) {
-            return null;
-        }
         return user;
 
     }
