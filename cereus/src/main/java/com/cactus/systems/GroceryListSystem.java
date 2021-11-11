@@ -18,8 +18,7 @@ import java.util.List;
 @Singleton
 public class GroceryListSystem {
 
-    @Inject
-    GroceryAdapter groceryAdapter;
+    private final GroceryAdapter groceryAdapter;
 
     long currentGroceryListId;
     HashMap<String, Long> currentListNamesMap;
@@ -30,7 +29,9 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with groceryList managers
      */
     @Inject
-    public GroceryListSystem(){}
+    public GroceryListSystem(GroceryAdapter groceryAdapter){
+        this.groceryAdapter = groceryAdapter;
+    }
 
     /***
      * Given a name from UI, creates a new GroceryList.

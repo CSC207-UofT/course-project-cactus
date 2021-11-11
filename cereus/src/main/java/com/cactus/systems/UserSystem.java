@@ -13,8 +13,7 @@ import java.util.Objects;
 @Singleton
 public class UserSystem {
 
-    @Inject
-    AuthAdapter authAdapter;
+    private final AuthAdapter authAdapter;
 
     User currentUser;
 
@@ -22,7 +21,9 @@ public class UserSystem {
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     @Inject
-    public UserSystem(){}
+    public UserSystem(AuthAdapter authAdapter){
+        this.authAdapter = authAdapter;
+    }
 
     /**
      * Get the current user's id
