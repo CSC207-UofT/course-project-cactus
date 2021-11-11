@@ -1,5 +1,6 @@
 package com.cactus.ui;
 
+import android.app.Activity;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,12 +23,12 @@ public class DisplayingListsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_lists);
 
+        listName = findViewById(R.id.listName);
+        addListButton = findViewById(R.id.addListButton);
+
         ArrayList<String> items = userInteractFacade.getGroceryListNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, android.R.id.text1, items);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
-
-        listName.findViewById(R.id.listName);
-        addListButton.findViewById(R.id.addListButton);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

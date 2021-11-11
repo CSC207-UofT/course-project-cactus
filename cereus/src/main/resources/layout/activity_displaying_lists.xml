@@ -6,30 +6,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".DisplayingListsActivity">
-    <ListView
-            android:layout_width="409dp"
-            android:layout_height="729dp" tools:layout_editor_absoluteX="1dp"
-            android:id="@+id/listViewDisplayList"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintVertical_bias="0.262"/>
     <EditText
             android:layout_width="216dp"
             android:layout_height="45dp"
             android:inputType="textShortMessage"
             android:ems="10"
             android:id="@+id/listName"
+            android:hint="Enter your list name"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listViewDisplayList" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintVertical_bias="0.262" android:hint="Enter your list name"/>
+            android:layout_marginTop="10dp" android:layout_marginLeft="30dp" android:layout_marginStart="30dp"
+            app:layout_constraintStart_toStartOf="parent"/>
     <Button
             android:text="Add List"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listName" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintVertical_bias="0.213" android:id="@+id/addListButton"/>
+            android:id="@+id/addListButton" app:layout_constraintLeft_toRightOf="@+id/listName"
+            android:layout_marginLeft="20dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+    <ListView
+            android:layout_width="409dp"
+            android:layout_height="729dp"
+            android:id="@+id/listViewDisplayList" app:layout_constraintTop_toBottomOf="@+id/listName"
+            app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
