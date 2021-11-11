@@ -2,6 +2,7 @@ package com.saguaro.service;
 
 import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
+import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -76,7 +77,7 @@ class UserServiceTest {
         }
 
         @Test
-        void testValidLoginCreatesValidToken() {
+        void testValidLoginCreatesValidToken() throws Exception {
             // mock responses
             when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
 
@@ -97,10 +98,9 @@ class UserServiceTest {
             // mock responses
             when(userRepository.findUserByUsername(username)).thenReturn(null);
 
-            User actual = userService.login(username, password);
-
-            // invalid login returns null user
-            assertNull(actual);
+            assertThrows(InvalidLoginException.class, () -> {
+                userService.login(username, password);
+            });
         }
 
         @Test
@@ -108,10 +108,9 @@ class UserServiceTest {
             // mock responses
             when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);
 
-            User actual = userService.login(username, password);
-
-            // invalid login returns null user
-            assertNull(actual);
+            assertThrows(InvalidLoginException.class, () -> {
+                userService.login(username, password);
+            });
         }
     }
 
@@ -141,7 +140,7 @@ class UserServiceTest {
     class RegisterTest {
 
         @Test
-        void testValidRegister() {
+        void testValidRegister() throws Exception {
             when(userRepository.existsByUsername(username)).thenReturn(false);
             when(roleRepository.findRoleByName("ROLE_USER")).thenReturn(role);
             when(passwordEncoder.encode(anyString())).thenReturn(password);
@@ -156,9 +155,9 @@ class UserServiceTest {
         void testRegisterExistingUser() {
             when(userRepository.existsByUsername(username)).thenReturn(true);
 
-            User newUser = userService.registerNewUser(username, password, name);
-
-            assertNull(newUser);
+            assertThrows(InvalidLoginException.class, () -> {
+                userService.registerNewUser(username, password, name);
+            }, "Cannot register user: " + username + "; username already exists");
         }
     }
 

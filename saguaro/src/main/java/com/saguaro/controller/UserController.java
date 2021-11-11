@@ -1,6 +1,8 @@
 package com.saguaro.controller;
 
 import com.saguaro.entity.User;
+import com.saguaro.exception.InvalidLoginException;
+import com.saguaro.exception.InvalidParamException;
 import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -18,27 +20,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        User user = userService.login(username, password);
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username/password invalid");
-        }
-
-        return user;
+    public User login(@RequestParam("username") String username,
+                      @RequestParam("password") String password) throws InvalidLoginException {
+        return userService.login(username, password);
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody RegisterPayload payload) {
-        User user = userService.registerNewUser(payload.getUsername(),
+    public User register(@RequestBody RegisterPayload payload) throws InvalidParamException {
+        return userService.registerNewUser(payload.getUsername(),
                 payload.getPassword(),
                 payload.getName());
-
-        if (user == null) {
-            // TODO: create exception handler with better exceptions
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists");
-        }
-
-        return user;
     }
 
     private static class RegisterPayload {

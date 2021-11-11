@@ -2,6 +2,8 @@ package com.saguaro.service;
 
 import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
+import com.saguaro.exception.InvalidLoginException;
+import com.saguaro.exception.InvalidParamException;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public User login(String username, String password) {
+    public User login(String username, String password) throws InvalidLoginException {
         User user = userRepository.findUserByUsername(username);
 
         if (user != null) {
@@ -37,7 +39,8 @@ public class UserService {
                 return user;
             }
         }
-        return null;
+
+        throw new InvalidLoginException();
     }
 
     public void logout(String username) {
@@ -46,9 +49,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User registerNewUser(String username, String password, String name) {
+    public User registerNewUser(String username, String password, String name)
+            throws InvalidParamException {
         if (userRepository.existsByUsername(username)) {
-            return null;
+            throw new InvalidParamException("Cannot register user: " + username + "; username already exists");
         }
 
         User newUser = new User();
