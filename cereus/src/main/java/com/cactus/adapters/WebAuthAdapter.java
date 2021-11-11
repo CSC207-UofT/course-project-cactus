@@ -2,7 +2,13 @@ package com.cactus.adapters;
 
 import com.cactus.entities.User;
 
+import javax.inject.Inject;
+
 public class WebAuthAdapter implements AuthAdapter {
+
+    @Inject
+    public WebAuthAdapter() {}
+
     @Override
     public User login(String username, String password) {
         return new User("Name", username, password);

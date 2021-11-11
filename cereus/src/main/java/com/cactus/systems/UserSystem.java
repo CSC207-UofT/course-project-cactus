@@ -21,6 +21,7 @@ public class UserSystem {
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
+    @Inject
     public UserSystem(){}
 
     /**

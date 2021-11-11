@@ -20,10 +20,4 @@ public abstract class AppModule {
     static UserInteractFacade provideFacade() {
         return new UserInteractFacade();
     }
-
-    @Binds
-    abstract AuthAdapter bindAuthAdapter(WebAuthAdapter impl);
-
-    @Binds
-    abstract GroceryAdapter bindGroceryAdapter(WebGroceryAdapter impl);
 }

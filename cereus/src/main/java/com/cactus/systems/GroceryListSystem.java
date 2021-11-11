@@ -29,6 +29,7 @@ public class GroceryListSystem {
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
+    @Inject
     public GroceryListSystem(){}
 
     /***
