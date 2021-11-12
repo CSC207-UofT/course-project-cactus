@@ -15,6 +15,7 @@ public interface ApplicationComponent {
     void inject(CreatingGroceryListActivity creatingGroceryListActivity);
     void inject(OptionsActivity optionsActivity);
     void inject(DisplayingListsActivity displayingListsActivity);
+    void inject(DisplayingItemsActivity displayingItemsActivity);
 
 //    void inject(UserInteractFacade userInteractFacade);
 }
