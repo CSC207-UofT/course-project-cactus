@@ -7,8 +7,13 @@ import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @RestController
 public class UserController {
@@ -26,40 +31,44 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody RegisterPayload payload) throws InvalidParamException {
-        return userService.registerNewUser(payload.getUsername(),
-                payload.getPassword(),
-                payload.getName());
+    public User register(@Validated @RequestBody RegisterPayload payload) throws InvalidParamException {
+        return userService.registerNewUser(payload.username,
+                payload.password,
+                payload.name);
     }
 
     private static class RegisterPayload {
+        @NotBlank
         String name;
+
+        @NotBlank
         String username;
 
-        public String getName() {
-            return name;
-        }
-
+//        public String getName() {
+//            return name;
+//        }
+//
         public void setName(String name) {
             this.name = name;
         }
-
-        public String getUsername() {
-            return username;
-        }
-
+//
+//        public String getUsername() {
+//            return username;
+//        }
+//
         public void setUsername(String username) {
             this.username = username;
         }
-
-        public String getPassword() {
-            return password;
-        }
-
+//
+//        public String getPassword() {
+//            return password;
+//        }
+//
         public void setPassword(String password) {
             this.password = password;
         }
 
+        @NotBlank
         String password;
     }
 

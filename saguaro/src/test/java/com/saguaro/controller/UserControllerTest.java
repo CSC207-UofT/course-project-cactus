@@ -134,7 +134,7 @@ class UserControllerTest {
         void logout() throws Exception {
             Authentication authentication = mock(Authentication.class);
             SecurityContext securityContext = mock(SecurityContext.class);
-            Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
             SecurityContextHolder.setContext(securityContext);
 
 
