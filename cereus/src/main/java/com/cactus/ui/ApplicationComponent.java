@@ -13,7 +13,6 @@ public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(SignupActivity signupActivity);
     void inject(CreatingGroceryListActivity creatingGroceryListActivity);
-    void inject(OptionsActivity optionsActivity);
     void inject(DisplayingListsActivity displayingListsActivity);
 
 //    void inject(UserInteractFacade userInteractFacade);
