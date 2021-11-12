@@ -126,6 +126,63 @@ class UserControllerTest {
                             instanceof InvalidParamException))
                     .andExpect(status().isConflict());
         }
+
+        @Test
+        void testRegisterUserBadRequestNoUsername() throws Exception {
+            mvc.perform(post("/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(",\"password\":\"password\"" +
+                                    ",\"name\":\"name\"}")
+                    ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testRegisterUserBadRequestNoPassword() throws Exception {
+            mvc.perform(post("/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(",\"username\":\"username\"" +
+                            ",\"name\":\"name\"}")
+            ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testRegisterUserBadRequestNoName() throws Exception {
+            mvc.perform(post("/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(",\"username\":\"username\"" +
+                            ",\"password\":\"password\"}")
+            ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testRegisterUserBadRequestBlankUsername() throws Exception {
+            mvc.perform(post("/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\":\"\"" +
+                                    ",\"password\":\"password\"" +
+                                    ",\"name\":\"name\"}")
+                    ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testRegisterUserBadRequestBlankPassword() throws Exception {
+            mvc.perform(post("/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"username\":\"username\"" +
+                            ",\"password\":\"\"" +
+                            ",\"name\":\"name\"}")
+            ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testRegisterUserBadRequestBlankName() throws Exception {
+            mvc.perform(post("/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"username\":\"username\"" +
+                            ",\"password\":\"password\"" +
+                            ",\"name\":\"\"}")
+            ).andExpect(status().isBadRequest());
+        }
     }
 
     @Nested
