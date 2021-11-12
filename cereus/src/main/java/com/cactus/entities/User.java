@@ -71,12 +71,5 @@ public class User {
     public void setId(long id){
         this.id = id;
     }
-    @Override
-    public String toString(){
-        return "Name: " + name +
-                "\nUsername: " + username +
-                "\nPassword: " + password +
-                "\nToken: " + token +
-                "\nId: " + id;
-    }
+
 }
