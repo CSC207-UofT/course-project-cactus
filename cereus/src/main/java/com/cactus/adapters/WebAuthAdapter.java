@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 public class WebAuthAdapter implements AuthAdapter {
 
-    private final static HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("localhost:8080");
+    private final static HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("localhost").port(8080);
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
 
