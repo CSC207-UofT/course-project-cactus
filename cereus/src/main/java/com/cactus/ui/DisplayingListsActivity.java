@@ -1,10 +1,8 @@
 package com.cactus.ui;
 
-import android.app.Activity;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import com.cactus.systems.UserInteractFacade;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -26,22 +24,15 @@ public class DisplayingListsActivity extends AppCompatActivity {
         listName = findViewById(R.id.listName);
         addListButton = findViewById(R.id.addListButton);
 
-        ArrayList<String> items = userInteractFacade.getGroceryListNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, android.R.id.text1, items);
+        ArrayList<String> lists = userInteractFacade.getGroceryListNames();
+        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout, lists);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-                System.out.println("You clicked list " + id + " called " + items.get(position));
-            }
-        });
-        listView.setAdapter(adapter);
+        listView.setAdapter(customListAdapter);
 
         addListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
 
-            items.add(givenListName);
+            lists.add(givenListName);
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
         });
     }

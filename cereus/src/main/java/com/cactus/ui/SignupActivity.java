@@ -44,10 +44,8 @@ public class SignupActivity extends AppCompatActivity {
             if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)){
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);
-
             }else{
                 Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
-
             }
         });
     }

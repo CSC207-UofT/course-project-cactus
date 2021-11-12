@@ -67,9 +67,9 @@ public class GroceryListSystem {
                 this.groceryAdapter.getGroceryListsByUser(userid);
 
         groceryLists = new ArrayList<GroceryList>();
-        groceryLists.add(new GroceryList("Apple"));
-        groceryLists.add(new GroceryList("Banana"));
-        groceryLists.add(new GroceryList("Melon"));
+        groceryLists.add(new GroceryList("List 1"));
+        groceryLists.add(new GroceryList("List 2"));
+        groceryLists.add(new GroceryList("List 3"));
 
         for(GroceryList groceryList : groceryLists){
             this.currentListNamesMap.put(groceryList.getName(), groceryList.getId());
@@ -89,6 +89,11 @@ public class GroceryListSystem {
         ArrayList<String> groceryItemNames = new ArrayList<>();
         List<GroceryItem> groceryItems =
                 this.groceryAdapter.getGroceryItems(this.currentGroceryListId, userid);
+
+        groceryItems = new ArrayList<GroceryItem>();
+        groceryItems.add(new GroceryItem("Apple", 1));
+        groceryItems.add(new GroceryItem("Banana", 1));
+        groceryItems.add(new GroceryItem("Melon", 1));
 
         for(GroceryItem groceryItem : groceryItems){
             groceryItemNames.add(groceryItem.getName());
