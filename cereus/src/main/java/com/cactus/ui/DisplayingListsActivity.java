@@ -27,7 +27,6 @@ public class DisplayingListsActivity extends AppCompatActivity {
         addListButton = findViewById(R.id.addListButton);
 
         ArrayList<String> items = userInteractFacade.getGroceryListNames();
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout, items);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
         listView.setAdapter(customListAdapter);
