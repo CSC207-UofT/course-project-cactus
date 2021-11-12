@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Grocery List Entity
  */
-public class GroceryList implements Entity {
+public class GroceryList {
 
     private String name;
     private long id;
