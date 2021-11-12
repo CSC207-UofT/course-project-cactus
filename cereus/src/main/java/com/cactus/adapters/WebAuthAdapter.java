@@ -18,7 +18,6 @@ import java.util.HashMap;
  */
 public class WebAuthAdapter implements AuthAdapter {
 
-    private final static HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.123.123").port(8080);
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
 
@@ -45,6 +44,8 @@ public class WebAuthAdapter implements AuthAdapter {
         HashMap<String, String> login = new HashMap<>();
         login.put("username", username);
         login.put("password", password);
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
 
         HttpUrl url = baseUrl.addPathSegment("login")
                 .addQueryParameter("username", username)
@@ -90,6 +91,7 @@ public class WebAuthAdapter implements AuthAdapter {
         create.put("password", password);
         create.put("name", name);
 
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
         HttpUrl url = baseUrl.addPathSegment("register").build();
 
         User user;
@@ -160,6 +162,7 @@ public class WebAuthAdapter implements AuthAdapter {
     public boolean logout(String token) {
         OkHttpClient client = new OkHttpClient();
 
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
         HttpUrl url = baseUrl.addPathSegment("logout").build();
 
         Request request = new Request.Builder()
