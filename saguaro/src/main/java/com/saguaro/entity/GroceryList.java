@@ -6,6 +6,7 @@ package com.saguaro.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,13 +17,15 @@ import java.util.Objects;
 @Entity
 public class GroceryList {
 
+    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "LIST_ID")
-    private long id;
+    private Long id;
 
     private String name;
 
+    @NotNull
     @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
@@ -45,9 +48,7 @@ public class GroceryList {
     /**
      * Creates a new GroceryList.
      */
-    public GroceryList(){
-        this.items = new ArrayList<>();
-    }
+    public GroceryList(){}
 
     public long getId() {
         return id;
@@ -77,6 +78,10 @@ public class GroceryList {
     }
 
     public void addItem(GroceryItem item) {
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
+
         if (!this.items.contains(item)) {
             this.items.add(item);
             item.addList(this);
@@ -103,6 +108,6 @@ public class GroceryList {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroceryList that = (GroceryList) o;
-        return id == that.id && items.equals(that.items) && Objects.equals(name, that.name) && Objects.equals(user, that.user);
+        return id.equals(that.id) && Objects.equals(items, that.items) && Objects.equals(name, that.name) && Objects.equals(user, that.user);
     }
 }

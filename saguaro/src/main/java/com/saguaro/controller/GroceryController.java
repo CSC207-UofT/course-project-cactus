@@ -1,14 +1,18 @@
 package com.saguaro.controller;
 
 import com.saguaro.entity.GroceryList;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.service.GroceryService;
 import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -16,7 +20,7 @@ public class GroceryController {
 
     private final GroceryService groceryService;
 
-    public GroceryController(GroceryService groceryService, UserService userService) {
+    public GroceryController(GroceryService groceryService) {
         this.groceryService = groceryService;
     }
 
@@ -29,14 +33,11 @@ public class GroceryController {
     }
 
     @GetMapping("api/list")
-    public GroceryList getList(@RequestParam("id") long id) {
-        GroceryList list = groceryService.getListById(id);
+    public GroceryList getList(@RequestParam("id") long id) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
 
-        if (list == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "List not found");
-        }
-
-        return list;
+        return groceryService.getListById(id, username);
     }
 
     @PostMapping("api/create-list")
@@ -48,7 +49,7 @@ public class GroceryController {
     }
 
     @PutMapping("api/save-list")
-    public GroceryList saveList(@RequestBody GroceryList list) {
+    public GroceryList saveList(@Validated @RequestBody GroceryList list) throws ResourceNotFoundException{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
@@ -57,7 +58,10 @@ public class GroceryController {
 
     @DeleteMapping("api/delete-list")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteList(@RequestParam("id") long id) {
-        groceryService.removeList(id);
+    public void deleteList(@RequestParam("id") long id) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        groceryService.removeList(id, username);
     }
 }

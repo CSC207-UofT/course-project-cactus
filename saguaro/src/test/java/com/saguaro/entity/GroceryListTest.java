@@ -15,13 +15,6 @@ import static org.mockito.Mockito.*;
 class GroceryListTest {
 
     @Test
-    void testInstantiateItems() {
-        GroceryList list = new GroceryList();
-
-        assertNotNull(list.getItems());
-    }
-
-    @Test
     void testPreRemove() {
         User user = mock(User.class);
         GroceryItem item1 = mock(GroceryItem.class);
@@ -151,7 +144,7 @@ class GroceryListTest {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
             first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "id", 1L);
 
             assertEquals(first, first);
         }
@@ -161,12 +154,12 @@ class GroceryListTest {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
             first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "id", 1L);
 
             GroceryList second = new GroceryList();
             second.setName("Harry's List");
             second.setUser(user);
-            ReflectionTestUtils.setField(second, "id", 1);
+            ReflectionTestUtils.setField(second, "id", 1L);
 
             assertEquals(first, second);
         }
@@ -176,34 +169,11 @@ class GroceryListTest {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
             first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "id", 1L);
 
             GroceryList second = new GroceryList();
             second.setName("Harry's List");
             second.setUser(user);
-
-            assertNotEquals(first, second);
-        }
-
-        @Test
-        void testEqualsNullItems() {
-            GroceryList first = new GroceryList();
-            first.setName("Harry's List");
-            first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
-            ReflectionTestUtils.setField(first, "items", null);
-
-            GroceryList second = new GroceryList();
-            second.setName("Harry's List");
-            second.setUser(user);
-            ReflectionTestUtils.setField(second, "id", 1);
-
-            assertThrows(NullPointerException.class, () -> {
-                first.equals(second);
-            });
-
-            ReflectionTestUtils.setField(first, "items", new ArrayList<>());
-            ReflectionTestUtils.setField(second, "items", null);
 
             assertNotEquals(first, second);
         }
@@ -213,7 +183,7 @@ class GroceryListTest {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
             first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "id", 1L);
 
             assertNotEquals(first, null);
         }
@@ -223,7 +193,7 @@ class GroceryListTest {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
             first.setUser(user);
-            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "id", 1L);
 
             assertNotEquals(first, new HashMap<Character, String>());
         }
