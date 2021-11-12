@@ -5,7 +5,7 @@ import com.cactus.entities.User;
 import org.apache.http.client.utils.URIBuilder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.apache.http.HttpStatus;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -135,7 +135,7 @@ public class WebAuthAdapter implements  AuthAdapter{
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         ObjectMapper finalMapper =
                 new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        if (response.statusCode() != 200){
+        if (response.statusCode() != HttpStatus.SC_OK){
             return null;
         }
         return finalMapper.readValue(response.body(), User.class);
@@ -176,7 +176,7 @@ public class WebAuthAdapter implements  AuthAdapter{
         catch(IOException | InterruptedException i){
             return false;
         }
-        return response.statusCode() == 204;
+        return response.statusCode() == HttpStatus.SC_NO_CONTENT;
     }
 
 
