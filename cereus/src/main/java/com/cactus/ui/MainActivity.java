@@ -1,6 +1,7 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
