@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 /**
  * User Entity
  */
-public class User implements Entity{
+public class User {
 
     private String username;
     private String password;
