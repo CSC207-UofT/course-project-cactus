@@ -96,6 +96,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(create, url);
         } catch (IOException i) {
+            System.out.println(i.getMessage());
             return null;
         }
         return user;

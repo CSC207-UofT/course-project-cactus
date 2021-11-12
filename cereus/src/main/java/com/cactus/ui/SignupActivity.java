@@ -1,6 +1,7 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,9 @@ public class SignupActivity extends AppCompatActivity {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         name = findViewById(R.id.name);
         username = findViewById(R.id.newUsername);
