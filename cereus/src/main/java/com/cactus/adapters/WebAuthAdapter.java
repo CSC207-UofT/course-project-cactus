@@ -10,6 +10,7 @@ import okhttp3.Response;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 /**
@@ -144,7 +145,12 @@ public class WebAuthAdapter implements AuthAdapter {
             return null;
         }
 
-        return finalMapper.readValue(response.body().string(), User.class);
+        try {
+            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
+        }
+        catch(NullPointerException e){
+            return null;
+        }
     }
 
 
