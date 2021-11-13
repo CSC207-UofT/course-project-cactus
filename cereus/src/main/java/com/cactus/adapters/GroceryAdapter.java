@@ -91,12 +91,12 @@ public interface GroceryAdapter {
      * If the operation was unsuccessful (i.e. the given list ID does not exist for this
      * user), then the Response will have code 400 (BAD_REQUEST) and a null payload.
      *
-     * @param items  a List of Strings containing the names of grocery items to set
+     * @param item  a List of Strings containing the names of grocery items to set
      * @param listid a long representing the ID of the list to change
      * @param userid a long representing the ID of the list's owner
      * @return       a Response to the set grocery item operation
      */
-    boolean setGroceryItems(List<String> items, long listid, long userid);
+    GroceryItem setGroceryItem(String item, long listid, long userid);
 
     /**
      * Returns a Response object with the results of a delete grocery list operation done
@@ -114,4 +114,12 @@ public interface GroceryAdapter {
      */
     boolean deleteGroceryList(long listid, long userid);
 
+    /***
+     * Delete an item that belongs to a list and user
+     *
+     * @param itemid id of item to be deleted
+     * @param listid id of list to which item belongs
+     * @param userid id of user to which item belongs
+     */
+    boolean deleteGroceryItem(long itemid, long listid, long userid);
 }

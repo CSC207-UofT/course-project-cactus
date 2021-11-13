@@ -8,10 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.cactus.systems.UserInteractFacade;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public abstract class CustomAdapter extends ArrayAdapter<String> {
+
+    @Inject
+    UserInteractFacade userInteractFacade;
 
     protected int resource;
     protected List<String> objects;

@@ -97,7 +97,6 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryItemNames(this.getCurrentUserId());
     }
 
-    // TODO: figure out why there are two methods for exiting
     /**
      * Exit the current grocery list using GroceryListSystem's exitGroceryList method
      * with parameters
@@ -129,23 +128,13 @@ public class UserInteractFacade {
     }
 
     /**
-     * Add grocery items to the current grocery list
+     * Delete a grocery list
      *
-     * @param items list of names of the items that are to be added to the current grocery list
-     * @return true of item was successfully added
-     */
-    public boolean addGroceryItems(List<String> items){
-        return this.groceryListSystem.addGroceryItems(items, this.getCurrentUserId());
-    }
-
-    // TODO: make this method require a grocery list id
-    /**
-     * Delete the current grocery list
-     *
+     * @param listName name of the list to be deleted
      * @return true if grocery list was successfully deleted
      */
-    public boolean deleteGroceryList() {
-        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId());
+    public boolean deleteGroceryList(String listName) {
+        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId(), listName);
     }
 
     /**
@@ -155,6 +144,25 @@ public class UserInteractFacade {
      */
     public String getListName() {
         return this.groceryListSystem.getListName(getCurrentUserId());
+    }
+
+    /***
+     * set the current grocery list
+     *
+     * @param listName name of the list to be set as current
+     */
+    public void setCurrentGroceryList(String listName){
+        this.groceryListSystem.setCurrentGroceryList(listName);
+    }
+
+    /***
+     * Delete a grocery item
+     *
+     * @param itemName name of the item to be deleted
+     * @return true if deletion was successful
+     */
+    public boolean deleteGroceryItem(String itemName){
+        return this.groceryListSystem.deleteGroceryItem(this.getCurrentUserId(), itemName);
     }
 
 }
