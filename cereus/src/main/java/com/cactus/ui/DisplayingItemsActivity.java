@@ -2,10 +2,7 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cactus.systems.UserInteractFacade;
 
@@ -44,9 +41,12 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(view ->{
-            userInteractFacade.logout();
-            Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
-            startActivity(intent);
+            if (userInteractFacade.logout()) {
+                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else{
+                Toast.makeText(DisplayingItemsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+            }
         });
     }
 

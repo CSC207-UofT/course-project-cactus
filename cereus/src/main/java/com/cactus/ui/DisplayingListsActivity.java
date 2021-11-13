@@ -40,9 +40,12 @@ public class DisplayingListsActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(view ->{
-            userInteractFacade.logout();
-            Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
-            startActivity(intent);
+            if (userInteractFacade.logout()) {
+                Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else{
+                Toast.makeText(DisplayingListsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+            }
         });
     }
 
