@@ -8,8 +8,11 @@ import okhttp3.*;
 import okhttp3.Response;
 
 import javax.inject.Inject;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Properties;
 
 
 /**
@@ -21,8 +24,25 @@ public class WebAuthAdapter implements AuthAdapter {
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
 
+    public final String STATIC_IP;
+
     @Inject
-    public WebAuthAdapter() {}
+    public WebAuthAdapter() {
+        String tempIp = "192.168.0.127"; // default to this address
+
+        try {
+            InputStream input = new FileInputStream("src/main/resources/network.properties");
+
+            Properties props = new Properties();
+            props.load(input);
+
+            tempIp = props.getProperty("staticIp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        STATIC_IP = tempIp;
+    }
 
     /**
      * Returns a User object that corresponds to the provided username and password.
@@ -45,7 +65,7 @@ public class WebAuthAdapter implements AuthAdapter {
         login.put("username", username);
         login.put("password", password);
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
 
         HttpUrl url = baseUrl.addPathSegment("login")
                 .addQueryParameter("username", username)
@@ -91,7 +111,7 @@ public class WebAuthAdapter implements AuthAdapter {
         create.put("password", password);
         create.put("name", name);
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl.addPathSegment("register").build();
 
         User user;
@@ -162,7 +182,7 @@ public class WebAuthAdapter implements AuthAdapter {
     public boolean logout(String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl.addPathSegment("logout").build();
 
         Request request = new Request.Builder()
