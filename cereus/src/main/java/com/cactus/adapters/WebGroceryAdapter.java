@@ -12,32 +12,32 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public WebGroceryAdapter() {}
 
     @Override
-    public List<GroceryList> getGroceryListsByUser(long userid) {
+    public List<GroceryList> getGroceryListsByUser(String token) {
         return null;
     }
 
     @Override
-    public GroceryList getGroceryList(long listid, long userid) {
+    public GroceryList getGroceryList(long listID, String token) {
         return null;
     }
 
     @Override
-    public List<GroceryItem> getGroceryItems(long listid, long userid) {
+    public List<GroceryItem> getGroceryItems(long listID, String token) {
         return null;
     }
 
     @Override
-    public GroceryList createGroceryList(String nameList, long userid) {
+    public GroceryList createGroceryList(String nameList, String token) {
         return null;
     }
 
     @Override
-    public boolean setGroceryItems(List<String> items, long listid, long userid) {
+    public boolean setGroceryItems(List<String> items, long listID, String token) {
         return false;
     }
 
     @Override
-    public boolean deleteGroceryList(long listid, long userid) {
+    public boolean deleteGroceryList(long listID, String token) {
         return false;
     }
 }
