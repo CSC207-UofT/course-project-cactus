@@ -127,7 +127,7 @@ class GroceryServiceTest {
             verify(groceryListRepository, times(1)).save(any(GroceryList.class));
             assertEquals("name", list.getName());
             assertEquals(user, list.getUser());
-            assertNull(list.getItems());
+            assertEquals(0, list.getItems().size());
         }
     }
 

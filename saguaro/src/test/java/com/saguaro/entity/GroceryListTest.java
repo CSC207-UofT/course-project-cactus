@@ -179,6 +179,29 @@ class GroceryListTest {
         }
 
         @Test
+        void testEqualsNullItems() {
+            GroceryList first = new GroceryList();
+            first.setName("Harry's List");
+            first.setUser(user);
+            ReflectionTestUtils.setField(first, "id", 1);
+            ReflectionTestUtils.setField(first, "items", null);
+
+            GroceryList second = new GroceryList();
+            second.setName("Harry's List");
+            second.setUser(user);
+            ReflectionTestUtils.setField(second, "id", 1);
+
+            assertThrows(NullPointerException.class, () -> {
+                first.equals(second);
+            });
+
+            ReflectionTestUtils.setField(first, "items", new ArrayList<>());
+            ReflectionTestUtils.setField(second, "items", null);
+
+            assertNotEquals(first, second);
+        }
+
+        @Test
         void testEqualsNull() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
