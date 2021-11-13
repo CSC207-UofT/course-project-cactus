@@ -94,3 +94,6 @@ fabric.properties
 
 # Local Android sdk location
 **/local.properties
+
+# Local static ip
+**/network.properties

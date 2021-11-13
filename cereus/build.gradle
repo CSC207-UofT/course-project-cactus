@@ -23,8 +23,8 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.40'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.40'
 
-    // test dependencies
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    // test dependencies - Android doesn't support JUnit5 officially yet
+    testImplementation 'junit:junit:4.13.2'
 
     // android test dependencies
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -63,7 +63,3 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
-//test {
-//    useJUnitPlatform()
-//}
