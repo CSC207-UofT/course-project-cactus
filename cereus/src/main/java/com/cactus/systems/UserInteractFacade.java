@@ -144,8 +144,8 @@ public class UserInteractFacade {
      *
      * @return true if grocery list was successfully deleted
      */
-    public boolean deleteGroceryList() {
-        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId());
+    public boolean deleteGroceryList(String listName) {
+        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId(), listName);
     }
 
     /**
@@ -155,6 +155,10 @@ public class UserInteractFacade {
      */
     public String getListName() {
         return this.groceryListSystem.getListName(getCurrentUserId());
+    }
+
+    public void setCurrentGroceryList(String listName){
+        this.groceryListSystem.setCurrentGroceryList(listName);
     }
 
 }

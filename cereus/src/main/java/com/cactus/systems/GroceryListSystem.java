@@ -66,10 +66,10 @@ public class GroceryListSystem {
         List<GroceryList> groceryLists =
                 this.groceryAdapter.getGroceryListsByUser(userid);
 
-        groceryLists = new ArrayList<GroceryList>();
-        groceryLists.add(new GroceryList("List 1"));
-        groceryLists.add(new GroceryList("List 2"));
-        groceryLists.add(new GroceryList("List 3"));
+//        groceryLists = new ArrayList<GroceryList>();
+//        groceryLists.add(new GroceryList("List 1"));
+//        groceryLists.add(new GroceryList("List 2"));
+//        groceryLists.add(new GroceryList("List 3"));
 
         for(GroceryList groceryList : groceryLists){
             this.currentListNamesMap.put(groceryList.getName(), groceryList.getId());
@@ -90,10 +90,10 @@ public class GroceryListSystem {
         List<GroceryItem> groceryItems =
                 this.groceryAdapter.getGroceryItems(this.currentGroceryListId, userid);
 
-        groceryItems = new ArrayList<GroceryItem>();
-        groceryItems.add(new GroceryItem("Apple", 1));
-        groceryItems.add(new GroceryItem("Banana", 1));
-        groceryItems.add(new GroceryItem("Melon", 1));
+//        groceryItems = new ArrayList<GroceryItem>();
+//        groceryItems.add(new GroceryItem("Apple", 1));
+//        groceryItems.add(new GroceryItem("Banana", 1));
+//        groceryItems.add(new GroceryItem("Melon", 1));
 
         for(GroceryItem groceryItem : groceryItems){
             groceryItemNames.add(groceryItem.getName());
@@ -161,8 +161,8 @@ public class GroceryListSystem {
      * @param userid the id of the user that the to be deleted list belongs to
      * @return true if the list was successfully deleted and false if list DNE
      */
-    public boolean deleteGroceryList(long userid) {
-        long toBeDeletedListId = this.currentGroceryListId;
+    public boolean deleteGroceryList(long userid, String listName) {
+        long toBeDeletedListId = this.currentListNamesMap.get(listName);
 
         if(exitGroceryList(new ArrayList<>(), userid)){
             return this.groceryAdapter.deleteGroceryList(toBeDeletedListId, userid);
@@ -178,6 +178,10 @@ public class GroceryListSystem {
      * */
     public String getListName(long userid) {
         return this.groceryAdapter.getGroceryList(this.currentGroceryListId, userid).getName();
+    }
+
+    public void setCurrentGroceryList(String listName){
+        this.currentGroceryListId = this.currentListNamesMap.get(listName);
     }
 
 }

@@ -12,10 +12,13 @@ public class CustomItemAdapter extends CustomAdapter {
     }
 
     void buttonClickAction(int position){
-        Toast.makeText(getContext(), "Delete item at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Delete item at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
+        this.objects.remove(this.objects.get(position));
+        this.notifyDataSetChanged();
     }
 
     void viewClickAction(int position){
-        Toast.makeText(getContext(), "Select item at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Select item at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
+        // Do nothing
     }
 }
