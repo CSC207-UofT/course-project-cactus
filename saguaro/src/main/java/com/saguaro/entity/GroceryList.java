@@ -6,6 +6,7 @@ package com.saguaro.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,13 +17,15 @@ import java.util.Objects;
 @Entity
 public class GroceryList {
 
+    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "LIST_ID")
-    private long id;
+    private Long id;
 
     private String name;
 
+    @NotNull
     @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
@@ -45,9 +48,7 @@ public class GroceryList {
     /**
      * Creates a new GroceryList.
      */
-    public GroceryList(){
-        this.items = new ArrayList<>();
-    }
+    public GroceryList(){}
 
     public long getId() {
         return id;
@@ -77,6 +78,9 @@ public class GroceryList {
     }
 
     public void addItem(GroceryItem item) {
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
         this.items.add(item);
         item.addList(this);
     }
