@@ -1,5 +1,6 @@
 package com.cactus.ui;
 
+import android.content.Intent;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
 
     private EditText listName;
     private Button addListButton;
+    private Button logoutButton;
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -23,6 +25,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
 
         listName = findViewById(R.id.listName);
         addListButton = findViewById(R.id.addListButton);
+        logoutButton = findViewById(R.id.logoutButtonList);
 
         ArrayList<String> lists = userInteractFacade.getGroceryListNames();
         CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout, lists);
@@ -34,6 +37,12 @@ public class DisplayingListsActivity extends AppCompatActivity {
 
             lists.add(givenListName);
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        });
+
+        logoutButton.setOnClickListener(view ->{
+            userInteractFacade.logout();
+            Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
+            startActivity(intent);
         });
     }
 
