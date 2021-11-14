@@ -119,16 +119,6 @@ public class UserInteractFacade {
     }
 
     /**
-     * Add grocery item to the current grocery list
-     *
-     * @param item name of the item that is to be added to the current grocery list
-     * @return true of item was successfully added
-     */
-    public boolean addGroceryItem(String item) {
-        return this.groceryListSystem.addGroceryItem(item, this.getToken());
-    }
-
-    /**
      * Add grocery items to the current grocery list
      *
      * @param items list of names of the items that are to be added to the current grocery list

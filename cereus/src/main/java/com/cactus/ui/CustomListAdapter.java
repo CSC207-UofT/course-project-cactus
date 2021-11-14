@@ -10,22 +10,18 @@ import java.util.List;
 
 public class CustomListAdapter extends CustomAdapter {
 
-    @Inject
-    UserInteractFacade userInteractFacade;
 
-    public CustomListAdapter(Context context, int resource, List<String> objects) {
-        super(context, resource, objects);
+    public CustomListAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
+        super(context, resource, objects, applicationComponent);
     }
 
     void buttonClickAction(int position){
-//        Toast.makeText(getContext(), "Delete list at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
         this.userInteractFacade.deleteGroceryList(this.objects.get(position));
         this.objects.remove(this.objects.get(position));
         this.notifyDataSetChanged();
     }
 
     void viewClickAction(int position){
-//        Toast.makeText(getContext(), "Select list at " + position + " called " + this.objects.get(position), Toast.LENGTH_SHORT).show();
         this.userInteractFacade.setCurrentGroceryList(this.objects.get(position));
         Intent intent = new Intent(getContext(), DisplayingItemsActivity.class);
         getContext().startActivity(intent);

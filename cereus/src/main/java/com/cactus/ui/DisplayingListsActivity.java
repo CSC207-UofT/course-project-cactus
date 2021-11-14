@@ -27,16 +27,19 @@ public class DisplayingListsActivity extends AppCompatActivity {
         addListButton = findViewById(R.id.addListButton);
         logoutButton = findViewById(R.id.logoutButtonList);
 
-        ArrayList<String> lists = userInteractFacade.getGroceryListNames();
-        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout, lists);
+        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
+                this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
         listView.setAdapter(customListAdapter);
 
         addListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
-
-            lists.add(givenListName);
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+            if (this.userInteractFacade.newGroceryList(givenListName)){
+                customListAdapter.objects.add(givenListName);
+                ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+            } else {
+                Toast.makeText(DisplayingListsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
+            }
         });
 
         logoutButton.setOnClickListener(view ->{

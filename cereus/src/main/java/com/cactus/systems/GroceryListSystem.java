@@ -40,10 +40,15 @@ public class GroceryListSystem {
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name, String token) {
+        if (currentListNamesMap.get(name) != null) {
+            return false;
+        }
+
         GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token);
 
         if (newGroceryList != null) {
             this.currentGroceryListId = newGroceryList.getId();
+            this.currentListNamesMap.put(name, this.currentGroceryListId);
             this.currentItems = new ArrayList<>();
             return true;
         }
@@ -162,6 +167,7 @@ public class GroceryListSystem {
         long toBeDeletedListId = this.currentListNamesMap.get(listName);
 
         if(exitGroceryList(new ArrayList<>(), token)){
+            this.currentListNamesMap.remove(listName);
             return this.groceryAdapter.deleteGroceryList(toBeDeletedListId, token);
         }
 
