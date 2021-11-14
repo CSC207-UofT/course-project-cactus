@@ -42,4 +42,20 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
             app:layout_constraintVertical_bias="0.111"/>
+    <TextView
+            android:text="Welcome to Cactus Grocery App"
+            android:layout_width="240dp"
+            android:layout_height="47dp" android:id="@+id/welcomeMessage"
+            app:layout_constraintBottom_toTopOf="@+id/username"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:textColor="@color/teal_700"
+            app:layout_constraintHorizontal_bias="0.567" app:layout_constraintVertical_bias="0.488"/>
+    <TextView
+            android:text="If you do not have an account, please first signup"
+            android:layout_width="319dp"
+            android:layout_height="56dp" android:id="@+id/signupText"
+            app:layout_constraintTop_toBottomOf="@+id/signup"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintVertical_bias="0.207" android:textColor="@color/teal_700"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

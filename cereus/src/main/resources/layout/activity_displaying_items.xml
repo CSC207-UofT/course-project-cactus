@@ -7,14 +7,14 @@
         android:layout_height="match_parent"
         tools:context=".DisplayingItemsActivity">
     <EditText
-            android:layout_width="216dp"
-            android:layout_height="45dp"
+            android:layout_width="168dp"
+            android:layout_height="42dp"
             android:inputType="textShortMessage"
             android:ems="10"
             android:id="@+id/itemName"
             android:hint="Enter your item name"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="10dp" android:layout_marginLeft="30dp" android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"/>
     <Button
             android:text="Add Item"
@@ -27,4 +27,12 @@
             android:layout_height="729dp"
             android:id="@+id/itemViewDisplayItem" app:layout_constraintTop_toBottomOf="@+id/itemName"
             app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+            android:text="logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/logoutButtonItem"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/addItemButton" android:layout_marginTop="16dp"
+            app:layout_constraintHorizontal_bias="0.304"
+            app:layout_constraintBottom_toTopOf="@+id/itemViewDisplayItem"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

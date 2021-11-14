@@ -9,11 +9,13 @@ import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Objects;
+
 import java.util.Properties;
 
 
@@ -26,10 +28,12 @@ public class WebAuthAdapter implements AuthAdapter {
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
 
+
     private final String STATIC_IP;
     @Inject
     public WebAuthAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
+
         try {
             InputStream input = new FileInputStream("src/main/resources/network.properties");
 
@@ -40,6 +44,7 @@ public class WebAuthAdapter implements AuthAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         STATIC_IP = tempIp;
     }
 

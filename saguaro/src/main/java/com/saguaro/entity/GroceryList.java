@@ -4,8 +4,10 @@
 package com.saguaro.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +18,7 @@ import java.util.Objects;
 @Entity
 public class GroceryList {
 
+    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "LIST_ID")
@@ -23,6 +26,7 @@ public class GroceryList {
 
     private String name;
 
+    @NotNull
     @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
@@ -47,6 +51,15 @@ public class GroceryList {
      */
     public GroceryList(){
         this.items = new ArrayList<>();
+    }
+
+    /**
+     * Constructor for Jackson deserialization, specifying that ID and items are required
+     */
+    public GroceryList(@JsonProperty(value = "id", required = true) long id,
+                       @JsonProperty(value = "items", required = true) List<GroceryItem> items) {
+        this.id = id;
+        this.items = items;
     }
 
     public long getId() {
@@ -77,8 +90,10 @@ public class GroceryList {
     }
 
     public void addItem(GroceryItem item) {
-        this.items.add(item);
-        item.addList(this);
+        if (!this.items.contains(item)) {
+            this.items.add(item);
+            item.addList(this);
+        }
     }
 
     public void removeItem(GroceryItem item) {
