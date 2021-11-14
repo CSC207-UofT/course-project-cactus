@@ -7,14 +7,14 @@
         android:layout_height="match_parent"
         tools:context=".DisplayingItemsActivity">
     <EditText
-            android:layout_width="168dp"
-            android:layout_height="42dp"
+            android:layout_width="174dp"
+            android:layout_height="45dp"
             android:inputType="textShortMessage"
             android:ems="10"
             android:id="@+id/itemName"
             android:hint="Item name here"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="16dp" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp" android:layout_marginLeft="4dp" android:layout_marginStart="4dp"
             app:layout_constraintStart_toStartOf="parent"/>
     <Button
             android:text="Add Item"
