@@ -50,6 +50,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
 
         logoutButton.setOnClickListener(view ->{
             if (userInteractFacade.logout()) {
+                this.userInteractFacade.addGroceryItems(items);
                 Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
                 startActivity(intent);
             } else{
