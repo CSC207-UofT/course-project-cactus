@@ -5,7 +5,11 @@ import com.cactus.entities.GroceryList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import okhttp3.*;
 import okhttp3.Response;
 import org.json.JSONArray;
@@ -23,9 +27,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
-
+    private final String STATIC_IP;
     @Inject
-    public WebGroceryAdapter() {}
+    public WebGroceryAdapter() {
+        String tempIp = "192.168.0.127"; // default to this address
+
+        STATIC_IP = tempIp;
+    }
 
     @Override
     public List<GroceryList> getGroceryListsByUser(String token) {
@@ -122,18 +130,25 @@ public class WebGroceryAdapter implements GroceryAdapter {
             if (response.code() != HTTP_OK) {
                 return null;
             }
-            JSONObject jsonString = new JSONObject(Objects.requireNonNull(response.body()).string());
-            JSONArray arr = jsonString.getJSONArray("items");
+            String responseString = Objects.requireNonNull(response.body()).string();
+            JsonNode jsonNode = finalMapper.readTree(responseString);
+            ArrayNode arrayNode = (ArrayNode) jsonNode.get("items");
+            ArrayList<String> itemNames = new ArrayList<>();
+            for(JsonNode jsonNode1: arrayNode){
+                String itemName = jsonNode1.get("name").asText();
+                itemNames.add(itemName);
+            }
 
             // Create GroceryItem objects
             ArrayList<GroceryItem> groceryItems = new ArrayList<>();
-            for (int i = 0; i < arr.length(); i++) {
-                String name = arr.getJSONObject(i).toString();
+            for (String name: itemNames) {
                 GroceryItem groceryItem = new GroceryItem(name, listID);
                 groceryItems.add(groceryItem);
             }
             return groceryItems;
-        }catch (NullPointerException | IOException | JSONException i) {
+
+        }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
             return null;
         }
 
@@ -169,11 +184,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         if (response.code() != HTTP_OK) {
+            System.out.println(response.code());
             return null;
         }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
         }
         catch(NullPointerException | IOException e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -182,16 +199,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public boolean setGroceryItems(List<String> items, long listID, String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
-
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+        GroceryList list = getGroceryList(listID, token);
         HttpUrl url = baseUrl
                 .addPathSegment("api")
                 .addPathSegment("save-list")
                 .build();
 
-        HashMap<String, String> save = new HashMap<>();
-        save.put("id", String.valueOf(listID));
-        save.put("items", String.valueOf(items));
+        HashMap<String, Object> save = new HashMap<>();
+        save.put("id", listID);
+        save.put("name", list.getName());
+        save.put("items", items);
         try{
             // Create body
             RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(save),
@@ -202,8 +220,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .put(requestBody)
                     .build();
             Response response = client.newCall(request).execute();
-
-            return response.code() == HTTP_NO_CONTENT;
+            return response.code() == HTTP_OK;
 
         } catch (IOException e) {
             return false;
