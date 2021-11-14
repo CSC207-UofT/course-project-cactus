@@ -17,11 +17,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.io.InputStream;
+import java.util.*;
 
 public class WebGroceryAdapter implements GroceryAdapter {
 
@@ -31,7 +30,16 @@ public class WebGroceryAdapter implements GroceryAdapter {
     @Inject
     public WebGroceryAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
+        try {
+            InputStream input = new FileInputStream("src/main/resources/network.properties");
 
+            Properties props = new Properties();
+            props.load(input);
+
+            tempIp = props.getProperty("staticIp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         STATIC_IP = tempIp;
     }
 

@@ -30,7 +30,16 @@ public class WebAuthAdapter implements AuthAdapter {
     @Inject
     public WebAuthAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
+        try {
+            InputStream input = new FileInputStream("src/main/resources/network.properties");
 
+            Properties props = new Properties();
+            props.load(input);
+
+            tempIp = props.getProperty("staticIp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         STATIC_IP = tempIp;
     }
 
