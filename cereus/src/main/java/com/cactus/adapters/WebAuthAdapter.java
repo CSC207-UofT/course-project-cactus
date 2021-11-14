@@ -75,6 +75,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(login, url);
         } catch (IOException i) {
+            i.printStackTrace();
             return null;
         }
         return user;
@@ -117,7 +118,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(create, url);
         } catch (IOException i) {
-            System.out.println(i.getMessage());
+            i.printStackTrace();
             return null;
         }
         return user;
@@ -167,6 +168,7 @@ public class WebAuthAdapter implements AuthAdapter {
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
         }
         catch(NullPointerException e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -200,6 +202,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
             return response.code() == HTTP_NO_CONTENT;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }

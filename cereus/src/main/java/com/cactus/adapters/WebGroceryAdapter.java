@@ -47,7 +47,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public List<GroceryList> getGroceryListsByUser(String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl.addPathSegment("api").addPathSegment("all-lists").build();
 
         Request request = new Request.Builder()
@@ -70,6 +70,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     new TypeReference<HashMap<Integer, String>>(){});
 
         }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
             return null;
         }
 
@@ -88,7 +89,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public GroceryList getGroceryList(long listID, String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl
                 .addPathSegment("api")
                 .addPathSegment("list")
@@ -110,6 +111,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
         }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
             return null;
         }
     }
@@ -118,7 +120,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public List<GroceryItem> getGroceryItems(long listID, String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl
                 .addPathSegment("api")
                 .addPathSegment("list")
@@ -166,7 +168,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public GroceryList createGroceryList(String nameList, String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
 
         HttpUrl url = baseUrl
                 .addPathSegment("api")
@@ -208,7 +210,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
         OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        GroceryList list = getGroceryList(listID, token);
         HttpUrl url = baseUrl
                 .addPathSegment("api")
                 .addPathSegment("save-list")
@@ -216,7 +217,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
         HashMap<String, Object> save = new HashMap<>();
         save.put("id", listID);
-        save.put("name", list.getName());
         save.put("items", items);
         try{
             // Create body
@@ -231,6 +231,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             return response.code() == HTTP_OK;
 
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -240,7 +241,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public boolean deleteGroceryList(long listID, String token) {
         OkHttpClient client = new OkHttpClient();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host("192.168.0.127").port(8080);
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
 
         HttpUrl url = baseUrl
                 .addPathSegment("api")
@@ -257,6 +258,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
             return response.code() == HTTP_NO_CONTENT;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
