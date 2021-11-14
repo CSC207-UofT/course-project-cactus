@@ -32,14 +32,14 @@ public interface AuthAdapter {
      * If the username has a different username, then a User object corresponding to the given information is created,
      * and returned
      *
+     * @param name     a String containing the name of the user
      * @param username a String containing the username of the new user
      * @param password a String containing the password of the new user
-     * @param name     a String containing the name of the user
      * @return         a User object created with the given parameters
      *
      * @see User
      */
-    User create(String username, String password, String name);
+    User create(String name, String username, String password);
 
 
     /**
