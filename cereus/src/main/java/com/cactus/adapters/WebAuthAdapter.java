@@ -9,9 +9,13 @@ import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.io.FileInputStream;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Objects;
+
 import java.util.Properties;
 
 
@@ -24,8 +28,8 @@ public class WebAuthAdapter implements AuthAdapter {
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
 
-    public final String STATIC_IP;
 
+    private final String STATIC_IP;
     @Inject
     public WebAuthAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
@@ -76,6 +80,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(login, url);
         } catch (IOException i) {
+            i.printStackTrace();
             return null;
         }
         return user;
@@ -118,7 +123,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(create, url);
         } catch (IOException i) {
-            System.out.println(i.getMessage());
+            i.printStackTrace();
             return null;
         }
         return user;
@@ -164,7 +169,13 @@ public class WebAuthAdapter implements AuthAdapter {
             return null;
         }
 
-        return finalMapper.readValue(response.body().string(), User.class);
+        try {
+            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
+        }
+        catch(NullPointerException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -196,6 +207,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
             return response.code() == HTTP_NO_CONTENT;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }

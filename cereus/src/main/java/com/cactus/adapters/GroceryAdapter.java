@@ -25,7 +25,7 @@ public interface GroceryAdapter {
      * @param userid a long representing the user ID to fetch lists for
      * @return       a Response to the request to get grocery lists for the user
      */
-    List<GroceryList> getGroceryListsByUser(long userid);
+    List<GroceryList> getGroceryListsByUser(String token);
 
     /**
      * Returns a Response object with the results of a grocery list fetch operation
@@ -33,7 +33,7 @@ public interface GroceryAdapter {
      *
      * If the list fetch was successful, the Response will have code 200 (OK), and
      * a payload with the following entries:
-     * - listid: a string representation of the list's ID (long)
+     * - listID: a string representation of the list's ID (long)
      * - name: a string containing the list's name (string)
      * - length: a string representation of the number of items in the list (int)
      * - [x]: where x is a string representation of an integer index from 0 <= x < length.
@@ -44,20 +44,20 @@ public interface GroceryAdapter {
      * If the list fetch was unsuccessful, the Response will have code 404 (NOT_FOUND)
      * and a null payload.
      *
-     * @param listid a long representing the ID of the list to get
+     * @param listID a long representing the ID of the list to get
      * @param userid a long representing the ID of the user the list belongs to
      * @return       a Response to the grocery list get operation
      */
-    GroceryList getGroceryList(long listid, long userid);
+    GroceryList getGroceryList(long listID, String token);
 
     /**
      * get a list of grocery items that belong to the given list
      *
-     * @param listid id of the list which holds the items you are getting
+     * @param listID id of the list which holds the items you are getting
      * @param userid id of the user who holds the list
      * @return a list of grocery items
      */
-    List<GroceryItem> getGroceryItems(long listid, long userid);
+    List<GroceryItem> getGroceryItems(long listID, String token);
 
     /**
      * Returns a Response object with the results of a create grocery list operation
@@ -78,7 +78,7 @@ public interface GroceryAdapter {
      *                     list
      * @return         a Response to the grocery list creation operation
      */
-    GroceryList createGroceryList(String nameList, long userid);
+    GroceryList createGroceryList(String nameList, String token);
 
     /**
      * Returns a Response object with the results of a set grocery item operation done
@@ -92,11 +92,11 @@ public interface GroceryAdapter {
      * user), then the Response will have code 400 (BAD_REQUEST) and a null payload.
      *
      * @param items  a List of Strings containing the names of grocery items to set
-     * @param listid a long representing the ID of the list to change
+     * @param listID a long representing the ID of the list to change
      * @param userid a long representing the ID of the list's owner
      * @return       a Response to the set grocery item operation
      */
-    boolean setGroceryItems(List<String> items, long listid, long userid);
+    boolean setGroceryItems(List<String> items, long listID, String token);
 
     /**
      * Returns a Response object with the results of a delete grocery list operation done
@@ -108,10 +108,10 @@ public interface GroceryAdapter {
      * If the operation was unsuccessful (i.e. the given list ID does not exist for this
      * user), then the Response will have code 400 (BAD_REQUEST) and a null payload.
      *
-     * @param listid a long representing the ID of the grocery list to delete
+     * @param listID a long representing the ID of the grocery list to delete
      * @param userid a long representing the ID of the grocery list's owner
      * @return       a Response to the grocery list deletion operation
      */
-    boolean deleteGroceryList(long listid, long userid);
+    boolean deleteGroceryList(long listID, String token);
 
 }
