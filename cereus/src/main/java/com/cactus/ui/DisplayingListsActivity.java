@@ -23,6 +23,8 @@ public class DisplayingListsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_lists);
 
+        setTitle("Cereus App : " + this.userInteractFacade.getUserName());
+
         listName = findViewById(R.id.listName);
         addListButton = findViewById(R.id.addListButton);
         logoutButton = findViewById(R.id.logoutButtonList);
@@ -37,6 +39,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
             if (this.userInteractFacade.newGroceryList(givenListName)){
                 customListAdapter.objects.add(givenListName);
                 ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                listName.getText().clear();
             } else {
                 Toast.makeText(DisplayingListsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
             }

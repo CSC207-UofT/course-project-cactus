@@ -25,6 +25,8 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_items);
 
+        setTitle("Cereus App : " + this.userInteractFacade.getListName());
+
         itemName = findViewById(R.id.itemName);
         addItemButton = findViewById(R.id.addItemButton);
         logoutButton = findViewById(R.id.logoutButtonItem);
@@ -40,6 +42,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
             if (!items.contains(givenItemName)){
                 items.add(givenItemName);
                 ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                itemName.getText().clear();
             } else {
                 Toast.makeText(DisplayingItemsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
             }

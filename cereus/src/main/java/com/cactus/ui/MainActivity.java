@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
+        setTitle("Cereus App : Login");
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
