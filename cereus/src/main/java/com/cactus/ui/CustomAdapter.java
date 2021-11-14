@@ -16,11 +16,12 @@ import java.util.List;
 
 public abstract class CustomAdapter extends ArrayAdapter<String> {
 
-    @Inject
-    UserInteractFacade userInteractFacade;
     protected int resource;
     protected List<String> objects;
     protected final LayoutInflater mInflater;
+
+//    @Inject
+//    UserInteractFacade userInteractFacade;
 
     public CustomAdapter(Context context, int resource, List<String> objects) {
         super(context, resource, objects);

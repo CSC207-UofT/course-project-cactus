@@ -3,10 +3,15 @@ package com.cactus.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+import com.cactus.systems.UserInteractFacade;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class CustomListAdapter extends CustomAdapter {
+
+    @Inject
+    UserInteractFacade userInteractFacade;
 
     public CustomListAdapter(Context context, int resource, List<String> objects) {
         super(context, resource, objects);

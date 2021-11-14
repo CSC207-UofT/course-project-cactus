@@ -5,7 +5,6 @@ import com.cactus.entities.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Objects;
 
 /***
  * Represents the system that controls users
@@ -26,12 +25,12 @@ public class UserSystem {
     }
 
     /**
-     * Get the current user's id
+     * Get the current user's token
      *
-     * @return id of the current user
+     * @return token of the current user
      */
-    public long getCurrentUserId() {
-        return currentUser.getId();
+    public String getToken() {
+        return currentUser.getToken();
     }
 
     /***

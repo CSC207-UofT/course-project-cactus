@@ -3,16 +3,18 @@
  */
 package com.cactus.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 
 /**
  * Grocery List Entity
  */
+
 public class GroceryList {
 
     private String name;
     private long id;
-    private final ArrayList<Long> userIdList;
 
 
     /**
@@ -20,34 +22,30 @@ public class GroceryList {
      *
      * @param name A String containing the User's name.
      */
-    public GroceryList(String name){
+
+    public GroceryList(String name) {
         this.name = name;
         this.id = 0L;
-        this.userIdList = new ArrayList<>();
     }
 
-    public String getName(){
+    public GroceryList(){}
+
+    public String getName() {
         return name;
     }
 
-    public ArrayList<Long> getUserIdList(){
-        return userIdList;
-    }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 
-    public void addUserId(long userId){
-        userIdList.add(userId);
-    }
 }

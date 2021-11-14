@@ -11,8 +11,6 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.UI"
             android:usesCleartextTraffic="true">
-        <activity android:name=".GroceryLists">
-        </activity>
         <activity android:name=".CreatingGroceryListActivity">
         </activity>
         <activity android:name=".SignupActivity">

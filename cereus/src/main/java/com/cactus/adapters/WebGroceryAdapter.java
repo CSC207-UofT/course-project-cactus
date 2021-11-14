@@ -2,42 +2,264 @@ package com.cactus.adapters;
 
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import okhttp3.*;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class WebGroceryAdapter implements GroceryAdapter {
 
+    private final static int HTTP_OK = 200;
+    private final static int HTTP_NO_CONTENT = 204;
+    private final String STATIC_IP;
     @Inject
-    public WebGroceryAdapter() {}
+    public WebGroceryAdapter() {
+        String tempIp = "192.168.0.127"; // default to this address
+        try {
+            InputStream input = new FileInputStream("src/main/resources/network.properties");
 
-    @Override
-    public List<GroceryList> getGroceryListsByUser(long userid) {
-        return null;
+            Properties props = new Properties();
+            props.load(input);
+
+            tempIp = props.getProperty("staticIp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        STATIC_IP = tempIp;
     }
 
     @Override
-    public GroceryList getGroceryList(long listid, long userid) {
-        return null;
+    public List<GroceryList> getGroceryListsByUser(String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+        HttpUrl url = baseUrl.addPathSegment("api").addPathSegment("all-lists").build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .build();
+
+        HashMap<Integer, String> groceryListNames;
+
+        try {
+            // Make request
+            Response response = client.newCall(request).execute();
+            //Parse response
+            ObjectMapper finalMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            if (response.code() != HTTP_OK) {
+                return null;
+            }
+            groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
+                    new TypeReference<HashMap<Integer, String>>(){});
+
+        }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
+            return null;
+        }
+
+        // Retrieve every list whose id was returned
+        ArrayList<GroceryList> groceryLists= new ArrayList<>();
+        for(HashMap.Entry<Integer, String> mapElement : groceryListNames.entrySet()) {
+            int id = mapElement.getKey();
+            groceryLists.add(getGroceryList(id, token));
+        }
+        return groceryLists;
+
+    }
+
+
+    @Override
+    public GroceryList getGroceryList(long listID, String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+        HttpUrl url = baseUrl
+                .addPathSegment("api")
+                .addPathSegment("list")
+                .addQueryParameter("id", String.valueOf(listID))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .build();
+        try {
+            // Make request
+            Response response = client.newCall(request).execute();
+            //Parse response
+            ObjectMapper finalMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            if (response.code() != HTTP_OK) {
+                return null;
+            }
+            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+        }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public List<GroceryItem> getGroceryItems(long listid, long userid) {
-        return null;
+    public List<GroceryItem> getGroceryItems(long listID, String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+        HttpUrl url = baseUrl
+                .addPathSegment("api")
+                .addPathSegment("list")
+                .addQueryParameter("id", String.valueOf(listID))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .build();
+        try {
+            // Make request
+            Response response = client.newCall(request).execute();
+            //Parse response
+            ObjectMapper finalMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            if (response.code() != HTTP_OK) {
+                return null;
+            }
+            String responseString = Objects.requireNonNull(response.body()).string();
+            JsonNode jsonNode = finalMapper.readTree(responseString);
+            ArrayNode arrayNode = (ArrayNode) jsonNode.get("items");
+            ArrayList<String> itemNames = new ArrayList<>();
+            for(JsonNode jsonNode1: arrayNode){
+                String itemName = jsonNode1.get("name").asText();
+                itemNames.add(itemName);
+            }
+
+            // Create GroceryItem objects
+            ArrayList<GroceryItem> groceryItems = new ArrayList<>();
+            for (String name: itemNames) {
+                GroceryItem groceryItem = new GroceryItem(name, listID);
+                groceryItems.add(groceryItem);
+            }
+            return groceryItems;
+
+        }catch (NullPointerException | IOException i) {
+            i.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public GroceryList createGroceryList(String nameList, long userid) {
-        return null;
+    public GroceryList createGroceryList(String nameList, String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+
+        HttpUrl url = baseUrl
+                .addPathSegment("api")
+                .addPathSegment("create-list")
+                .addQueryParameter("name", nameList)
+                .build();
+
+        // Create body
+        RequestBody requestBody = RequestBody.create("",
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .post(requestBody)
+                .build();
+        try {
+        // Make request
+        Response response = client.newCall(request).execute();
+
+        // Parse response
+        ObjectMapper finalMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        if (response.code() != HTTP_OK) {
+            System.out.println(response.code());
+            return null;
+        }
+            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+        }
+        catch(NullPointerException | IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public boolean setGroceryItems(List<String> items, long listid, long userid) {
-        return false;
+    public boolean setGroceryItems(List<String> items, long listID, String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+        HttpUrl url = baseUrl
+                .addPathSegment("api")
+                .addPathSegment("save-list")
+                .build();
+
+        HashMap<String, Object> save = new HashMap<>();
+        save.put("id", listID);
+        save.put("items", items);
+        try{
+            // Create body
+            RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(save),
+                    MediaType.get("application/json; charset=utf-8"));
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", token)
+                    .put(requestBody)
+                    .build();
+            Response response = client.newCall(request).execute();
+            return response.code() == HTTP_OK;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     @Override
-    public boolean deleteGroceryList(long listid, long userid) {
-        return false;
+    public boolean deleteGroceryList(long listID, String token) {
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
+
+        HttpUrl url = baseUrl
+                .addPathSegment("api")
+                .addPathSegment("delete-list")
+                .addQueryParameter("id", String.valueOf(listID))
+                .build();
+        try{
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", token)
+                    .delete()
+                    .build();
+            Response response = client.newCall(request).execute();
+
+            return response.code() == HTTP_NO_CONTENT;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

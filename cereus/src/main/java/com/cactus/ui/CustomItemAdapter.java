@@ -2,10 +2,15 @@ package com.cactus.ui;
 
 import android.content.Context;
 import android.widget.Toast;
+import com.cactus.systems.UserInteractFacade;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class CustomItemAdapter extends CustomAdapter {
+
+    @Inject
+    UserInteractFacade userInteractFacade;
 
     public CustomItemAdapter(Context context, int resource, List<String> objects) {
         super(context, resource, objects);
