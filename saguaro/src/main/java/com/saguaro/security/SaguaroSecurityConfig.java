@@ -23,7 +23,6 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
     TokenAuthenticationProvider provider;
 
     private static final RequestMatcher REQUEST_MATCHER = new OrRequestMatcher(
-            new AntPathRequestMatcher("/test*"),
             new AntPathRequestMatcher("/api/*"),
             new AntPathRequestMatcher("/logout*")
     );
