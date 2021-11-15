@@ -97,27 +97,6 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryItemNames(this.getToken());
     }
 
-    // TODO: figure out why there are two methods for exiting
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     * with parameters
-     *
-     * @param items list of items that are to be added to the current list
-     * @return true if list was successfully exited and the items were added to the list
-     */
-    public boolean exitGroceryList(List<String> items){
-        return this.groceryListSystem.exitGroceryList(items, this.getToken());
-    }
-
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     *
-     * @return true if the list was successfully exited
-     */
-    public boolean exitGroceryList() {
-        return this.groceryListSystem.exitGroceryList();
-    }
-
     /**
      * Add grocery items to the current grocery list
      *

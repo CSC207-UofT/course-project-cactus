@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.cactus.entities.User;
 import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
@@ -50,19 +48,9 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
 
         button = view.findViewById(R.id.deleteButton);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                buttonClickAction(position);
-            }
-        });
+        button.setOnClickListener(thisView -> buttonClickAction(position));
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                viewClickAction(position);
-            }
-        });
+        view.setOnClickListener(thisView -> viewClickAction(position));
 
         return view;
     }

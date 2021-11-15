@@ -6,13 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.cactus.systems.UserInteractFacade;
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 public class DisplayingListsActivity extends AppCompatActivity {
 
     private EditText listName;
-    private Button addListButton;
-    private Button logoutButton;
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -26,12 +23,12 @@ public class DisplayingListsActivity extends AppCompatActivity {
         setTitle("Cereus App : " + this.userInteractFacade.getUserName());
 
         listName = findViewById(R.id.listName);
-        addListButton = findViewById(R.id.addListButton);
-        logoutButton = findViewById(R.id.logoutButtonList);
+        Button addListButton = findViewById(R.id.addListButton);
+        Button logoutButton = findViewById(R.id.logoutButtonList);
 
         CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
-        ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
+        ListView listView = findViewById(R.id.listViewDisplayList);
         listView.setAdapter(customListAdapter);
 
         addListButton.setOnClickListener(view -> {

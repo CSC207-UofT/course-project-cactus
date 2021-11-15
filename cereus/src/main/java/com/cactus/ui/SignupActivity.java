@@ -2,7 +2,6 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.os.StrictMode;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +16,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText name;
     private EditText username;
     private EditText password;
-    private Button signupButton;
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -36,7 +34,7 @@ public class SignupActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         username = findViewById(R.id.newUsername);
         password = findViewById(R.id.newPassword);
-        signupButton = findViewById(R.id.button);
+        Button signupButton = findViewById(R.id.button);
 
         signupButton.setOnClickListener(view -> {
             String givenName = name.getText().toString();
