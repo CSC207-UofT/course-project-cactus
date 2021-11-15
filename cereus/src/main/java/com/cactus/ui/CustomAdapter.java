@@ -8,7 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.cactus.entities.User;
+import com.cactus.systems.UserInteractFacade;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public abstract class CustomAdapter extends ArrayAdapter<String> {
@@ -17,8 +20,12 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     protected List<String> objects;
     protected final LayoutInflater mInflater;
 
-    public CustomAdapter(Context context, int resource, List<String> objects) {
+    @Inject
+    UserInteractFacade userInteractFacade;
+
+    public CustomAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects);
+        applicationComponent.inject(this);
         this.resource = resource;
         this.objects = objects;
         this.mInflater = LayoutInflater.from(context);

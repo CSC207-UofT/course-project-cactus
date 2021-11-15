@@ -103,14 +103,14 @@ public class WebAuthAdapter implements AuthAdapter {
      * Note: the password is not present in the User, and a null value is in place. The token has not been set yet, and
      * is also null.
      *
+     * @param name     a String containing the name of the user
      * @param username a String containing the username of the new user
      * @param password a String containing the password of the new user
-     * @param name     a String containing the name of the user
      * @return a User object created with the given parameters
      * @see User
      */
     @Override
-    public User create(String username, String password, String name) {
+    public User create(String name, String username, String password) {
         HashMap<String, String> create = new HashMap<>();
         create.put("username", username);
         create.put("password", password);

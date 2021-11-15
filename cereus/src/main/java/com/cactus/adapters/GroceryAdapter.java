@@ -22,7 +22,7 @@ public interface GroceryAdapter {
      * If the request was unsuccessful (i.e. the user does not exist), then the Response
      * will have code 404 (NOT_FOUND) and a null payload.
      *
-     * @param userid a long representing the user ID to fetch lists for
+     * @param token a string representing the user token to fetch lists for
      * @return       a Response to the request to get grocery lists for the user
      */
     List<GroceryList> getGroceryListsByUser(String token);
@@ -45,7 +45,7 @@ public interface GroceryAdapter {
      * and a null payload.
      *
      * @param listID a long representing the ID of the list to get
-     * @param userid a long representing the ID of the user the list belongs to
+     * @param token a string representing the token of the user the list belongs to
      * @return       a Response to the grocery list get operation
      */
     GroceryList getGroceryList(long listID, String token);
@@ -54,7 +54,7 @@ public interface GroceryAdapter {
      * get a list of grocery items that belong to the given list
      *
      * @param listID id of the list which holds the items you are getting
-     * @param userid id of the user who holds the list
+     * @param token token of the user who holds the list
      * @return a list of grocery items
      */
     List<GroceryItem> getGroceryItems(long listID, String token);
@@ -74,7 +74,7 @@ public interface GroceryAdapter {
      * Response will have code 400 (BAD_REQUEST) and a null payload.
      *
      * @param nameList a String containing the name of the new grocery list
-     * @param userid   a long representing the ID of the user creating the
+     * @param token   a string representing the token of the user creating the
      *                     list
      * @return         a Response to the grocery list creation operation
      */
@@ -93,7 +93,7 @@ public interface GroceryAdapter {
      *
      * @param items  a List of Strings containing the names of grocery items to set
      * @param listID a long representing the ID of the list to change
-     * @param userid a long representing the ID of the list's owner
+     * @param token a string representing the token of the list's owner
      * @return       a Response to the set grocery item operation
      */
     boolean setGroceryItems(List<String> items, long listID, String token);
@@ -109,7 +109,7 @@ public interface GroceryAdapter {
      * user), then the Response will have code 400 (BAD_REQUEST) and a null payload.
      *
      * @param listID a long representing the ID of the grocery list to delete
-     * @param userid a long representing the ID of the grocery list's owner
+     * @param token a string representing the token of the grocery list's owner
      * @return       a Response to the grocery list deletion operation
      */
     boolean deleteGroceryList(long listID, String token);

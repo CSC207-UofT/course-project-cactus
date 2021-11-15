@@ -40,10 +40,15 @@ public class GroceryListSystem {
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name, String token) {
+        if (currentListNamesMap.get(name) != null) {
+            return false;
+        }
+
         GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token);
 
         if (newGroceryList != null) {
             this.currentGroceryListId = newGroceryList.getId();
+            this.currentListNamesMap.put(name, this.currentGroceryListId);
             this.currentItems = new ArrayList<>();
             return true;
         }
@@ -63,10 +68,10 @@ public class GroceryListSystem {
         List<GroceryList> groceryLists =
                 this.groceryAdapter.getGroceryListsByUser(token);
 
-        groceryLists = new ArrayList<GroceryList>();
-        groceryLists.add(new GroceryList("List 1"));
-        groceryLists.add(new GroceryList("List 2"));
-        groceryLists.add(new GroceryList("List 3"));
+//        groceryLists = new ArrayList<GroceryList>();
+//        groceryLists.add(new GroceryList("List 1"));
+//        groceryLists.add(new GroceryList("List 2"));
+//        groceryLists.add(new GroceryList("List 3"));
 
         for(GroceryList groceryList : groceryLists){
             this.currentListNamesMap.put(groceryList.getName(), groceryList.getId());
@@ -87,10 +92,10 @@ public class GroceryListSystem {
         List<GroceryItem> groceryItems =
                 this.groceryAdapter.getGroceryItems(this.currentGroceryListId, token);
 
-        groceryItems = new ArrayList<GroceryItem>();
-        groceryItems.add(new GroceryItem("Apple", 1));
-        groceryItems.add(new GroceryItem("Banana", 1));
-        groceryItems.add(new GroceryItem("Melon", 1));
+//        groceryItems = new ArrayList<GroceryItem>();
+//        groceryItems.add(new GroceryItem("Apple", 1));
+//        groceryItems.add(new GroceryItem("Banana", 1));
+//        groceryItems.add(new GroceryItem("Melon", 1));
 
         for(GroceryItem groceryItem : groceryItems){
             groceryItemNames.add(groceryItem.getName());
@@ -104,7 +109,7 @@ public class GroceryListSystem {
      * items from the  parameter are saved to the list
      *
      * @param items list of strings representing the items to be added to the grocery list
-     * @param userid the id of the user that is using the current list
+     * @param token the token of the user that is using the current list
      * @return true if there existed a valid list id before exiting
      */
     public boolean exitGroceryList(List<String> items, String token){
@@ -138,7 +143,7 @@ public class GroceryListSystem {
      * Add grocery items to the current grocery list
      *
      * @param item a List of strings representing the items to the added to the grocery list
-     * @param userid id for the current user
+     * @param token token for the current user
      * @return true if items were added, false otherwise
      */
     public boolean addGroceryItem(String item, String token) {
@@ -158,10 +163,11 @@ public class GroceryListSystem {
      * @param token the id of the user that the to be deleted list belongs to
      * @return true if the list was successfully deleted and false if list DNE
      */
-    public boolean deleteGroceryList(String token) {
-        long toBeDeletedListId = this.currentGroceryListId;
+    public boolean deleteGroceryList(String token, String listName) {
+        long toBeDeletedListId = this.currentListNamesMap.get(listName);
 
         if(exitGroceryList(new ArrayList<>(), token)){
+            this.currentListNamesMap.remove(listName);
             return this.groceryAdapter.deleteGroceryList(toBeDeletedListId, token);
         }
 
@@ -175,6 +181,10 @@ public class GroceryListSystem {
      * */
     public String getListName(String token) {
         return this.groceryAdapter.getGroceryList(this.currentGroceryListId, token).getName();
+    }
+
+    public void setCurrentGroceryList(String listName){
+        this.currentGroceryListId = this.currentListNamesMap.get(listName);
     }
 
 }
