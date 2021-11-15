@@ -3,16 +3,12 @@ package com.saguaro.controller;
 import com.saguaro.entity.GroceryList;
 import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.service.GroceryService;
-import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController

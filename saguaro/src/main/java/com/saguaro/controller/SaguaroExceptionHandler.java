@@ -25,8 +25,7 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
             InvalidLoginException.class
     })
     ResponseEntity<Object> handle(InvalidLoginException e, WebRequest request) {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.put(HttpHeaders.WWW_AUTHENTICATE, List.of("Basic"));
+        // TODO: return WWW-Authenticate header?
 
         return handleExceptionInternal(e,
                 e.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
