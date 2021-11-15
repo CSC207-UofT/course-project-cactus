@@ -9,10 +9,6 @@ package com.saguaro.exception;
  */
 public class InvalidParamException extends Exception {
 
-    public InvalidParamException() {
-        super();
-    }
-
     public InvalidParamException(String message) {
         super(message);
     }

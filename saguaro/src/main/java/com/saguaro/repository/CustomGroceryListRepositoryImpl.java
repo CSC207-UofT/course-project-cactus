@@ -2,13 +2,13 @@ package com.saguaro.repository;
 
 import com.saguaro.entity.GroceryItem;
 import com.saguaro.entity.GroceryList;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 public class CustomGroceryListRepositoryImpl implements CustomGroceryListRepository<GroceryList> {
 
-    @Autowired
+    @PersistenceContext
     EntityManager entityManager;
 
     /**

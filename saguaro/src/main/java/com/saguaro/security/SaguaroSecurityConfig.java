@@ -1,7 +1,5 @@
 package com.saguaro.security;
 
-import com.saguaro.security.TokenAuthenticationFilter;
-import com.saguaro.security.TokenAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +29,12 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
     );
 
     @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception{
+    public void configure(AuthenticationManagerBuilder builder) {
         builder.authenticationProvider(provider);
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/login*", "/register*", "/h2-console/**");
     }
 
@@ -57,15 +55,6 @@ public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.headers().frameOptions().disable(); // needed for h2 console
     }
-
-    /* Unused in favour of token provider
-    public DaoAuthenticationProvider authProvider(PasswordEncoder encoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(this.userDetailsService);
-        provider.setPasswordEncoder(encoder);
-        return provider;
-    }
-    */
 
     @Bean
     PasswordEncoder encoder() {

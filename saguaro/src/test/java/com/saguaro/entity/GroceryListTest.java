@@ -84,7 +84,7 @@ class GroceryListTest {
 
         @Test
         void testAddExistingItem() {
-            ArrayList<GroceryItem> itemList = new ArrayList<GroceryItem>(List.of(item));
+            ArrayList<GroceryItem> itemList = new ArrayList<>(List.of(item));
             ReflectionTestUtils.setField(list, "items", itemList);
 
             list.addItem(item);
@@ -191,9 +191,7 @@ class GroceryListTest {
             second.setUser(user);
             ReflectionTestUtils.setField(second, "id", 1);
 
-            assertThrows(NullPointerException.class, () -> {
-                first.equals(second);
-            });
+            assertThrows(NullPointerException.class, () -> first.equals(second));
 
             ReflectionTestUtils.setField(first, "items", new ArrayList<>());
             ReflectionTestUtils.setField(second, "items", null);
