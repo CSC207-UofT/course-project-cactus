@@ -2,6 +2,7 @@
  * This file defines a GroceryItem class.
  */
 package com.cactus.entities;
+
 /**
  * Grocery Item Entity
  */

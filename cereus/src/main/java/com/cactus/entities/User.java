@@ -34,7 +34,8 @@ public class User {
     /**
      * Empty constructor for User, required for Jackson serialization
      */
-    public User() {}
+    public User() {
+    }
 
     public String getName() {
         return name;

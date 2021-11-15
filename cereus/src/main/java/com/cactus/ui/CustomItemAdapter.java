@@ -27,7 +27,7 @@ public class CustomItemAdapter extends CustomAdapter {
      *
      * @param position index of the chosen element
      */
-    void buttonClickAction(int position){
+    void buttonClickAction(int position) {
         this.objects.remove(this.objects.get(position));
         this.notifyDataSetChanged();
     }
@@ -38,7 +38,7 @@ public class CustomItemAdapter extends CustomAdapter {
      *
      * @param position index of the chosen element
      */
-    void viewClickAction(int position){
+    void viewClickAction(int position) {
         // Do nothing
     }
 }

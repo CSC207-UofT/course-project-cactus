@@ -60,7 +60,7 @@ public class User {
         return this.id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -68,7 +68,7 @@ public class User {
         this.name = name;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
@@ -76,7 +76,7 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 

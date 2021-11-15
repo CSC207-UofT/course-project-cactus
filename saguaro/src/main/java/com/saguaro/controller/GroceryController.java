@@ -45,7 +45,7 @@ public class GroceryController {
     }
 
     @PutMapping("api/save-list")
-    public GroceryList saveList(@Validated @RequestBody GroceryList list) throws ResourceNotFoundException{
+    public GroceryList saveList(@Validated @RequestBody GroceryList list) throws ResourceNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 

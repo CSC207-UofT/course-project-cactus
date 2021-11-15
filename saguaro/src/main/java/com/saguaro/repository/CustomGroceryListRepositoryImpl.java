@@ -12,9 +12,8 @@ public class CustomGroceryListRepositoryImpl implements CustomGroceryListReposit
     EntityManager entityManager;
 
     /**
-     *
      * @param entity the GroceryList to be saved
-     * @param <S> any subclass of GroceryList
+     * @param <S>    any subclass of GroceryList
      * @return the
      */
     @Override

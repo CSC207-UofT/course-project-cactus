@@ -17,7 +17,7 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler for any InvalidLoginException that is thrown.
      *
-     * @param e the InvalidLoginException to be handled
+     * @param e       the InvalidLoginException to be handled
      * @param request the request which generated this exception
      * @return the response with the appropriate HTTP status code
      */

@@ -30,7 +30,7 @@ public class CustomListAdapter extends CustomAdapter {
      * @param position index of the chosen element
      */
     void buttonClickAction(int position) {
-        if (this.userInteractFacade.deleteGroceryList(this.objects.get(position))){
+        if (this.userInteractFacade.deleteGroceryList(this.objects.get(position))) {
             this.objects.remove(this.objects.get(position));
             this.notifyDataSetChanged();
         } else {
@@ -44,7 +44,7 @@ public class CustomListAdapter extends CustomAdapter {
      *
      * @param position index of the chosen element
      */
-    void viewClickAction(int position){
+    void viewClickAction(int position) {
         this.userInteractFacade.setCurrentGroceryList(this.objects.get(position));
         Intent intent = new Intent(getContext(), DisplayingItemsActivity.class);
         getContext().startActivity(intent);

@@ -126,10 +126,10 @@ class UserControllerTest {
         @Test
         void testRegisterUserBadRequestNoUsername() throws Exception {
             mvc.perform(post("/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(",\"password\":\"password\"" +
-                                    ",\"name\":\"name\"}")
-                    ).andExpect(status().isBadRequest());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(",\"password\":\"password\"" +
+                            ",\"name\":\"name\"}")
+            ).andExpect(status().isBadRequest());
         }
 
         @Test
@@ -153,11 +153,11 @@ class UserControllerTest {
         @Test
         void testRegisterUserBadRequestBlankUsername() throws Exception {
             mvc.perform(post("/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"username\":\"\"" +
-                                    ",\"password\":\"password\"" +
-                                    ",\"name\":\"name\"}")
-                    ).andExpect(status().isBadRequest());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"username\":\"\"" +
+                            ",\"password\":\"password\"" +
+                            ",\"name\":\"name\"}")
+            ).andExpect(status().isBadRequest());
         }
 
         @Test

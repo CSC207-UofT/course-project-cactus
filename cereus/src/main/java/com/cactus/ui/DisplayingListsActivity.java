@@ -5,6 +5,7 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.cactus.systems.UserInteractFacade;
+
 import javax.inject.Inject;
 
 /***
@@ -23,7 +24,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
      * @param savedInstanceState state variable
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_lists);
@@ -44,14 +45,14 @@ public class DisplayingListsActivity extends AppCompatActivity {
      * @param listView listView layout variable
      * @param customListAdapter customListAdapter for displaying list
      */
-    private void displayOptions(ListView listView, CustomListAdapter customListAdapter){
+    private void displayOptions(ListView listView, CustomListAdapter customListAdapter) {
         EditText listName = findViewById(R.id.listName);
         Button addListButton = findViewById(R.id.addListButton);
         Button logoutButton = findViewById(R.id.logoutButtonList);
 
         addListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName)){
+            if (this.userInteractFacade.newGroceryList(givenListName)) {
                 customListAdapter.objects.add(givenListName);
                 ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                 listName.getText().clear();
@@ -60,11 +61,11 @@ public class DisplayingListsActivity extends AppCompatActivity {
             }
         });
 
-        logoutButton.setOnClickListener(view ->{
+        logoutButton.setOnClickListener(view -> {
             if (userInteractFacade.logout()) {
                 Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else{
+            } else {
                 Toast.makeText(DisplayingListsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
             }
         });

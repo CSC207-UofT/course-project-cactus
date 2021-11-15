@@ -57,7 +57,7 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
-    public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException{
+    public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
 

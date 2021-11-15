@@ -3,6 +3,7 @@ package com.cactus.systems;
 import com.cactus.adapters.*;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class GroceryListSystem {
      * Create a new GroceryListSystem with groceryList managers
      */
     @Inject
-    public GroceryListSystem(GroceryAdapter groceryAdapter){
+    public GroceryListSystem(GroceryAdapter groceryAdapter) {
         this.groceryAdapter = groceryAdapter;
     }
 
@@ -66,7 +67,7 @@ public class GroceryListSystem {
         List<GroceryList> groceryLists =
                 this.groceryAdapter.getGroceryListsByUser(token);
 
-        for(GroceryList groceryList : groceryLists){
+        for (GroceryList groceryList : groceryLists) {
             this.currentListNamesMap.put(groceryList.getName(), groceryList.getId());
             listNames.add(groceryList.getName());
         }
@@ -86,7 +87,7 @@ public class GroceryListSystem {
         List<GroceryItem> groceryItems =
                 this.groceryAdapter.getGroceryItems(this.currentGroceryListId, token);
 
-        for(GroceryItem groceryItem : groceryItems){
+        for (GroceryItem groceryItem : groceryItems) {
             groceryItemNames.add(groceryItem.getName());
         }
 
@@ -114,7 +115,7 @@ public class GroceryListSystem {
      * @param token the token of the user that it is being added to
      * @return true of items were added successfully
      **/
-    public boolean addGroceryItems(List<String> items, String token){
+    public boolean addGroceryItems(List<String> items, String token) {
         return this.groceryAdapter.setGroceryItems(items, this.currentGroceryListId, token);
     }
 
@@ -128,7 +129,7 @@ public class GroceryListSystem {
     public boolean deleteGroceryList(String token, String listName) {
         long toBeDeletedListId = Objects.requireNonNull(this.currentListNamesMap.get(listName));
 
-        if(exitGroceryList()){
+        if (exitGroceryList()) {
             this.currentListNamesMap.remove(listName);
             return this.groceryAdapter.deleteGroceryList(toBeDeletedListId, token);
         }
@@ -152,7 +153,7 @@ public class GroceryListSystem {
      *
      * @param listName name of the to be set grocery list
      */
-    public void setCurrentGroceryList(String listName){
+    public void setCurrentGroceryList(String listName) {
         this.currentGroceryListId = Objects.requireNonNull(this.currentListNamesMap.get(listName));
     }
 

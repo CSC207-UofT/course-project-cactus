@@ -2,6 +2,7 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.entities.User;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -18,7 +19,7 @@ public class UserSystem {
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     @Inject
-    public UserSystem(AuthAdapter authAdapter){
+    public UserSystem(AuthAdapter authAdapter) {
         this.authAdapter = authAdapter;
     }
 
@@ -65,7 +66,7 @@ public class UserSystem {
      * @param user the user that is being logged in
      * @return true if user exists
      */
-    private boolean updateCurrentUser(User user){
+    private boolean updateCurrentUser(User user) {
         if (user != null) {
             this.currentUser = user;
             return true;

@@ -25,14 +25,14 @@ public class UserInteractFacade {
 
     // UserSystem methods
 
-    private String getToken(){
+    private String getToken() {
         return this.userSystem.getToken();
     }
 
     /**
      * Create user using UserSystem's createUser method
      *
-     * @param name the name of the user that is being created
+     * @param name     the name of the user that is being created
      * @param username the username of the user that is being created
      * @param password the password of the user that is being created
      * @return true if user was successfully created
@@ -106,7 +106,7 @@ public class UserInteractFacade {
      * @param items list of names of the items that are to be added to the current grocery list
      * @return true of item was successfully added
      */
-    public boolean addGroceryItems(List<String> items){
+    public boolean addGroceryItems(List<String> items) {
         return this.groceryListSystem.addGroceryItems(items, this.getToken());
     }
 
@@ -133,7 +133,7 @@ public class UserInteractFacade {
      *
      * @param listName name of the to be set grocery list
      */
-    public void setCurrentGroceryList(String listName){
+    public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
 

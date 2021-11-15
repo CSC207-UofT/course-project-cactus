@@ -68,16 +68,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 return null;
             }
             groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
-                    new TypeReference<HashMap<Integer, String>>(){});
+                    new TypeReference<HashMap<Integer, String>>() {
+                    });
 
-        }catch (NullPointerException | IOException i) {
+        } catch (NullPointerException | IOException i) {
             i.printStackTrace();
             return null;
         }
 
         // Retrieve every list whose id was returned
-        ArrayList<GroceryList> groceryLists= new ArrayList<>();
-        for(HashMap.Entry<Integer, String> mapElement : groceryListNames.entrySet()) {
+        ArrayList<GroceryList> groceryLists = new ArrayList<>();
+        for (HashMap.Entry<Integer, String> mapElement : groceryListNames.entrySet()) {
             int id = mapElement.getKey();
             groceryLists.add(getGroceryList(id, token));
         }
@@ -111,7 +112,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 return null;
             }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
-        }catch (NullPointerException | IOException i) {
+        } catch (NullPointerException | IOException i) {
             i.printStackTrace();
             return null;
         }
@@ -145,20 +146,20 @@ public class WebGroceryAdapter implements GroceryAdapter {
             JsonNode jsonNode = finalMapper.readTree(responseString);
             ArrayNode arrayNode = (ArrayNode) jsonNode.get("items");
             ArrayList<String> itemNames = new ArrayList<>();
-            for(JsonNode jsonNode1: arrayNode){
+            for (JsonNode jsonNode1 : arrayNode) {
                 String itemName = jsonNode1.get("name").asText();
                 itemNames.add(itemName);
             }
 
             // Create GroceryItem objects
             ArrayList<GroceryItem> groceryItems = new ArrayList<>();
-            for (String name: itemNames) {
+            for (String name : itemNames) {
                 GroceryItem groceryItem = new GroceryItem(name);
                 groceryItems.add(groceryItem);
             }
             return groceryItems;
 
-        }catch (NullPointerException | IOException i) {
+        } catch (NullPointerException | IOException i) {
             i.printStackTrace();
             return null;
         }
@@ -186,20 +187,19 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .post(requestBody)
                 .build();
         try {
-        // Make request
-        Response response = client.newCall(request).execute();
+            // Make request
+            Response response = client.newCall(request).execute();
 
-        // Parse response
-        ObjectMapper finalMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            // Parse response
+            ObjectMapper finalMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        if (response.code() != HTTP_OK) {
-            System.out.println(response.code());
-            return null;
-        }
+            if (response.code() != HTTP_OK) {
+                System.out.println(response.code());
+                return null;
+            }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
-        }
-        catch(NullPointerException | IOException e){
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -218,7 +218,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         HashMap<String, Object> save = new HashMap<>();
         save.put("id", listID);
         save.put("items", items);
-        try{
+        try {
             // Create body
             RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(save),
                     MediaType.get("application/json; charset=utf-8"));
@@ -247,7 +247,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addPathSegment("delete-list")
                 .addQueryParameter("id", String.valueOf(listID))
                 .build();
-        try{
+        try {
             Request request = new Request.Builder()
                     .url(url)
                     .addHeader("Authorization", token)

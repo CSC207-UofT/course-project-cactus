@@ -89,7 +89,7 @@ class UserServiceTest {
 
             try {
                 UUID.fromString(actual.getToken());
-            } catch(Exception e) {
+            } catch (Exception e) {
                 fail("Token is not valid UUID");
             }
         }

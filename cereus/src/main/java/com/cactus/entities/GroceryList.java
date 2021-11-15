@@ -15,7 +15,8 @@ public class GroceryList {
     /**
      * Empty constructor for GroceryList, required for Jackson serialization
      */
-    public GroceryList(){}
+    public GroceryList() {
+    }
 
     public String getName() {
         return name;

@@ -54,12 +54,12 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
      * @return the view that is generated
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         final View view;
         final TextView text;
         final Button button;
 
-        if(convertView == null){
+        if (convertView == null) {
             view = this.mInflater.inflate(resource, parent, false);
         } else {
             view = convertView;

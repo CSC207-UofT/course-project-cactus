@@ -10,8 +10,12 @@ import javax.inject.Singleton;
 })
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
+
     void inject(SignupActivity signupActivity);
+
     void inject(DisplayingListsActivity displayingListsActivity);
+
     void inject(DisplayingItemsActivity displayingItemsActivity);
+
     void inject(CustomAdapter customAdapter);
 }

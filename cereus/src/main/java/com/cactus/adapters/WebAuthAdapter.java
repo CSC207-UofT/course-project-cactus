@@ -29,6 +29,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
 
     private final String STATIC_IP;
+
     @Inject
     public WebAuthAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
@@ -170,8 +171,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
         try {
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
-        }
-        catch(NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
             return null;
         }
