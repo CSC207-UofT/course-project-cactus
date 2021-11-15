@@ -3,7 +3,6 @@ package com.cactus.systems;
 import com.cactus.adapters.*;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.Objects;
 public class GroceryListSystem {
 
     private final GroceryAdapter groceryAdapter;
-
     long currentGroceryListId;
     HashMap<String, Long> currentListNamesMap;
 
@@ -36,6 +34,7 @@ public class GroceryListSystem {
      * telling us that the name was already taken
      *
      * @param name given name
+     * @param token token of user
      * @return true if a new groceryList was created, false otherwise
      */
     public boolean newGroceryList(String name, String token) {
@@ -58,6 +57,7 @@ public class GroceryListSystem {
      * Return a mapping of all the groceryLists from their name to their ID
      * so that UI can print the names and tell the controller which ID was picked
      *
+     * @param token token of user
      * @return groceryListNameMap
      */
     public ArrayList<String> getGroceryListNames(String token) {
@@ -78,6 +78,7 @@ public class GroceryListSystem {
      * Return the list of grocery list item names for the current grocery list
      * so that UI can display them to the user.
      *
+     * @param token token of user
      * @return groceryItemNames
      * */
     public ArrayList<String> getGroceryItemNames(String token) {
@@ -94,9 +95,8 @@ public class GroceryListSystem {
 
     /**
      * Exit the list by setting the list id to -1
-     * No items were added so no parameter
      *
-     * @return true if successfully exited list
+     * @return true if there existed a valid list id before exiting
      */
     public boolean exitGroceryList() {
         if (this.currentGroceryListId != -1) {
@@ -107,13 +107,13 @@ public class GroceryListSystem {
         }
     }
 
-    /***
+    /**
      * Add grocery items to the current grocery list
      *
-     * @param items a List of strings representing the items to the added to the grocery list
-     * @param token token for the current user
-     * @return true if items were added, false otherwise
-     */
+     * @param items list of items to be added
+     * @param token the token of the user that it is being added to
+     * @return true of items were added successfully
+     **/
     public boolean addGroceryItems(List<String> items, String token){
         return this.groceryAdapter.setGroceryItems(items, this.currentGroceryListId, token);
     }
@@ -139,12 +139,19 @@ public class GroceryListSystem {
     /***
      * Return the current list name so that UI can display it.
      *
+     * @param token token of user
      * @return name of grocery list
      * */
     public String getListName(String token) {
         return this.groceryAdapter.getGroceryList(this.currentGroceryListId, token).getName();
     }
 
+
+    /***
+     * Set the current grocery list to the given one
+     *
+     * @param listName name of the to be set grocery list
+     */
     public void setCurrentGroceryList(String listName){
         this.currentGroceryListId = Objects.requireNonNull(this.currentListNamesMap.get(listName));
     }

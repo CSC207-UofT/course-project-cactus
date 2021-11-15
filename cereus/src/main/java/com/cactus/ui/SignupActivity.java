@@ -11,15 +11,21 @@ import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 
+/***
+ * Represents the activity responsible for displaying the signup page
+ */
 public class SignupActivity extends AppCompatActivity {
-
-    private EditText name;
-    private EditText username;
-    private EditText password;
 
     @Inject
     UserInteractFacade userInteractFacade;
 
+    /***
+     * Logic for what to do when this activity is created
+     *
+     * On create, the signup options are initialized
+     *
+     * @param savedInstanceState state variable
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
@@ -31,9 +37,16 @@ public class SignupActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        name = findViewById(R.id.name);
-        username = findViewById(R.id.newUsername);
-        password = findViewById(R.id.newPassword);
+        displayOptions();
+    }
+
+    /***
+     * Display the signup text boxes and button
+     */
+    private void displayOptions(){
+        EditText name = findViewById(R.id.name);
+        EditText username = findViewById(R.id.newUsername);
+        EditText password = findViewById(R.id.newPassword);
         Button signupButton = findViewById(R.id.button);
 
         signupButton.setOnClickListener(view -> {

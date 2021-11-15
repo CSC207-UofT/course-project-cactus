@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Facade controller in charge of calling UserSystem and GroceryListSystem methods
+ */
 @Singleton
 public class UserInteractFacade {
     private final UserSystem userSystem;
@@ -107,7 +110,6 @@ public class UserInteractFacade {
         return this.groceryListSystem.addGroceryItems(items, this.getToken());
     }
 
-    // TODO: make this method require a grocery list id
     /**
      * Delete the current grocery list
      *
@@ -126,6 +128,11 @@ public class UserInteractFacade {
         return this.groceryListSystem.getListName(getToken());
     }
 
+    /***
+     * Set the current grocery list to the given one
+     *
+     * @param listName name of the to be set grocery list
+     */
     public void setCurrentGroceryList(String listName){
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
