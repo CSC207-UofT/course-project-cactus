@@ -49,7 +49,7 @@ public class GroceryList {
     /**
      * Creates a new GroceryList.
      */
-    public GroceryList(){
+    public GroceryList() {
         this.items = new ArrayList<>();
     }
 
@@ -106,7 +106,7 @@ public class GroceryList {
     void removeList() {
         this.user.removeGroceryList(this);
 
-        for (GroceryItem item: items) {
+        for (GroceryItem item : items) {
             item.removeList(this);
         }
     }

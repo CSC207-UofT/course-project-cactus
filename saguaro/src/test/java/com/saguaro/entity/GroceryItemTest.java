@@ -70,9 +70,7 @@ class GroceryItemTest {
             GroceryItem second = new GroceryItem();
             second.setName("Bread");
 
-            assertThrows(NullPointerException.class, () -> {
-                first.equals(second);
-            });
+            assertThrows(NullPointerException.class, () -> first.equals(second));
 
             first.setName("Bread");
             second.setName(null);
