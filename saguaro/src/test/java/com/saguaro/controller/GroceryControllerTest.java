@@ -196,6 +196,18 @@ class GroceryControllerTest {
                             .content((new ObjectMapper()).writeValueAsString(bad)))
                     .andExpect(status().isBadRequest());
         }
+
+        @Test
+        void testSaveListBlankItem() throws Exception {
+            HashMap<String, String> bad = new HashMap<>();
+            bad.put("iid", "1");
+            bad.put("items", "[\" \", \"b\"]");
+
+            mvc.perform(put("/api/save-list")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content((new ObjectMapper()).writeValueAsString(bad)))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
     @Nested
