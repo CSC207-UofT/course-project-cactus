@@ -1,4 +1,4 @@
-package com.saguaro.configuration;
+package com.saguaro.security;
 
 import com.saguaro.security.TokenAuthenticationFilter;
 import com.saguaro.security.TokenAuthenticationProvider;
