@@ -1,9 +1,6 @@
 package com.cactus.adapters;
+
 import com.cactus.entities.User;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 
 public interface AuthAdapter {
 

@@ -83,8 +83,14 @@ public class UserSystem {
      */
     public boolean logout() {
         if (this.currentUser != null) {
+
+            if (!authAdapter.logout(this.getToken())) {
+                return false;
+            }
+
             this.currentUser = null;
             return true;
+
         } else {
             return false;
         }
