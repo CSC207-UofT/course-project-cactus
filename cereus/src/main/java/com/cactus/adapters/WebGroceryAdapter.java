@@ -2,19 +2,13 @@ package com.cactus.adapters;
 
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import okhttp3.*;
 import okhttp3.Response;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 import java.io.FileInputStream;
@@ -27,6 +21,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
     private final static int HTTP_OK = 200;
     private final static int HTTP_NO_CONTENT = 204;
     private final String STATIC_IP;
+
+    private final OkHttpClient client;
+
     @Inject
     public WebGroceryAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
@@ -41,14 +38,18 @@ public class WebGroceryAdapter implements GroceryAdapter {
             e.printStackTrace();
         }
         STATIC_IP = tempIp;
+
+        client = new OkHttpClient();
     }
 
     @Override
     public List<GroceryList> getGroceryListsByUser(String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        HttpUrl url = baseUrl.addPathSegment("api").addPathSegment("all-lists").build();
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("api")
+                .addPathSegment("all-lists").build();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -87,10 +88,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     @Override
     public GroceryList getGroceryList(long listID, String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        HttpUrl url = baseUrl
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("list")
                 .addQueryParameter("id", String.valueOf(listID))
@@ -118,10 +119,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     @Override
     public List<GroceryItem> getGroceryItems(long listID, String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        HttpUrl url = baseUrl
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("list")
                 .addQueryParameter("id", String.valueOf(listID))
@@ -152,7 +153,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             // Create GroceryItem objects
             ArrayList<GroceryItem> groceryItems = new ArrayList<>();
             for (String name: itemNames) {
-                GroceryItem groceryItem = new GroceryItem(name, listID);
+                GroceryItem groceryItem = new GroceryItem(name);
                 groceryItems.add(groceryItem);
             }
             return groceryItems;
@@ -166,11 +167,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     @Override
     public GroceryList createGroceryList(String nameList, String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-
-        HttpUrl url = baseUrl
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("create-list")
                 .addQueryParameter("name", nameList)
@@ -207,10 +207,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     @Override
     public boolean setGroceryItems(List<String> items, long listID, String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        HttpUrl url = baseUrl
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("save-list")
                 .build();
@@ -239,11 +239,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     @Override
     public boolean deleteGroceryList(long listID, String token) {
-        OkHttpClient client = new OkHttpClient();
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-
-        HttpUrl url = baseUrl
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("delete-list")
                 .addQueryParameter("id", String.valueOf(listID))
