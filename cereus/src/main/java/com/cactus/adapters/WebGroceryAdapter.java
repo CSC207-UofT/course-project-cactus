@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * The WebGroceryAdapter class implements the GroceryAdapter Interface by interacting with a server
+ * that stores our Users and Grocery Lists.
+ */
 public class WebGroceryAdapter implements GroceryAdapter {
 
     private final static int HTTP_OK = 200;
@@ -42,6 +46,19 @@ public class WebGroceryAdapter implements GroceryAdapter {
         client = new OkHttpClient();
     }
 
+
+    /**
+     * Returns a List of GroceryList objects that correspond to the User associated with the given token
+     * <p>
+     *
+     * The token is sent to the server to return the list of grocery lists, which returns the names and ids.
+     *
+     * The id of each list is used to get every grocery list using getGroceryList().
+     *
+     *
+     * @param token a string representing the user token to fetch lists for
+     * @return a List of GroceryList objects that are of the User whose token is entered
+     */
     @Override
     public List<GroceryList> getGroceryListsByUser(String token) {
         HttpUrl url = new HttpUrl.Builder()
@@ -86,7 +103,18 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     }
 
-
+    /**
+     * Returns a GroceryList corresponding to the listID given.
+     * A user token is required for authorization.
+     * <p>
+     * The token and listID are sent to the server to return the GroceryList.
+     *
+     * If the listID does not correspond to an existing list, then null is returned.
+     *
+     * @param listID a long representing the ID of the list to get
+     * @param token  a string representing the token of the user the list belongs to
+     * @return a GroceryList corresponding to the listID given
+     */
     @Override
     public GroceryList getGroceryList(long listID, String token) {
         HttpUrl url = new HttpUrl.Builder()
@@ -118,6 +146,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
         }
     }
 
+    /**
+     * Returns a list of GroceryItem objects that belong to the given list
+     *
+     * The token and listID are sent to the server to return the list of Grocery Items.
+     *
+     * If the listID does not correspond to an existing list, then null is returned.
+     *
+     * @param listID id of the list which holds the items you are getting
+     * @param token  token of the user who holds the list
+     * @return a list of GroceryItems in the list
+     */
     @Override
     public List<GroceryItem> getGroceryItems(long listID, String token) {
         HttpUrl url = new HttpUrl.Builder()
@@ -166,6 +205,18 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     }
 
+    /**
+     * Returns a GroceryList with the name given. A user token is required for authorization.
+     *
+     * nameList and token are sent to the server to create a GroceryList.
+     *
+     * If the token does not correspond to the User, null is returned.
+     *
+     * @param nameList a String containing the name of the new grocery list
+     * @param token    a string representing the token of the user creating the
+     *                 list
+     * @return a GroceryList that corresponds to the GroceryList created
+     */
     @Override
     public GroceryList createGroceryList(String nameList, String token) {
         HttpUrl url = new HttpUrl.Builder()
@@ -205,6 +256,18 @@ public class WebGroceryAdapter implements GroceryAdapter {
         }
     }
 
+    /**
+     * Returns whether the list of grocery items are added to the GroceryList that corresponds
+     * to the listID given. A user token is required for authorization.
+     *
+     * The items, listID and token are sent to the server to append items to the list corresponding to
+     * listID.
+     *
+     * @param items  a List of Strings containing the names of grocery items to set
+     * @param listID a long representing the ID of the list to change
+     * @param token  a string representing the token of the list's owner
+     * @return a boolean indicating whether the grocery items are appended to the list
+     */
     @Override
     public boolean setGroceryItems(List<String> items, long listID, String token) {
         HttpUrl url = new HttpUrl.Builder()
@@ -237,6 +300,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     }
 
+    /**
+     * Returns whether the GroceryList corresponding to the listID is deleted.
+     * A user token is required for authorization.
+     *
+     *The listID and token are sent to the server to delete the list corresponding to listID.
+     *
+     *
+     * @param listID a long representing the ID of the grocery list to delete
+     * @param token  a string representing the token of the grocery list's owner
+     * @return a Response to the grocery list deletion operation
+     */
     @Override
     public boolean deleteGroceryList(long listID, String token) {
         HttpUrl url = new HttpUrl.Builder()
