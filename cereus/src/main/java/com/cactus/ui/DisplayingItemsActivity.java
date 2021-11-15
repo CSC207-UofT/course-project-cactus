@@ -64,14 +64,14 @@ public class DisplayingItemsActivity extends AppCompatActivity {
             }
         });
 
-        logoutButton.setOnClickListener(view -> {
-            if (!userInteractFacade.logout()) {
-                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
-            } else if (!this.userInteractFacade.addGroceryItems(items)) {
-                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
-            } else {
+        logoutButton.setOnClickListener(view ->{
+            this.userInteractFacade.addGroceryItems(items);
+
+            if (userInteractFacade.logout()) {
                 Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
                 startActivity(intent);
+            } else {
+                Toast.makeText(DisplayingItemsActivity.this, "Logout unsuccessful", Toast.LENGTH_LONG).show();
             }
         });
     }
