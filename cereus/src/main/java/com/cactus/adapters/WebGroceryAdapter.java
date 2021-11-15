@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import okhttp3.*;
-import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.io.FileInputStream;
