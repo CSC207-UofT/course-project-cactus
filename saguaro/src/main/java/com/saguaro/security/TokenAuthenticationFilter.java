@@ -21,7 +21,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String token = request.getHeader("AUTHORIZATION");
 
         if (token == null) {
@@ -35,7 +35,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                           Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) throws IOException, ServletException {
         SecurityContextHolder.getContext().setAuthentication(authResult);
         chain.doFilter(request, response);
     }

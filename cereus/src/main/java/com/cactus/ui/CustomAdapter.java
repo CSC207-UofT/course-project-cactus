@@ -21,6 +21,7 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     protected int resource;
     protected List<String> objects;
     protected final LayoutInflater mInflater;
+    protected Context context;
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -36,6 +37,7 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     public CustomAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects);
         applicationComponent.inject(this);
+        this.context = context;
         this.resource = resource;
         this.objects = objects;
         this.mInflater = LayoutInflater.from(context);
@@ -52,12 +54,12 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
      * @return the view that is generated
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         final View view;
         final TextView text;
         final Button button;
 
-        if(convertView == null){
+        if (convertView == null) {
             view = this.mInflater.inflate(resource, parent, false);
         } else {
             view = convertView;
@@ -68,19 +70,9 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
 
         button = view.findViewById(R.id.deleteButton);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                buttonClickAction(position);
-            }
-        });
+        button.setOnClickListener(thisView -> buttonClickAction(position));
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                viewClickAction(position);
-            }
-        });
+        view.setOnClickListener(thisView -> viewClickAction(position));
 
         return view;
     }

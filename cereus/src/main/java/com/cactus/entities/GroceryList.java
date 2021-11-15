@@ -3,10 +3,6 @@
  */
 package com.cactus.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.ArrayList;
-
 /**
  * Grocery List Entity
  */
@@ -16,19 +12,11 @@ public class GroceryList {
     private String name;
     private long id;
 
-
     /**
-     * Creates a new GroceryList with the given name.
-     *
-     * @param name A String containing the User's name.
+     * Empty constructor for GroceryList, required for Jackson serialization
      */
-
-    public GroceryList(String name) {
-        this.name = name;
-        this.id = 0L;
+    public GroceryList() {
     }
-
-    public GroceryList(){}
 
     public String getName() {
         return name;

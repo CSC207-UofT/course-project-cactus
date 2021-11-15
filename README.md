@@ -21,6 +21,30 @@ By default, Cereus assumes that Saguaro is located at `192.169.0.127`. In other 
 
 As part of the Gradle project build, the correct Android SDK version should be downloaded. However, sometimes Gradle may not be able to find the SDK, causing the build to fail. Should this be the case, create a `local.properties` file at the root of the project, and add the property `sdk.dir` mapping to your SDK location.
 
+## Test
+
+To run all tests/checks, execute the following command at the root of the project
+```bash
+./gradlew check
+```
+
+Alternatively, run the `check` task from Intellij's Gradle window.
+
 ## Run
 
-[comment]: <> (TODO)
+Intellij should recognize both the Spring application and Android application within the project, and automatically create appropriate run configurations. Start both applications by selecting the appropriate run configuration and clicking the "run" button at the top of the IDE window.
+
+If Intellij was unable to create the correct run configurations, open the run configurations dropdown and select "Edit Configurations". Click the plus symbol in the top left of the popup window to create a new run configuration.
+
+#### Saguaro:
+
+- Create a new "Spring Boot" run configuration
+- Set "Use classpath of module" to `course-project-cactus.saguaro.main`
+- Set "Main class" to `com.saguaro.SaguaroApplication`
+- Apply changes and exit
+
+#### Cereus:
+
+- Create a new "Android App" run configuration
+- Set "Module" to `course-project-cactus.cereus`
+- Apply changes and exit

@@ -1,6 +1,5 @@
 package com.cactus.ui;
 
-import com.cactus.systems.UserInteractFacade;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -11,11 +10,12 @@ import javax.inject.Singleton;
 })
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
-    void inject(SignupActivity signupActivity);
-    void inject(CreatingGroceryListActivity creatingGroceryListActivity);
-    void inject(DisplayingListsActivity displayingListsActivity);
-    void inject(DisplayingItemsActivity displayingItemsActivity);
-    void inject(CustomAdapter customAdapter);
 
-//    void inject(UserInteractFacade userInteractFacade);
+    void inject(SignupActivity signupActivity);
+
+    void inject(DisplayingListsActivity displayingListsActivity);
+
+    void inject(DisplayingItemsActivity displayingItemsActivity);
+
+    void inject(CustomAdapter customAdapter);
 }

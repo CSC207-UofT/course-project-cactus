@@ -43,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
     /***
      * Display the signup text boxes and button
      */
-    private void displayOptions(){
+    private void displayOptions() {
         EditText name = findViewById(R.id.name);
         EditText username = findViewById(R.id.newUsername);
         EditText password = findViewById(R.id.newPassword);
@@ -54,10 +54,10 @@ public class SignupActivity extends AppCompatActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-            if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)){
+            if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)) {
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);
-            }else{
+            } else {
                 Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
             }
         });

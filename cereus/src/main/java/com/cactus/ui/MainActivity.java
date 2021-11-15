@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     /***
      * Display the login options and signup button
      */
-    private void displayOptions(){
+    private void displayOptions() {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-            if (userInteractFacade.login(givenUsername, givenPassword)){
+            if (userInteractFacade.login(givenUsername, givenPassword)) {
                 Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
 
-            }else{
+            } else {
                 Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
             }
         });

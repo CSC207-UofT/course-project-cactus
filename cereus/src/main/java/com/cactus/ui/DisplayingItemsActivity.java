@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cactus.systems.UserInteractFacade;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
      * @param savedInstanceState state variable
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_items);
@@ -35,7 +36,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
 
         items = userInteractFacade.getGroceryItemNames();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
-        ListView listView = (ListView) findViewById(R.id.itemViewDisplayItem);
+        ListView listView = findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);
 
         displayOptions(listView);
@@ -46,7 +47,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
      *
      * @param listView listView layout variable
      */
-    private void displayOptions(ListView listView){
+    private void displayOptions(ListView listView) {
         EditText itemName = findViewById(R.id.itemName);
         Button addItemButton = findViewById(R.id.addItemButton);
         Button logoutButton = findViewById(R.id.logoutButtonItem);
@@ -54,7 +55,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
 
-            if (!items.contains(givenItemName)){
+            if (!items.contains(givenItemName)) {
                 items.add(givenItemName);
                 ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                 itemName.getText().clear();
@@ -68,16 +69,16 @@ public class DisplayingItemsActivity extends AppCompatActivity {
                 Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
             } else if (!userInteractFacade.logout()) {
                 Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
-            } else{
+            } else {
                 Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
     }
 
-    /***
+    /**
      * Logic for what to do when this activity is destroyed
-     *
+     * <p>
      * on delete, the items are saved to the database
      */
     @Override

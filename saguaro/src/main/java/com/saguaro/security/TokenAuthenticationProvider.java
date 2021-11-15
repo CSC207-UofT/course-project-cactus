@@ -1,6 +1,5 @@
 package com.saguaro.security;
 
-import com.saguaro.entity.User;
 import com.saguaro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
