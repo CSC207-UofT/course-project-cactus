@@ -49,12 +49,13 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(view ->{
+            this.userInteractFacade.addGroceryItems(items);
+
             if (userInteractFacade.logout()) {
-                this.userInteractFacade.addGroceryItems(items);
                 Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else{
-                Toast.makeText(DisplayingItemsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(DisplayingItemsActivity.this, "Logout unsuccessful", Toast.LENGTH_LONG).show();
             }
         });
     }

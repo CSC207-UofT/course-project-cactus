@@ -50,7 +50,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
                 startActivity(intent);
             } else{
-                Toast.makeText(DisplayingListsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+                Toast.makeText(DisplayingListsActivity.this, "Logout unsuccessful", Toast.LENGTH_LONG).show();
             }
         });
     }
