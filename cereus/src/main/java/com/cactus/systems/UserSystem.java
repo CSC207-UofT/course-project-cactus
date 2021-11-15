@@ -2,7 +2,6 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.entities.User;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -13,7 +12,6 @@ import javax.inject.Singleton;
 public class UserSystem {
 
     private final AuthAdapter authAdapter;
-
     User currentUser;
 
     /***

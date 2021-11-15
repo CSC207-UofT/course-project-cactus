@@ -5,20 +5,26 @@ import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cactus.systems.UserInteractFacade;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
 
+/***
+ * Represents the activity responsible for displaying the grocery items
+ */
 public class DisplayingItemsActivity extends AppCompatActivity {
 
-    private EditText itemName;
-    private Button addItemButton;
-    private Button logoutButton;
     private ArrayList<String> items;
 
     @Inject
     UserInteractFacade userInteractFacade;
 
+    /***
+     * Logic for what to do when this activity is created
+     *
+     * On create, the list, buttons, and text fields are initialized
+     *
+     * @param savedInstanceState state variable
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
@@ -27,14 +33,23 @@ public class DisplayingItemsActivity extends AppCompatActivity {
 
         setTitle("Cereus App : " + this.userInteractFacade.getListName());
 
-        itemName = findViewById(R.id.itemName);
-        addItemButton = findViewById(R.id.addItemButton);
-        logoutButton = findViewById(R.id.logoutButtonItem);
-
         items = userInteractFacade.getGroceryItemNames();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = (ListView) findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);
+
+        displayOptions(listView);
+    }
+
+    /***
+     * Display the add item text field and button along with logout button
+     *
+     * @param listView listView layout variable
+     */
+    private void displayOptions(ListView listView){
+        EditText itemName = findViewById(R.id.itemName);
+        Button addItemButton = findViewById(R.id.addItemButton);
+        Button logoutButton = findViewById(R.id.logoutButtonItem);
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
@@ -49,19 +64,26 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(view ->{
-            if (userInteractFacade.logout()) {
-                this.userInteractFacade.addGroceryItems(items);
+            if (!userInteractFacade.logout()) {
+                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
+            } else if (!this.userInteractFacade.addGroceryItems(items)){
+                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
+            } else{
                 Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else{
-                Toast.makeText(DisplayingItemsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    /***
+     * Logic for what to do when this activity is destroyed
+     *
+     * on delete, the items are saved to the database
+     */
     @Override
     protected void onDestroy() {
-        this.userInteractFacade.addGroceryItems(items);
+        if (!this.userInteractFacade.addGroceryItems(items))
+            Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
 

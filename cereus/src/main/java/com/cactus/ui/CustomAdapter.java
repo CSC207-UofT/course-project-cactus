@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.cactus.entities.User;
 import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 import java.util.List;
 
+/***
+ * Super class for CustomListAdapter and CustomItemAdapter
+ * A custom version of ArrayAdapter for displaying list elements with text and a button
+ */
 public abstract class CustomAdapter extends ArrayAdapter<String> {
 
     protected int resource;
@@ -23,6 +25,14 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     @Inject
     UserInteractFacade userInteractFacade;
 
+    /***
+     * Initializes a new CustomAdapter
+     *
+     * @param context current context
+     * @param resource variable for the layout you wish to use
+     * @param objects the list object
+     * @param applicationComponent the applicationComponent variable
+     */
     public CustomAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects);
         applicationComponent.inject(this);
@@ -31,6 +41,16 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
         this.mInflater = LayoutInflater.from(context);
     }
 
+    /***
+     * Overridden version of getView from ArrayAdapter
+     *
+     * get the current element in the listView list
+     *
+     * @param position index of this element
+     * @param convertView view variable
+     * @param parent view parent for xml use
+     * @return the view that is generated
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         final View view;
@@ -65,7 +85,17 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
         return view;
     }
 
+    /***
+     * Action that is called when the button on a specific element is pressed
+     *
+     * @param position index of the chosen element
+     */
     abstract void buttonClickAction(int position);
 
+    /***
+     * Action that is called when the specific element is pressed (the entire element)
+     *
+     * @param position index of the chosen element
+     */
     abstract void viewClickAction(int position);
 }

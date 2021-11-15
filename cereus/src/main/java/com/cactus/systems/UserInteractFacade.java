@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Facade controller in charge of calling UserSystem and GroceryListSystem methods
+ */
 @Singleton
 public class UserInteractFacade {
     private final UserSystem userSystem;
@@ -97,27 +100,6 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryItemNames(this.getToken());
     }
 
-    // TODO: figure out why there are two methods for exiting
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     * with parameters
-     *
-     * @param items list of items that are to be added to the current list
-     * @return true if list was successfully exited and the items were added to the list
-     */
-    public boolean exitGroceryList(List<String> items){
-        return this.groceryListSystem.exitGroceryList(items, this.getToken());
-    }
-
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     *
-     * @return true if the list was successfully exited
-     */
-    public boolean exitGroceryList() {
-        return this.groceryListSystem.exitGroceryList();
-    }
-
     /**
      * Add grocery items to the current grocery list
      *
@@ -128,7 +110,6 @@ public class UserInteractFacade {
         return this.groceryListSystem.addGroceryItems(items, this.getToken());
     }
 
-    // TODO: make this method require a grocery list id
     /**
      * Delete the current grocery list
      *
@@ -147,6 +128,11 @@ public class UserInteractFacade {
         return this.groceryListSystem.getListName(getToken());
     }
 
+    /***
+     * Set the current grocery list to the given one
+     *
+     * @param listName name of the to be set grocery list
+     */
     public void setCurrentGroceryList(String listName){
         this.groceryListSystem.setCurrentGroceryList(listName);
     }

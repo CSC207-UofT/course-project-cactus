@@ -6,17 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.cactus.systems.UserInteractFacade;
 import javax.inject.Inject;
-import java.util.ArrayList;
 
+/***
+ * Represents the activity responsible for displaying the grocery lists
+ */
 public class DisplayingListsActivity extends AppCompatActivity {
-
-    private EditText listName;
-    private Button addListButton;
-    private Button logoutButton;
 
     @Inject
     UserInteractFacade userInteractFacade;
 
+    /***
+     * Logic for what to do when this activity is created
+     *
+     * On create, the list, buttons, and text fields are initialized
+     *
+     * @param savedInstanceState state variable
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
@@ -25,14 +30,24 @@ public class DisplayingListsActivity extends AppCompatActivity {
 
         setTitle("Cereus App : " + this.userInteractFacade.getUserName());
 
-        listName = findViewById(R.id.listName);
-        addListButton = findViewById(R.id.addListButton);
-        logoutButton = findViewById(R.id.logoutButtonList);
-
         CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = (ListView) findViewById(R.id.listViewDisplayList);
         listView.setAdapter(customListAdapter);
+
+        displayOptions(listView, customListAdapter);
+    }
+
+    /***
+     * Display the add list text field and button along with logout button
+     *
+     * @param listView listView layout variable
+     * @param customListAdapter customListAdapter for displaying list
+     */
+    private void displayOptions(ListView listView, CustomListAdapter customListAdapter){
+        EditText listName = findViewById(R.id.listName);
+        Button addListButton = findViewById(R.id.addListButton);
+        Button logoutButton = findViewById(R.id.logoutButtonList);
 
         addListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
