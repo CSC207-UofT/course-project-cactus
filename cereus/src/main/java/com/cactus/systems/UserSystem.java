@@ -13,14 +13,13 @@ import javax.inject.Singleton;
 public class UserSystem {
 
     private final AuthAdapter authAdapter;
-
     User currentUser;
 
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
     @Inject
-    public UserSystem(AuthAdapter authAdapter){
+    public UserSystem(AuthAdapter authAdapter) {
         this.authAdapter = authAdapter;
     }
 
@@ -67,7 +66,7 @@ public class UserSystem {
      * @param user the user that is being logged in
      * @return true if user exists
      */
-    private boolean updateCurrentUser(User user){
+    private boolean updateCurrentUser(User user) {
         if (user != null) {
             this.currentUser = user;
             return true;
@@ -83,8 +82,14 @@ public class UserSystem {
      */
     public boolean logout() {
         if (this.currentUser != null) {
+
+            if (!authAdapter.logout(this.getToken())) {
+                return false;
+            }
+
             this.currentUser = null;
             return true;
+
         } else {
             return false;
         }

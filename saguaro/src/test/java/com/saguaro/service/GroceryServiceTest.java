@@ -7,7 +7,6 @@ import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.GroceryItemRepository;
 import com.saguaro.repository.GroceryListRepository;
 import com.saguaro.repository.UserRepository;
-import org.aspectj.util.Reflection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -99,9 +98,7 @@ class GroceryServiceTest {
         void testGetListByIdInvalidId() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(null);
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.getListById(1L, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.getListById(1L, "username"));
         }
 
         @Test
@@ -109,9 +106,7 @@ class GroceryServiceTest {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
             when(list.getUser()).thenReturn(mock(User.class));
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.getListById(1L, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.getListById(1L, "username"));
         }
     }
 
@@ -244,9 +239,7 @@ class GroceryServiceTest {
         void testSaveListInvalidId() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(null);
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.saveList(list, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.saveList(list, "username"));
         }
 
         @Test
@@ -254,9 +247,7 @@ class GroceryServiceTest {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
             when(list.getUser()).thenReturn(mock(User.class));
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.saveList(list, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.saveList(list, "username"));
         }
     }
 
@@ -277,9 +268,7 @@ class GroceryServiceTest {
         void testDeleteListInvalidId() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(null);
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.removeList(1L, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.removeList(1L, "username"));
         }
 
         @Test
@@ -287,9 +276,7 @@ class GroceryServiceTest {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
             when(list.getUser()).thenReturn(mock(User.class));
 
-            assertThrows(ResourceNotFoundException.class, () -> {
-                groceryService.removeList(1L, "username");
-            });
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.removeList(1L, "username"));
         }
     }
 }

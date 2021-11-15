@@ -43,10 +43,6 @@ public class Role implements GrantedAuthority {
         return id;
     }
 
-    public Collection<User> getUsers() {
-        return users;
-    }
-
     void addUser(User user) {
         this.users.add(user);
     }

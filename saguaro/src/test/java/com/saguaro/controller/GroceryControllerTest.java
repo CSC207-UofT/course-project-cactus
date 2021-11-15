@@ -125,7 +125,7 @@ class GroceryControllerTest {
             when(groceryService.createNewList(newList.getName(), "username")).thenReturn(newList);
 
             mvc.perform(post("/api/create-list")
-                    .queryParam("name", "name"))
+                            .queryParam("name", "name"))
                     .andExpect(status().isOk())
                     .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
         }
