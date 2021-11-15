@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class DisplayingItemsActivity extends AppCompatActivity {
 
     private EditText itemName;
-    private Button addItemButton;
-    private Button logoutButton;
     private ArrayList<String> items;
 
     @Inject
@@ -28,12 +26,12 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         setTitle("Cereus App : " + this.userInteractFacade.getListName());
 
         itemName = findViewById(R.id.itemName);
-        addItemButton = findViewById(R.id.addItemButton);
-        logoutButton = findViewById(R.id.logoutButtonItem);
+        Button addItemButton = findViewById(R.id.addItemButton);
+        Button logoutButton = findViewById(R.id.logoutButtonItem);
 
         items = userInteractFacade.getGroceryItemNames();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
-        ListView listView = (ListView) findViewById(R.id.itemViewDisplayItem);
+        ListView listView = findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);
 
         addItemButton.setOnClickListener(view -> {
@@ -49,12 +47,15 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         });
 
         logoutButton.setOnClickListener(view ->{
-            if (userInteractFacade.logout()) {
-                this.userInteractFacade.addGroceryItems(items);
-                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else{
-                Toast.makeText(DisplayingItemsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+            if (this.userInteractFacade.addGroceryItems(items)) {
+                if (userInteractFacade.logout()) {
+                    Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(DisplayingItemsActivity.this, "Try again later", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(DisplayingItemsActivity.this, "Could not save list, try again later", Toast.LENGTH_LONG).show();
             }
         });
     }

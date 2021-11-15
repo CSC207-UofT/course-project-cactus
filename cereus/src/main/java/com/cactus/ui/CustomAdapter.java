@@ -19,6 +19,7 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     protected int resource;
     protected List<String> objects;
     protected final LayoutInflater mInflater;
+    protected Context context;
 
     @Inject
     UserInteractFacade userInteractFacade;
@@ -26,6 +27,7 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     public CustomAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects);
         applicationComponent.inject(this);
+        this.context = context;
         this.resource = resource;
         this.objects = objects;
         this.mInflater = LayoutInflater.from(context);

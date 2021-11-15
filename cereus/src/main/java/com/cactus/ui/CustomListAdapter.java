@@ -3,9 +3,7 @@ package com.cactus.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import com.cactus.systems.UserInteractFacade;
 
-import javax.inject.Inject;
 import java.util.List;
 
 public class CustomListAdapter extends CustomAdapter {
@@ -16,7 +14,10 @@ public class CustomListAdapter extends CustomAdapter {
     }
 
     void buttonClickAction(int position){
-        this.userInteractFacade.deleteGroceryList(this.objects.get(position));
+        if (this.userInteractFacade.deleteGroceryList(this.objects.get(position))) {
+            Toast.makeText(this.context, "Deleted list: " + this.objects.get(position), Toast.LENGTH_LONG).show();
+        }
+
         this.objects.remove(this.objects.get(position));
         this.notifyDataSetChanged();
     }
