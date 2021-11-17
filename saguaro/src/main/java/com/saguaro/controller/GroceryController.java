@@ -32,6 +32,14 @@ public class GroceryController {
      */
     private final GroceryService groceryService;
 
+    /**
+     * Constructs this grocery controller given a GroceryService.
+     *
+     * Notice that by default, Spring will attempt to autowire the only
+     * constructor of a class.
+     *
+     * @param groceryService a GroceryService to provide logic for this controller
+     */
     public GroceryController(GroceryService groceryService) {
         this.groceryService = groceryService;
     }
