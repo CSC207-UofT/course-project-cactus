@@ -18,6 +18,7 @@ import java.util.Objects;
 @Entity
 public class GroceryList {
 
+    @NotNull
     @Id
     @GeneratedValue
     @Column(name = "LIST_ID")
@@ -25,6 +26,7 @@ public class GroceryList {
 
     private String name;
 
+    @NotNull
     @ManyToMany
     @JoinTable(
             name = "LIST_ITEMS",
@@ -47,7 +49,7 @@ public class GroceryList {
     /**
      * Creates a new GroceryList.
      */
-    public GroceryList(){
+    public GroceryList() {
         this.items = new ArrayList<>();
     }
 
@@ -104,7 +106,7 @@ public class GroceryList {
     void removeList() {
         this.user.removeGroceryList(this);
 
-        for (GroceryItem item: items) {
+        for (GroceryItem item : items) {
             item.removeList(this);
         }
     }

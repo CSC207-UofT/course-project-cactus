@@ -1,18 +1,23 @@
 package com.cactus.systems;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * Facade controller in charge of calling UserSystem and GroceryListSystem methods
+ */
+@Singleton
 public class UserInteractFacade {
-    UserSystem userSystem;
-    GroceryListSystem groceryListSystem;
+    private final UserSystem userSystem;
+
+    private final GroceryListSystem groceryListSystem;
 
     /**
      * Creates a new UserInteractFacade object
-     *
-     * @param userSystem controller for user use cases
-     * @param groceryListSystem controller for grocery list use cases
      */
+    @Inject
     public UserInteractFacade(UserSystem userSystem, GroceryListSystem groceryListSystem) {
         this.userSystem = userSystem;
         this.groceryListSystem = groceryListSystem;
@@ -20,14 +25,14 @@ public class UserInteractFacade {
 
     // UserSystem methods
 
-    private long getCurrentUserId(){
-        return this.userSystem.getCurrentUserId();
+    private String getToken() {
+        return this.userSystem.getToken();
     }
 
     /**
      * Create user using UserSystem's createUser method
      *
-     * @param name the name of the user that is being created
+     * @param name     the name of the user that is being created
      * @param username the username of the user that is being created
      * @param password the password of the user that is being created
      * @return true if user was successfully created
@@ -74,7 +79,7 @@ public class UserInteractFacade {
      * @return true if grocery list was successfully created
      */
     public boolean newGroceryList(String name) {
-        return this.groceryListSystem.newGroceryList(name, this.getCurrentUserId());
+        return this.groceryListSystem.newGroceryList(name, this.getToken());
     }
 
     /**
@@ -83,7 +88,7 @@ public class UserInteractFacade {
      * @return a list of grocery list names belonging to the current user
      */
     public ArrayList<String> getGroceryListNames() {
-        return this.groceryListSystem.getGroceryListNames(this.getCurrentUserId());
+        return this.groceryListSystem.getGroceryListNames(this.getToken());
     }
 
     /**
@@ -92,38 +97,7 @@ public class UserInteractFacade {
      * @return a list of grocery item names belonging to the current list
      */
     public ArrayList<String> getGroceryItemNames() {
-        return this.groceryListSystem.getGroceryItemNames(this.getCurrentUserId());
-    }
-
-    // TODO: figure out why there are two methods for exiting
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     * with parameters
-     *
-     * @param items list of items that are to be added to the current list
-     * @return true if list was successfully exited and the items were added to the list
-     */
-    public boolean exitGroceryList(List<String> items){
-        return this.groceryListSystem.exitGroceryList(items, this.getCurrentUserId());
-    }
-
-    /**
-     * Exit the current grocery list using GroceryListSystem's exitGroceryList method
-     *
-     * @return true if the list was successfully exited
-     */
-    public boolean exitGroceryList() {
-        return this.groceryListSystem.exitGroceryList();
-    }
-
-    /**
-     * Add grocery item to the current grocery list
-     *
-     * @param item name of the item that is to be added to the current grocery list
-     * @return true of item was successfully added
-     */
-    public boolean addGroceryItem(String item) {
-        return this.groceryListSystem.addGroceryItem(item, this.getCurrentUserId());
+        return this.groceryListSystem.getGroceryItemNames(this.getToken());
     }
 
     /**
@@ -132,18 +106,17 @@ public class UserInteractFacade {
      * @param items list of names of the items that are to be added to the current grocery list
      * @return true of item was successfully added
      */
-    public boolean addGroceryItems(List<String> items){
-        return this.groceryListSystem.addGroceryItems(items, this.getCurrentUserId());
+    public boolean addGroceryItems(List<String> items) {
+        return this.groceryListSystem.addGroceryItems(items, this.getToken());
     }
 
-    // TODO: make this method require a grocery list id
     /**
      * Delete the current grocery list
      *
      * @return true if grocery list was successfully deleted
      */
-    public boolean deleteGroceryList() {
-        return this.groceryListSystem.deleteGroceryList(this.getCurrentUserId());
+    public boolean deleteGroceryList(String listName) {
+        return this.groceryListSystem.deleteGroceryList(this.getToken(), listName);
     }
 
     /**
@@ -152,7 +125,16 @@ public class UserInteractFacade {
      * @return Name of the current grocery list
      */
     public String getListName() {
-        return this.groceryListSystem.getListName(getCurrentUserId());
+        return this.groceryListSystem.getListName(getToken());
+    }
+
+    /***
+     * Set the current grocery list to the given one
+     *
+     * @param listName name of the to be set grocery list
+     */
+    public void setCurrentGroceryList(String listName) {
+        this.groceryListSystem.setCurrentGroceryList(listName);
     }
 
 }

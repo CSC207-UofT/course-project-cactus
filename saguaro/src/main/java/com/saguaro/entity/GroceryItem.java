@@ -7,6 +7,7 @@ package com.saguaro.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Entity
 public class GroceryItem {
 
+    @NotBlank
     @Id
     private String name;
 

@@ -2,11 +2,14 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.entities.User;
-import java.util.Objects;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /***
  * Represents the system that controls users
  */
+@Singleton
 public class UserSystem {
 
     private final AuthAdapter authAdapter;
@@ -15,17 +18,18 @@ public class UserSystem {
     /***
      * Create a new GroceryListSystem with user and groceryList managers, and mapping of grocery list name
      */
-    public UserSystem(AuthAdapter authAdapter){
+    @Inject
+    public UserSystem(AuthAdapter authAdapter) {
         this.authAdapter = authAdapter;
     }
 
     /**
-     * Get the current user's id
+     * Get the current user's token
      *
-     * @return id of the current user
+     * @return token of the current user
      */
-    public long getCurrentUserId() {
-        return currentUser.getId();
+    public String getToken() {
+        return currentUser.getToken();
     }
 
     /***
@@ -62,7 +66,7 @@ public class UserSystem {
      * @param user the user that is being logged in
      * @return true if user exists
      */
-    private boolean updateCurrentUser(User user){
+    private boolean updateCurrentUser(User user) {
         if (user != null) {
             this.currentUser = user;
             return true;
@@ -78,8 +82,14 @@ public class UserSystem {
      */
     public boolean logout() {
         if (this.currentUser != null) {
+
+            if (!authAdapter.logout(this.getToken())) {
+                return false;
+            }
+
             this.currentUser = null;
             return true;
+
         } else {
             return false;
         }

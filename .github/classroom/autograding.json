@@ -3,7 +3,7 @@
     {
       "name": "Autotesting Action",
       "setup": "",
-      "run": "gradle test",
+      "run": "gradle :saguaro:check",
       "input": "",
       "output": "",
       "comparison": "included",

@@ -125,7 +125,7 @@ class GroceryControllerTest {
             when(groceryService.createNewList(newList.getName(), "username")).thenReturn(newList);
 
             mvc.perform(post("/api/create-list")
-                    .queryParam("name", "name"))
+                            .queryParam("name", "name"))
                     .andExpect(status().isOk())
                     .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
         }
@@ -190,6 +190,18 @@ class GroceryControllerTest {
         void testSaveListBadRequestNoItems() throws Exception {
             HashMap<String, String> bad = new HashMap<>();
             bad.put("iid", "1");
+
+            mvc.perform(put("/api/save-list")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content((new ObjectMapper()).writeValueAsString(bad)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testSaveListBlankItem() throws Exception {
+            HashMap<String, String> bad = new HashMap<>();
+            bad.put("iid", "1");
+            bad.put("items", "[\" \", \"b\"]");
 
             mvc.perform(put("/api/save-list")
                             .contentType(MediaType.APPLICATION_JSON)

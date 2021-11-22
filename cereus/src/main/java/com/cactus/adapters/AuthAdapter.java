@@ -1,57 +1,46 @@
 package com.cactus.adapters;
+
 import com.cactus.entities.User;
 
 public interface AuthAdapter {
 
     /**
-     * Returns a Response object with the results of a login operation done using the
-     * provided username and password.
-     *
-     * If the login was successful, the Response will have code 200 (OK), and a
-     * payload with the following entries:
-     * - userid: a string representation of the user' ID (long)
-     * - name: a string representation of the user's name (string)
-     *
-     * The type in parentheses denotes the value's original type.
-     *
-     * If the login was unsuccessful, the Response will have code 400 (BAD_REQUEST)
-     * and a null payload.
+     * Returns a User object that corresponds to the provided username and password.
+     * <p>
+     * If the username and password do not correspond to an existing User,
+     * then null is returned, and no login takes place.
      *
      * @param username a String containing the username of the user to be logged in
      * @param password a String containing the password to validate
-     * @return         a Response to the login operation
-     *
-     * @see Response
+     * @return a User object that corresponds to the given parameters
+     * @see User
      */
     User login(String username, String password);
 
+
     /**
-     * Returns a Response object with the results of a create user operation done
-     * using the provided username, password, and name.
+     * Returns a User object created with the provided username, password, and name.
+     * <p>
+     * If the user has the same username as one that already exists, then null is returned and no creation takes place.
+     * <p>
+     * If the username has a different username, then a User object corresponding to the given information is created,
+     * and returned
      *
-     * If the user was created successfully, the Response will have code 200 (OK),
-     * and a payload with the following keys:
-     * - userid: a string representation of the user' ID (long)
-     * - name: a string representation of the user's name (string)
-     *
-     * The type in parentheses denotes the value's original type.
-     *
-     * If the user creation was unsuccessful (i.e. username already exists), the
-     * Response will have code 400 (BAD_REQUEST) and a null payload.
-     *
+     * @param name     a String containing the name of the user
      * @param username a String containing the username of the new user
      * @param password a String containing the password of the new user
-     * @param name     a String containing the name of the user
-     * @return         a Response to the create user operation
-     *
-     * @see Response
+     * @return a User object created with the given parameters
+     * @see User
      */
-    User create(String username, String password, String name);
+    User create(String name, String username, String password);
 
-    /***
-     * A getter for users to be used in the controller
+
+    /**
+     * Returns whether the User object with the corresponding token is successfully logged out of the application.
      *
-     * @param userId the id of the user that you want
+     * @param token a String containing a token unique to every User, stored in the User class
+     * @return whether the User corresponding to the token is logged out or not
+     * @see User
      */
-    User getUser(long userId);
+    boolean logout(String token);
 }
