@@ -193,4 +193,34 @@ class UserServiceTest {
             assertNull(actual);
         }
     }
+
+    @Nested
+    class EditTest {
+
+        @BeforeEach
+        void setUpEdit() {
+            when(userRepository.findUserByUsername(username)).thenReturn(user);
+            when(userRepository.save(any(User.class))).thenAnswer(ans -> ans.getArgument(0));
+        }
+
+        @Test
+        void testEditNameAndPassword() {
+            when(passwordEncoder.encode("NEW_PASS")).thenReturn("HASH");
+
+            User actual = userService.edit("NEW_NAME", "NEW_PASS", username);
+
+            assertEquals("NEW_NAME", actual.getName());
+            assertEquals("HASH", actual.getPassword());
+            assertEquals(username, actual.getUsername());
+        }
+
+        @Test
+        void testEditNoChange() {
+            User actual = userService.edit(null, null, username);
+
+            assertEquals(name, actual.getName());
+            assertEquals(password, actual.getPassword());
+            assertEquals(username, actual.getUsername());
+        }
+    }
 }
