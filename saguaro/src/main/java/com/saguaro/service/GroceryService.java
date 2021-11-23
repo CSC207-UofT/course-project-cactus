@@ -66,6 +66,10 @@ public class GroceryService {
                     String.valueOf(list.getId()), user);
         }
 
+        if (list.getName() != null) {
+            oldList.setName(list.getName());
+        }
+
         HashSet<GroceryItem> foundItems = new HashSet<>();
 
         for (GroceryItem item : list.getItems()) {

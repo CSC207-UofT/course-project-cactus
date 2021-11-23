@@ -198,7 +198,7 @@ class GroceryControllerTest {
         }
 
         @Test
-        void testSaveListBlankItem() throws Exception {
+        void testSaveListBadRequestBlankItem() throws Exception {
             HashMap<String, String> bad = new HashMap<>();
             bad.put("iid", "1");
             bad.put("items", "[\" \", \"b\"]");
