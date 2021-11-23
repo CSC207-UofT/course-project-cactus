@@ -28,13 +28,38 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@Validated @RequestBody RegisterPayload payload) throws InvalidParamException {
+    public User register(@Validated @RequestBody UserPayload payload) throws InvalidParamException {
         return userService.registerNewUser(payload.username,
                 payload.password,
                 payload.name);
     }
 
-    private static class RegisterPayload {
+    @PostMapping("/logout")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        userService.logout(username);
+    }
+
+    /**
+     * Given a UserPayload, replaced the logged-in user's attributes with any non-null
+     * attributes of the payload. Note that a user's username cannot be changed; the
+     * username property of the payload is ignored by this method.
+     *
+     * @param payload the UserPayload containing user attributes to change
+     * @return the newly saved User object
+     */
+    @PostMapping("/api/edit-user")
+    public User editUser(@RequestBody UserPayload payload) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return userService.edit(payload.name, payload.password, username);
+    }
+
+    private static class UserPayload {
         @NotBlank
         String name;
 
@@ -55,14 +80,5 @@ public class UserController {
         public void setPassword(String password) {
             this.password = password;
         }
-    }
-
-    @PostMapping("/logout")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void logout() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) auth.getPrincipal();
-
-        userService.logout(username);
     }
 }
