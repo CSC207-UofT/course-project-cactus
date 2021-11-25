@@ -51,7 +51,7 @@ public class UserController {
      * @param payload the UserPayload containing user attributes to change
      * @return the newly saved User object
      */
-    @PostMapping("/api/edit-user")
+    @PutMapping("/api/edit-user")
     public User editUser(@Validated(EditGroup.class) @RequestBody UserPayload payload) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();

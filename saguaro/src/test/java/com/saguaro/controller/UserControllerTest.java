@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -228,7 +229,7 @@ class UserControllerTest {
             when(userService.edit("name", "password", "username"))
                     .thenReturn(user);
 
-            mvc.perform(post("/api/edit-user")
+            mvc.perform(put("/api/edit-user")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"password\":\"password\"" +
                                     ",\"name\":\"name\"}")
@@ -246,7 +247,7 @@ class UserControllerTest {
             when(userService.edit("name", "password", "username"))
                     .thenReturn(user);
 
-            mvc.perform(post("/api/edit-user")
+            mvc.perform(put("/api/edit-user")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"username\":\"username\"" +
                                     ",\"password\":\"password\"" +
@@ -265,7 +266,7 @@ class UserControllerTest {
             when(userService.edit(null, null, "username"))
                     .thenReturn(user);
 
-            mvc.perform(post("/api/edit-user")
+            mvc.perform(put("/api/edit-user")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{}")
                             .header("Authentication", "token")
@@ -276,7 +277,7 @@ class UserControllerTest {
 
         @Test
         void testEditUserBadRequestBlankName() throws Exception {
-            mvc.perform(post("/api/edit-user")
+            mvc.perform(put("/api/edit-user")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"password\":\"password\"" +
                             ",\"name\":\"\"}")
@@ -286,7 +287,7 @@ class UserControllerTest {
 
         @Test
         void testEditUserBadRequestBlankPassword() throws Exception {
-            mvc.perform(post("/api/edit-user")
+            mvc.perform(put("/api/edit-user")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"password\":\" \"" +
                             ",\"name\":\"name\"}")
