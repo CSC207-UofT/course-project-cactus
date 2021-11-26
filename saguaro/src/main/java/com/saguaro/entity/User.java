@@ -168,7 +168,9 @@ public class User {
     }
 
     public void removeFriend(User user) {
-
+        if (this.friends.remove(user)) {
+            user.removeBefriended(user);
+        }
     }
 
     /**
@@ -179,6 +181,10 @@ public class User {
      */
     private void addBefriended(User user) {
         this.befriended.add(user);
+    }
+
+    private void removeBefriended(User user) {
+        this.befriended.remove(user);
     }
 
     @Override
