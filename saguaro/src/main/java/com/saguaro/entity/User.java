@@ -208,7 +208,7 @@ public class User {
     /**
      * Serializer class for a user's friends
      */
-    private static class FriendSerializer extends JsonSerializer<Set<User>> {
+    private static class FriendSerializer extends JsonSerializer<List<User>> {
 
         /**
          * Takes the set of users that are a user's friends, and serializes only their
@@ -221,7 +221,7 @@ public class User {
          * @throws IOException if there is an error writing JSON content
          */
         @Override
-        public void serialize(Set<User> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        public void serialize(List<User> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             String[] usernames = value.stream().map(User::getUsername).collect(Collectors.toList()).toArray(new String[1]);
             gen.writeArray(usernames, 0, usernames.length);
         }
