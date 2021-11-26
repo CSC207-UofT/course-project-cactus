@@ -1,2 +1,6 @@
-INSERT INTO role (id, name)
-VALUES (0, 'ROLE_USER');
+INSERT INTO role
+SELECT *
+FROM (
+         SELECT 0, 'ROLE_USER'
+     ) x
+WHERE NOT EXISTS(SELECT * FROM role WHERE id = 0);
