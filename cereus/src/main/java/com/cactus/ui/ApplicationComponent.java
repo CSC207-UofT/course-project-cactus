@@ -18,4 +18,6 @@ public interface ApplicationComponent {
     void inject(DisplayingItemsActivity displayingItemsActivity);
 
     void inject(CustomAdapter customAdapter);
+
+    void inject (UserProfileActivity userProfileActivity);
 }
