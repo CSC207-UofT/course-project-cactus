@@ -4,6 +4,7 @@ import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
 import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.exception.InvalidParamException;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +84,19 @@ public class UserService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getToken(), true, true, true, true, authorities
         );
+    }
+
+    @Transactional
+    public User addFriend(String friendUsername, String username)
+            throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        User friend = userRepository.findUserByUsername(friendUsername);
+
+        if (friend == null) {
+            throw new ResourceNotFoundException(User.class, friendUsername);
+        }
+
+        user.addFriend(friend);
+        return userRepository.save(user);
     }
 }
