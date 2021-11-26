@@ -3,6 +3,7 @@ package com.saguaro.controller;
 import com.saguaro.entity.User;
 import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.exception.InvalidParamException;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -64,5 +65,14 @@ public class UserController {
         String username = (String) auth.getPrincipal();
 
         userService.logout(username);
+    }
+
+    @PostMapping("/add-friend")
+    public User addFriend(@RequestParam("username") String friendUsername)
+            throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return userService.addFriend(friendUsername, username);
     }
 }
