@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saguaro.entity.User;
 import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.exception.InvalidParamException;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.service.UserService;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -197,6 +199,52 @@ class UserControllerTest {
             ).andExpect(status().isNoContent());
 
             verify(userService, times(1)).logout(anyString());
+        }
+    }
+
+    @Nested
+    class TestAddFriend {
+
+        Authentication authentication;
+        SecurityContext securityContext;
+
+        @BeforeEach
+        void setUpdAddFriend() {
+            authentication = mock(Authentication.class);
+            securityContext = mock(SecurityContext.class);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn("username");
+            SecurityContextHolder.setContext(securityContext);
+        }
+
+        @Test
+        void testAddFriendValid() throws Exception {
+            User user = new User();
+            User friend = new User();
+            user.addFriend(friend);
+
+            when(userService.addFriend("friend", "username")).thenReturn(user);
+
+            mvc.perform(post("/api/add-friend")
+                            .queryParam("username", "friend")
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
+        }
+
+        @Test
+        void testAddFriendDoesNotExist() throws Exception {
+            User user = new User();
+            User friend = new User();
+            user.addFriend(friend);
+
+            when(userService.addFriend("friend", "username")).thenThrow(ResourceNotFoundException.class);
+
+            mvc.perform(post("/api/add-friend")
+                            .queryParam("username", "friend")
+                    ).andExpect(status().isNotFound())
+                    .andExpect(result -> assertTrue(result.getResolvedException()
+                            instanceof ResourceNotFoundException));
         }
     }
 }

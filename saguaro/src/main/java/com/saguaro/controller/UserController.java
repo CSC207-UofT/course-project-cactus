@@ -78,7 +78,7 @@ public class UserController {
      * @throws ResourceNotFoundException if the given username to add as a friend does not
      *                                   exist
      */
-    @PostMapping("/add-friend")
+    @PostMapping("api/add-friend")
     public User addFriend(@RequestParam("username") String friendUsername)
             throws ResourceNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
