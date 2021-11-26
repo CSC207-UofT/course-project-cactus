@@ -21,7 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/addListButton" app:layout_constraintLeft_toRightOf="@+id/listName"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
     <ListView
             android:layout_width="409dp"
             android:layout_height="729dp"
@@ -33,5 +34,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/logoutButtonList"
             app:layout_constraintLeft_toRightOf="@+id/addListButton"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"
+            android:backgroundTint="@color/design_default_color_error"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
