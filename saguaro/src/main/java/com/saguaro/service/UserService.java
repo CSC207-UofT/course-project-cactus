@@ -86,6 +86,21 @@ public class UserService {
         );
     }
 
+    /**
+     * Given a friend username and a username, add the User represented by the former as
+     * a friend of the latter. This method assumes that the username (but not the
+     * friend's username) belongs to a valid user, since a user must be authenticated
+     * in order to add a friend.
+     * <p>
+     * If the provided friend username does not map to an existing user, a
+     * ResourceNotFoundException is thrown.
+     *
+     * @param friendUsername the String username of the user to add as a friend
+     * @param username       the String username of the user adding the friend
+     * @return the newly modified User object
+     * @throws ResourceNotFoundException if the given username to add as a friend does not
+     *                                   exist
+     */
     @Transactional
     public User addFriend(String friendUsername, String username)
             throws ResourceNotFoundException {

@@ -71,8 +71,8 @@ public class User {
             )
     )
     private List<User> friends;
-    // using Sets for some reason doesn't work
-    // contains returns incorrect results
+    // using Sets "breaks" Hibernate
+    // see https://stackoverflow.com/questions/5031614/the-jpa-hashcode-equals-dilemma
 
     /**
      * The users this user has been befriended by
@@ -200,6 +200,11 @@ public class User {
                 && Objects.equals(token, user.token);
     }
 
+    /**
+     * Generate a hash for this User
+     *
+     * @return an integer hash for this object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, username, password, name, roles, token);

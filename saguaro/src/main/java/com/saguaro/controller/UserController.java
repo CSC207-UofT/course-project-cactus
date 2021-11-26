@@ -67,6 +67,17 @@ public class UserController {
         userService.logout(username);
     }
 
+    /**
+     * Given a username, add that user as a friend of the currently authenticated user.
+     * <p>
+     * If the provided username to add as a friend does not exist, a
+     * ResourceNotFoundException will be thrown.
+     *
+     * @param friendUsername the String username of the user to add as a friend
+     * @return the newly modified User object
+     * @throws ResourceNotFoundException if the given username to add as a friend does not
+     *                                   exist
+     */
     @PostMapping("/add-friend")
     public User addFriend(@RequestParam("username") String friendUsername)
             throws ResourceNotFoundException {
