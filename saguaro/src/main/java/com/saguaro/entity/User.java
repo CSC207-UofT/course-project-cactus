@@ -70,18 +70,23 @@ public class User {
                     referencedColumnName = "USER_ID"
             )
     )
-    private Set<User> friends;
+    private List<User> friends;
+    // using Sets for some reason doesn't work
+    // contains returns incorrect results
 
     /**
      * The users this user has been befriended by
      */
     @JsonIgnore
     @ManyToMany(mappedBy = "friends")
-    private Set<User> befriended;
+    private List<User> befriended;
 
     public User() {
         this.roles = new ArrayList<>();
         this.lists = new ArrayList<>();
+
+        this.friends = new ArrayList<>();
+        this.befriended = new ArrayList<>();
     }
 
     public long getId() {
@@ -142,6 +147,15 @@ public class User {
     }
 
     /**
+     * Get the list of users that are friends of this user
+     *
+     * @return the friends of this user
+     */
+    public List<User> getFriends() {
+        return this.friends;
+    }
+
+    /**
      * Add a user to this user's list of friends
      *
      * @param user the User to add as a friend
@@ -151,6 +165,10 @@ public class User {
             this.friends.add(user);
             user.addBefriended(this);
         }
+    }
+
+    public void removeFriend(User user) {
+
     }
 
     /**
@@ -174,6 +192,11 @@ public class User {
                 && name.equals(user.name)
                 && roles.equals(user.roles)
                 && Objects.equals(token, user.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, name, roles, token);
     }
 
     /**
