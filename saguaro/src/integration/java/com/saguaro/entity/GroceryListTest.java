@@ -33,12 +33,12 @@ public class GroceryListTest {
     @Test
     void testUserSetAndListAddedToUser() {
         GroceryList list = new GroceryList();
-        list.setUser(user);
+        list.setOwner(user);
 
         GroceryList savedList = entityManager.persistFlushFind(list);
         user = entityManager.refresh(user);
 
-        assertEquals(user, savedList.getUser());
+        assertEquals(user, savedList.getOwner());
         assertEquals(1, user.getGroceryLists().size());
         assertEquals(savedList, user.getGroceryLists().get(0)); // check if user contains saved list
     }
@@ -51,7 +51,7 @@ public class GroceryListTest {
         @BeforeEach
         void SetUpExistingList() {
             GroceryList list = new GroceryList();
-            list.setUser(user);
+            list.setOwner(user);
             savedList = entityManager.persistFlushFind(list);
         }
 
@@ -67,10 +67,10 @@ public class GroceryListTest {
         @Test
         void testResetUser() {
             User newUser = new User();
-            savedList.setUser(newUser);
+            savedList.setOwner(newUser);
             entityManager.persistAndFlush(savedList);
 
-            assertEquals(user, savedList.getUser()); // should not be able to overwrite existing owner of list
+            assertEquals(user, savedList.getOwner()); // should not be able to overwrite existing owner of list
         }
 
         @Nested

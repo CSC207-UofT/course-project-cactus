@@ -51,8 +51,12 @@ public class User {
     private String token;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "owner")
     private List<GroceryList> lists;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "shared")
+    private List<GroceryList> sharedLists;
 
     /**
      * The users this user has befriended
@@ -84,6 +88,7 @@ public class User {
     public User() {
         this.roles = new ArrayList<>();
         this.lists = new ArrayList<>();
+        this.sharedLists = new ArrayList<>();
 
         this.friends = new ArrayList<>();
         this.befriended = new ArrayList<>();
@@ -185,6 +190,10 @@ public class User {
 
     private void removeBefriended(User user) {
         this.befriended.remove(user);
+    }
+
+    void addSharedList(GroceryList list) {
+        this.sharedLists.add(list);
     }
 
     @Override

@@ -44,13 +44,29 @@ public class GroceryList {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
-    private User user;
+    private User owner;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "SHARED_LISTS",
+            joinColumns = @JoinColumn(
+                    name = "LIST_ID",
+                    referencedColumnName = "LIST_ID"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "USER_ID",
+                    referencedColumnName = "USER_ID"
+            )
+    )
+    private List<User> shared;
 
     /**
      * Creates a new GroceryList.
      */
     public GroceryList() {
         this.items = new ArrayList<>();
+        this.shared = new ArrayList<>();
     }
 
     /**
@@ -74,14 +90,25 @@ public class GroceryList {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return this.owner;
     }
 
-    public void setUser(User user) {
-        if (this.user == null) {
-            this.user = user;
-            this.user.addGroceryList(this);
+    public void setOwner(User owner) {
+        if (this.owner == null) {
+            this.owner = owner;
+            this.owner.addGroceryList(this);
+        }
+    }
+
+    public List<User> getShared() {
+        return this.shared;
+    }
+
+    public void addSharedUser(User user) {
+        if (user != this.owner && !this.shared.contains(user)) {
+            this.shared.add(user);
+             user.addSharedList(this);
         }
     }
 
@@ -104,7 +131,7 @@ public class GroceryList {
 
     @PreRemove
     void removeList() {
-        this.user.removeGroceryList(this);
+        this.owner.removeGroceryList(this);
 
         for (GroceryItem item : items) {
             item.removeList(this);
@@ -116,6 +143,6 @@ public class GroceryList {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroceryList that = (GroceryList) o;
-        return id == that.id && items.equals(that.items) && Objects.equals(name, that.name) && Objects.equals(user, that.user);
+        return id == that.id && items.equals(that.items) && Objects.equals(name, that.name) && Objects.equals(owner, that.owner);
     }
 }

@@ -40,7 +40,7 @@ public class GroceryService {
         User user = userRepository.findUserByUsername(username);
         GroceryList list = groceryListRepository.findGroceryListById(id);
 
-        if (list == null || !user.equals(list.getUser())) {
+        if (list == null || !user.equals(list.getOwner())) {
             throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
         }
 
@@ -52,7 +52,7 @@ public class GroceryService {
 
         GroceryList list = new GroceryList();
         list.setName(name);
-        list.setUser(user);
+        list.setOwner(user);
 
         return groceryListRepository.save(list);
     }
@@ -61,7 +61,7 @@ public class GroceryService {
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
 
-        if (oldList == null || !user.equals(oldList.getUser())) {
+        if (oldList == null || !user.equals(oldList.getOwner())) {
             throw new ResourceNotFoundException(GroceryList.class,
                     String.valueOf(list.getId()), user);
         }
@@ -90,7 +90,7 @@ public class GroceryService {
         User user = userRepository.findUserByUsername(username);
         GroceryList list = groceryListRepository.findGroceryListById(id);
 
-        if (list == null || !user.equals(list.getUser())) {
+        if (list == null || !user.equals(list.getOwner())) {
             throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
         }
 

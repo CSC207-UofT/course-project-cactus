@@ -87,7 +87,7 @@ class GroceryServiceTest {
         @Test
         void testGetListByIdValid() throws Exception {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
-            when(list.getUser()).thenReturn(user);
+            when(list.getOwner()).thenReturn(user);
 
             GroceryList actual = groceryService.getListById(1L, "username");
 
@@ -104,7 +104,7 @@ class GroceryServiceTest {
         @Test
         void testGetListByIdUnmatchedUser() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
-            when(list.getUser()).thenReturn(mock(User.class));
+            when(list.getOwner()).thenReturn(mock(User.class));
 
             assertThrows(ResourceNotFoundException.class, () -> groceryService.getListById(1L, "username"));
         }
@@ -121,7 +121,7 @@ class GroceryServiceTest {
 
             verify(groceryListRepository, times(1)).save(any(GroceryList.class));
             assertEquals("name", list.getName());
-            assertEquals(user, list.getUser());
+            assertEquals(user, list.getOwner());
             assertEquals(0, list.getItems().size());
         }
     }
@@ -134,11 +134,11 @@ class GroceryServiceTest {
             GroceryItem bread = mock(GroceryItem.class);
 
             GroceryList existingList = new GroceryList();
-            existingList.setUser(user);
+            existingList.setOwner(user);
             existingList.addItem(bread);
 
             GroceryList newList = new GroceryList();
-            newList.setUser(user);
+            newList.setOwner(user);
             newList.addItem(bread);
             ReflectionTestUtils.setField(newList, "id", 1L);
 
@@ -158,12 +158,12 @@ class GroceryServiceTest {
             GroceryItem milk = mock(GroceryItem.class);
 
             GroceryList existingList = new GroceryList();
-            existingList.setUser(user);
+            existingList.setOwner(user);
             existingList.addItem(bread);
             existingList.addItem(milk);
 
             GroceryList newList = new GroceryList();
-            newList.setUser(user);
+            newList.setOwner(user);
             newList.addItem(bread);
             ReflectionTestUtils.setField(newList, "id", 1L);
 
@@ -185,11 +185,11 @@ class GroceryServiceTest {
             when(milk.getName()).thenReturn("milk");
 
             GroceryList existingList = new GroceryList();
-            existingList.setUser(user);
+            existingList.setOwner(user);
             existingList.addItem(bread);
 
             GroceryList newList = new GroceryList();
-            newList.setUser(user);
+            newList.setOwner(user);
             newList.addItem(bread);
             newList.addItem(milk);
             ReflectionTestUtils.setField(newList, "id", 1L);
@@ -214,11 +214,11 @@ class GroceryServiceTest {
             when(milk.getName()).thenReturn("milk");
 
             GroceryList existingList = new GroceryList();
-            existingList.setUser(user);
+            existingList.setOwner(user);
             existingList.addItem(bread);
 
             GroceryList newList = new GroceryList();
-            newList.setUser(user);
+            newList.setOwner(user);
             newList.addItem(bread);
             newList.addItem(milk);
             ReflectionTestUtils.setField(newList, "id", 1L);
@@ -245,7 +245,7 @@ class GroceryServiceTest {
         @Test
         void testSaveListUnmatchedUser() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
-            when(list.getUser()).thenReturn(mock(User.class));
+            when(list.getOwner()).thenReturn(mock(User.class));
 
             assertThrows(ResourceNotFoundException.class, () -> groceryService.saveList(list, "username"));
         }
@@ -257,7 +257,7 @@ class GroceryServiceTest {
         @Test
         void testDeleteListValid() throws Exception {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
-            when(list.getUser()).thenReturn(user);
+            when(list.getOwner()).thenReturn(user);
 
             groceryService.removeList(1L, "username");
 
@@ -274,7 +274,7 @@ class GroceryServiceTest {
         @Test
         void testDeleteListUnmatchedUser() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(list);
-            when(list.getUser()).thenReturn(mock(User.class));
+            when(list.getOwner()).thenReturn(mock(User.class));
 
             assertThrows(ResourceNotFoundException.class, () -> groceryService.removeList(1L, "username"));
         }
