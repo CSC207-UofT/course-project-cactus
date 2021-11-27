@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import okhttp3.*;
 
 import javax.inject.Inject;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -31,7 +30,8 @@ public class WebGroceryAdapter implements GroceryAdapter {
     public WebGroceryAdapter() {
         String tempIp = "192.168.0.127"; // default to this address
         try {
-            InputStream input = new FileInputStream("src/main/resources/network.properties");
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream input = classloader.getResourceAsStream("network.properties");
 
             Properties props = new Properties();
             props.load(input);
