@@ -12,9 +12,11 @@ import java.util.Objects;
 /**
  * This class implements a grocery list entity, and is used by Hibernate to generate a
  * corresponding database representation.
- *
+ * <p>
  * Grocery lists are associated with one "owner" user, and contain a list of grocery
  * items.
+ *
+ * @author Charles Wong
  */
 @Entity
 public class GroceryList {
@@ -71,7 +73,7 @@ public class GroceryList {
      * Constructor for Jackson deserialization, specifying that ID and items are required.
      * All other fields are initialized to null if not provided.
      *
-     * @param id a long ID to initalize this list with
+     * @param id    a long ID to initalize this list with
      * @param items a List of GroceryItems this list to put in this list
      */
     public GroceryList(@JsonProperty(value = "id", required = true) long id,
@@ -165,7 +167,7 @@ public class GroceryList {
      * Performs all necessary operations to maintain database relations before deleting
      * this list. This list is removed from the collection of lists the owner User owns,
      * and removes all reference to this list from this list's contained items.
-     *
+     * <p>
      * This method is called automatically by Hibernate on deletion of this list.
      */
     @PreRemove

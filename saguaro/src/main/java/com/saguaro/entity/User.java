@@ -12,12 +12,14 @@ import java.util.Objects;
 /**
  * This class implements a User entity, and is used by Hibernate to generate a
  * corresponding database representation.
- *
+ * <p>
  * Every user is identified with a numerical ID, and a unique username. A user must also
  * have a password, which is stored as a bcrypt hash, and a plaintext name. By default,
  * all users are automatically assigned the ROLE_USER role on registration. If a user is
  * currently logged in, they will have a string authentication token associated with
  * their account. Finally, every user can own grocery lists.
+ *
+ * @author Charles Wong
  */
 @javax.persistence.Entity
 public class User {
@@ -71,6 +73,7 @@ public class User {
 
     /**
      * The grocery lists of this user
+     *
      * @see GroceryList
      */
     @JsonIgnore

@@ -12,10 +12,12 @@ import java.util.Objects;
 /**
  * This class implements a grocery item entity, and is used by Hibernate to generate a
  * corresponding database representation.
- *
+ * <p>
  * Grocery items are contained within grocery lists, however grocery items are shared in
  * between lists. This means that two lists containing an item with the same name will
  * have pointers to the same item object.
+ *
+ * @author Charles Wong
  */
 @Entity
 public class GroceryItem {
@@ -45,7 +47,7 @@ public class GroceryItem {
     /**
      * Creates a new GroceryItem with the given name, that does not belong to any grocery
      * lists.
-     *
+     * <p>
      * Required by Jackson for serialization/deserialization of grocery lists.
      *
      * @param name the String name of this object

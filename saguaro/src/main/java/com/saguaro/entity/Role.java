@@ -12,8 +12,10 @@ import java.util.Collection;
  * corresponding database representation. This class additionally implements the
  * {@link GrantedAuthority} interface, allowing Roles to be used to authorize access
  * to protected resources by Spring.
- *
+ * <p>
  * Every user is by default given the ROLE_USER role on registration.
+ *
+ * @author Charles Wong
  */
 @Entity
 public class Role implements GrantedAuthority {
