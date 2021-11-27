@@ -53,7 +53,7 @@ class GroceryListTest {
 
         @Test
         void testExistingUser() {
-            ReflectionTestUtils.setField(list, "user", user);
+            ReflectionTestUtils.setField(list, "owner", user);
 
             User newUser = mock(User.class);
             list.setOwner(newUser);
