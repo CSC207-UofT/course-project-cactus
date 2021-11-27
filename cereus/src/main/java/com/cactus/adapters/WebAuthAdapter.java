@@ -35,7 +35,8 @@ public class WebAuthAdapter implements AuthAdapter {
         String tempIp = "192.168.0.127"; // default to this address
 
         try {
-            InputStream input = new FileInputStream("src/main/resources/network.properties");
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream input = classloader.getResourceAsStream("network.properties");
 
             Properties props = new Properties();
             props.load(input);
@@ -197,6 +198,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
         Request request = new Request.Builder()
                 .url(url)
+                .post(RequestBody.create("", null))
                 .addHeader("Authorization", token)
                 .build();
 
