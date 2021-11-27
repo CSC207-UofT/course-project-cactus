@@ -8,7 +8,6 @@ import okhttp3.*;
 import okhttp3.Response;
 
 import javax.inject.Inject;
-import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
