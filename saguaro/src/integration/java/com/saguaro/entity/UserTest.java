@@ -21,35 +21,6 @@ public class UserTest {
     @Autowired
     TestEntityManager testEntityManager;
 
-    @BeforeEach
-    void setUpUser() {
-
-    }
-
-    @Test
-    void testRoleInitNotNull() {
-        User user = new User();
-        assertNotNull(user.getAuthorities());
-    }
-
-    @Test
-    void testListsInitNotNull() {
-        User user = new User();
-        assertNotNull(user.getGroceryLists());
-    }
-
-    @Test
-    void testFriendsInitNotNull() {
-        User user = new User();
-        assertNotNull(user.getFriends());
-    }
-
-    @Test
-    void testBefriendedInitNotNull() {
-        User user = new User();
-        assertNotNull(ReflectionTestUtils.getField(user, "befriended"));
-    }
-
     @Nested
     class TestAddFriend {
 
