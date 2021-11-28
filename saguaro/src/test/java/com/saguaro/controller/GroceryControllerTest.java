@@ -67,7 +67,7 @@ class GroceryControllerTest {
             HashMap<Long, String> lists = new HashMap<>();
             lists.put(1L, "name");
 
-            when(groceryService.getListNamesByUsername(anyString())).thenReturn(lists);
+            when(groceryService.getOwnedListNamesByUsername(anyString())).thenReturn(lists);
 
             mvc.perform(get("/api/all-lists"))
                     .andExpect(status().isOk())
