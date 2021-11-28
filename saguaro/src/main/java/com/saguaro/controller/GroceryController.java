@@ -107,8 +107,8 @@ public class GroceryController {
      * list. The grocery list to be overwritten is identified by the list ID. The
      * name attribute may be null, in which case the list's name will remain unchanged.
      * <p>
-     * If the provided list has an ID which does not exist, or the ID corresponds to a
-     * list that does not belong to the currently authenticated user, a
+     * If the provided list has an ID which does not exist, or the currently authenticated
+     * user does not own or have shared access to the list corresponding to the ID, a
      * ResourceNotFoundException is thrown.
      * <p>
      * If the save is successful, then the newly saved grocery list is returned.

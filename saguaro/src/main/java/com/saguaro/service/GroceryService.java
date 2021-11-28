@@ -99,7 +99,7 @@ public class GroceryService {
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
 
-        if (oldList == null || !user.equals(oldList.getOwner())) {
+        if (oldList == null || !(user.equals(oldList.getOwner()) || oldList.getSharedUsers().contains(user))) {
             throw new ResourceNotFoundException(GroceryList.class,
                     String.valueOf(list.getId()), user);
         }
