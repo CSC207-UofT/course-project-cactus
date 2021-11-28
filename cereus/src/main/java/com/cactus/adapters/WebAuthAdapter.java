@@ -37,7 +37,7 @@ public class WebAuthAdapter implements AuthAdapter {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             InputStream input = classloader.getResourceAsStream("network.properties");
 
-            if (input != null){
+            if (input != null) {
                 Properties props = new Properties();
                 props.load(input);
 
