@@ -3,6 +3,7 @@
  */
 package com.saguaro.entity;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -47,7 +48,10 @@ public class GroceryList {
     )
     private List<GroceryItem> items;
 
-    @JsonSerialize(using = OwnerSerializer.class)
+    // we ignore the field, but set its getter as the JsonProperty
+    // then we can ignore the setter, and have this field only be
+    // serialized, but not deserialized
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
     private User owner;
@@ -56,7 +60,6 @@ public class GroceryList {
      * A list of unique Users that this GroceryList is shared with
      */
     @JsonSerialize(using = SharedUserSerializer.class)
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "SHARED_LISTS",
@@ -100,10 +103,13 @@ public class GroceryList {
         this.name = name;
     }
 
+    @JsonProperty
+    @JsonSerialize(using = OwnerSerializer.class)
     public User getOwner() {
         return this.owner;
     }
 
+    @JsonIgnore
     public void setOwner(User owner) {
         if (this.owner == null) {
             this.owner = owner;
