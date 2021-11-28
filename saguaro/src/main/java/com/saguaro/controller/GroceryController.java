@@ -148,19 +148,19 @@ public class GroceryController {
 
     /**
      * Fetch a comprehensive list of all the grocery lists the authenticated user has access to.
-     *
+     * <p>
      * The returned JSON object has two top level properties:
      * <ul>
      *     <li>lists
      *     <li>templates
      * </ul>
-     *
+     * <p>
      * The values of these are objects with the following two properties:
      * <ul>
      *     <li>owned
      *     <li>shared
      * </ul>
-     *
+     * <p>
      * These properties correspond to an object mapping list ID to list name, of lists
      * that the authenticated user owns and has shared access to, respectively.
      *
@@ -186,5 +186,33 @@ public class GroceryController {
         body.put("templates", templates);
 
         return body;
+    }
+
+    /**
+     * Add a user to the shared users of a grocery list. A list can only be shared by the owner of the list,
+     * and if the user it is being shared with is a friend of the owner. If any of these conditions are
+     * not met, then a ResourceNotFoundException is thrown.
+     * <p>
+     * Furthermore, if the user to be shared with cannot be found, or if the list ID does not match any
+     * existing list, a ResourceNotFoundException is thrown.
+     * <p>
+     * Since this endpoint is a protected resource, a valid username must be available from the SecurityContext
+     * when this method is invoked.
+     * <p>
+     * If the sharing was successful, the newly modified GroceryList object is returned.
+     *
+     * @param id            a long representing the ID of the GroceryList to share
+     * @param shareUsername the String username of the user to share the list with
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the list to be shared does not belong to the sharer, or if the
+     *                                   sharee is not a friend of the sharer
+     */
+    @PostMapping("api/share-list")
+    public GroceryList shareList(@RequestParam("listId") long id,
+                                 @RequestParam("shareUsername") String shareUsername) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.shareList(id, shareUsername, username);
     }
 }

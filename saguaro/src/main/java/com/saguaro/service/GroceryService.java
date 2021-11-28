@@ -31,7 +31,7 @@ public class GroceryService {
     /**
      * Given a username, gets all the grocery lists that the corresponding user owns. Returns
      * the results as a map from list ID to list name.
-     *
+     * <p>
      * Delegates to {@link #getListNamesByUsername(String, boolean)}.
      *
      * @param username the String username of the user to fetch for
@@ -44,7 +44,7 @@ public class GroceryService {
     /**
      * Given a username, gets all the grocery lists that the corresponding user has shared
      * access to. Returns the results as a map from list ID to list name.
-     *
+     * <p>
      * Delegates to {@link #getListNamesByUsername(String, boolean)}.
      *
      * @param username the String username of the user to fetch for
@@ -59,8 +59,8 @@ public class GroceryService {
      * boolean specifier.
      *
      * @param username the String username of the user to fetch for
-     * @param shared a boolean that should be true if the shared access lists are desired, and false
-     *               if the owned lists are desired
+     * @param shared   a boolean that should be true if the shared access lists are desired, and false
+     *                 if the owned lists are desired
      * @return a mapping from list ID to list name of the desired type of list
      */
     private Map<Long, String> getListNamesByUsername(String username, boolean shared) {
@@ -135,8 +135,43 @@ public class GroceryService {
         groceryListRepository.delete(list);
     }
 
-    public void shareList(long id, String friendUsername, String username) {
+    /**
+     * Add a user to the shared users of a grocery list. A list can only be shared by the owner of the list,
+     * and if the user it is being shared with is a friend of the owner. If any of these conditions are
+     * not met, then a ResourceNotFoundException is thrown.
+     * <p>
+     * Furthermore, if the user to be shared with cannot be found, or if the list ID does not match any
+     * existing list, a ResourceNotFoundException is thrown. This method assumes that the username of the
+     * sharer provided is valid, since a user must be authenticated to call an endpoint that calls this
+     * method.
+     *
+     * @param id            a long representing the ID of the GroceryList to share
+     * @param shareUsername the String username of the user to share the list with
+     * @param username      the username of the owner of the list
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the list to be shared does not belong to the sharer, or if the
+     *                                   sharee is not a friend of the sharer
+     */
+    public GroceryList shareList(long id, String shareUsername, String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
 
+        GroceryList list = groceryListRepository.findGroceryListById(id);
+
+        if (list == null || !user.equals(list.getOwner())) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
+        }
+
+        User sharee = userRepository.findUserByUsername(shareUsername);
+
+        if (sharee == null) {
+            throw new ResourceNotFoundException(User.class, shareUsername);
+        } else if (!user.getFriends().contains(sharee)) {
+            throw new ResourceNotFoundException(User.class, shareUsername, user);
+        }
+
+        list.addSharedUser(sharee);
+
+        return groceryListRepository.save(list);
     }
 
 }
