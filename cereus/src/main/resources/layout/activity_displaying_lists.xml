@@ -6,6 +6,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".DisplayingListsActivity">
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/screen_background_light"
+            android:id="@+id/listImage"
+            android:tint="@color/teal_200"
+            app:layout_constraintTop_toBottomOf="@+id/listName"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listText"
+            app:layout_constraintLeft_toLeftOf="@+id/listImage"
+            app:layout_constraintTop_toTopOf="@+id/listImage"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp" android:textSize="20sp" tools:text="Lists"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/screen_background_light"
+            android:id="@+id/templateImage"
+            android:tint="@color/teal_200"
+            app:layout_constraintTop_toBottomOf="@+id/listViewDisplayList"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/templateText"
+            app:layout_constraintLeft_toLeftOf="@+id/templateImage"
+            app:layout_constraintTop_toTopOf="@+id/templateImage"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp" android:textSize="20sp" tools:text="Templates"/>
     <EditText
             android:layout_width="174dp"
             android:layout_height="45dp"
@@ -26,7 +62,8 @@
             android:layout_width="409dp"
             android:layout_height="729dp"
             android:id="@+id/listViewDisplayList" app:layout_constraintTop_toBottomOf="@+id/listName"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent">
+    </ListView>
     <Button
             android:text="logout"
             android:layout_width="wrap_content"
