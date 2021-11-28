@@ -12,18 +12,48 @@
             app:srcCompat="@android:drawable/screen_background_light"
             android:id="@+id/listImage"
             android:tint="@color/teal_200"
-            app:layout_constraintTop_toBottomOf="@+id/listName"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"/>
     <TextView
-            android:text="TextView"
+            android:text="Lists"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listText"
             app:layout_constraintLeft_toLeftOf="@+id/listImage"
             app:layout_constraintTop_toTopOf="@+id/listImage"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp" android:textSize="20sp" tools:text="Lists"/>
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
+    <EditText
+            android:layout_width="174dp"
+            android:layout_height="45dp"
+            android:inputType="textShortMessage"
+            android:ems="10"
+            android:id="@+id/listName"
+            android:hint="List name here"
+            app:layout_constraintTop_toBottomOf="@+id/listImage"
+            android:layout_marginTop="8dp" android:layout_marginLeft="4dp" android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+            android:text="Add List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addListButton" app:layout_constraintLeft_toRightOf="@+id/listName"
+            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+    <Button
+            android:text="logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoutButtonList"
+            app:layout_constraintLeft_toRightOf="@+id/addListButton"
+            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/listViewDisplayList" app:layout_constraintTop_toBottomOf="@+id/listName"
+            app:layout_constraintStart_toStartOf="parent">
+    </ListView>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -34,41 +64,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"/>
     <TextView
-            android:text="TextView"
+            android:text="Templates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/templateText"
             app:layout_constraintLeft_toLeftOf="@+id/templateImage"
             app:layout_constraintTop_toTopOf="@+id/templateImage"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp" android:textSize="20sp" tools:text="Templates"/>
-    <EditText
-            android:layout_width="174dp"
-            android:layout_height="45dp"
-            android:inputType="textShortMessage"
-            android:ems="10"
-            android:id="@+id/listName"
-            android:hint="List name here"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" android:layout_marginLeft="4dp" android:layout_marginStart="4dp"
-            app:layout_constraintStart_toStartOf="parent"/>
-    <Button
-            android:text="Add List"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/addListButton" app:layout_constraintLeft_toRightOf="@+id/listName"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
-    <ListView
-            android:layout_width="409dp"
-            android:layout_height="729dp"
-            android:id="@+id/listViewDisplayList" app:layout_constraintTop_toBottomOf="@+id/listName"
-            app:layout_constraintStart_toStartOf="parent">
-    </ListView>
-    <Button
-            android:text="logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/logoutButtonList"
-            app:layout_constraintLeft_toRightOf="@+id/addListButton"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"/>
+            android:layout_marginLeft="20dp"
+            android:textSize="20sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
