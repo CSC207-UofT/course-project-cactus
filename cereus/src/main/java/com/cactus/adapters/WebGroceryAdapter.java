@@ -33,10 +33,12 @@ public class WebGroceryAdapter implements GroceryAdapter {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             InputStream input = classloader.getResourceAsStream("network.properties");
 
-            Properties props = new Properties();
-            props.load(input);
+            if (input != null){
+                Properties props = new Properties();
+                props.load(input);
 
-            tempIp = props.getProperty("staticIp");
+                tempIp = props.getProperty("staticIp");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
