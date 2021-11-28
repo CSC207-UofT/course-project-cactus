@@ -5,12 +5,18 @@ package com.saguaro.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Grocery List Entity
@@ -41,7 +47,7 @@ public class GroceryList {
     )
     private List<GroceryItem> items;
 
-    @JsonIgnore
+    @JsonSerialize(using = OwnerSerializer.class)
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
     private User owner;
@@ -49,6 +55,7 @@ public class GroceryList {
     /**
      * A list of unique Users that this GroceryList is shared with
      */
+    @JsonSerialize(using = SharedUserSerializer.class)
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -158,5 +165,54 @@ public class GroceryList {
         if (o == null || getClass() != o.getClass()) return false;
         GroceryList that = (GroceryList) o;
         return id == that.id && items.equals(that.items) && Objects.equals(name, that.name) && Objects.equals(owner, that.owner);
+    }
+
+    /**
+     * Serializer class for a GroceryLists's owner.
+     *
+     * The serialization of GroceryList does not need to return full information on the list's owner. Rather,
+     * it only requires some sort of identifier.
+     */
+    private static class OwnerSerializer extends JsonSerializer<User> {
+
+        /**
+         * Takes the User object, which should be the owner of a GroceryList, and returns just
+         * its username as a string
+         *
+         * @param value the Users to serialize
+         * @param gen a JsonGenerator to output resulting JSON
+         * @param serializers a SerializerProvider that can be used to get serializers
+         *                    for serializing Objects value contains, if any.
+         * @throws IOException if there is an error writing JSON content
+         */
+        @Override
+        public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeString(value.getUsername());
+        }
+    }
+
+    /**
+     * Serializer class for the shared users of this list
+     *
+     * The serialization of GroceryList does not need to return full information on the list's shared
+     * users. Rather, it only requires some sort of identifier for each user.
+     */
+    private static class SharedUserSerializer extends JsonSerializer<List<User>> {
+
+        /**
+         * Takes the User object, which should be the owner of a GroceryList, and returns just
+         * its username as a string
+         *
+         * @param value the Users to serialize
+         * @param gen a JsonGenerator to output resulting JSON
+         * @param serializers a SerializerProvider that can be used to get serializers
+         *                    for serializing Objects value contains, if any.
+         * @throws IOException if there is an error writing JSON content
+         */
+        @Override
+        public void serialize(List<User> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            String[] usernames = value.stream().map(User::getUsername).collect(Collectors.toList()).toArray(new String[1]);
+            gen.writeArray(usernames, 0, usernames.length);
+        }
     }
 }
