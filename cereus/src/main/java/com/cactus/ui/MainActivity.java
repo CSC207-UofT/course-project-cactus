@@ -1,6 +1,7 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Cereus App : Login");
+
+        // needs to be set before any networking is done
+        // since the entry point to the app will pretty much always be here, set this here
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         displayOptions();
     }
