@@ -55,7 +55,7 @@ public class User {
     private List<GroceryList> lists;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "shared")
+    @ManyToMany(mappedBy = "sharedUsers")
     private List<GroceryList> sharedLists;
 
     /**
@@ -192,10 +192,20 @@ public class User {
         this.befriended.remove(user);
     }
 
+    /**
+     * Get all the lists that were shared with this user
+     *
+     * @return a List of GroceryLists that were shared with this user
+     */
     public List<GroceryList> getSharedLists() {
         return this.sharedLists;
     }
 
+    /**
+     * Add a GroceryList to the list of lists that were shared with this user
+     *
+     * @param list the GroceryList to mark as being shared with this user
+     */
     void addSharedList(GroceryList list) {
         this.sharedLists.add(list);
     }

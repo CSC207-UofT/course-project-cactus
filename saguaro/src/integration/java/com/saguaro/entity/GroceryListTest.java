@@ -8,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.PersistenceException;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -185,8 +182,8 @@ public class GroceryListTest {
 
                 friend = entityManager.refresh(friend);
 
-                assertEquals(1, savedList.getShared().size());
-                assertTrue(savedList.getShared().contains(friend));
+                assertEquals(1, savedList.getSharedUsers().size());
+                assertTrue(savedList.getSharedUsers().contains(friend));
 
                 assertEquals(1, friend.getSharedLists().size());
                 assertTrue(friend.getSharedLists().contains(savedList));
@@ -199,7 +196,7 @@ public class GroceryListTest {
 
                 user = entityManager.refresh(user);
 
-                assertTrue(savedList.getShared().isEmpty());
+                assertTrue(savedList.getSharedUsers().isEmpty());
                 assertTrue(friend.getSharedLists().isEmpty());
             }
 
@@ -213,8 +210,8 @@ public class GroceryListTest {
 
                 friend = entityManager.refresh(friend);
 
-                assertEquals(1, savedList.getShared().size());
-                assertTrue(savedList.getShared().contains(friend));
+                assertEquals(1, savedList.getSharedUsers().size());
+                assertTrue(savedList.getSharedUsers().contains(friend));
 
                 assertEquals(1, friend.getSharedLists().size());
                 assertTrue(friend.getSharedLists().contains(savedList));

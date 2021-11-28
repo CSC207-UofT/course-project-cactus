@@ -46,6 +46,9 @@ public class GroceryList {
     @JoinColumn(name = "OWNER_ID", referencedColumnName = "USER_ID", nullable = false)
     private User owner;
 
+    /**
+     * A list of unique Users that this GroceryList is shared with
+     */
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -59,14 +62,14 @@ public class GroceryList {
                     referencedColumnName = "USER_ID"
             )
     )
-    private List<User> shared;
+    private List<User> sharedUsers;
 
     /**
      * Creates a new GroceryList.
      */
     public GroceryList() {
         this.items = new ArrayList<>();
-        this.shared = new ArrayList<>();
+        this.sharedUsers = new ArrayList<>();
     }
 
     /**
@@ -101,13 +104,24 @@ public class GroceryList {
         }
     }
 
-    public List<User> getShared() {
-        return this.shared;
+    /**
+     * Get all the users that this list is shared with
+     *
+     * @return a List of Users that this list is shared with
+     */
+    public List<User> getSharedUsers() {
+        return this.sharedUsers;
     }
 
+    /**
+     * Share a list with a new user. The user this list is being shared with must not be this list's
+     * owner, and must not already have access to this list.
+     *
+     * @param user the User to share this list with
+     */
     public void addSharedUser(User user) {
-        if (user != this.owner && !this.shared.contains(user)) {
-            this.shared.add(user);
+        if (user != this.owner && !this.sharedUsers.contains(user)) {
+            this.sharedUsers.add(user);
              user.addSharedList(this);
         }
     }

@@ -149,8 +149,8 @@ class GroceryListTest {
         void testAddSharedUser() {
             list.addSharedUser(friend);
 
-            assertEquals(1, list.getShared().size());
-            assertTrue(list.getShared().contains(friend));
+            assertEquals(1, list.getSharedUsers().size());
+            assertTrue(list.getSharedUsers().contains(friend));
 
             verify(friend, times(1)).addSharedList(list);
         }
@@ -159,18 +159,18 @@ class GroceryListTest {
         void testAddSharedUserIsOwner() {
             list.addSharedUser(owner);
 
-            assertEquals(0, list.getShared().size());
+            assertEquals(0, list.getSharedUsers().size());
             verify(owner, times(0)).addSharedList(list);
         }
 
         @Test
         void testAddSharedUserExists() {
-            ReflectionTestUtils.setField(list, "shared", new ArrayList<>(List.of(friend)));
+            ReflectionTestUtils.setField(list, "sharedUsers", new ArrayList<>(List.of(friend)));
 
             list.addSharedUser(friend);
 
-            assertEquals(1, list.getShared().size());
-            assertTrue(list.getShared().contains(friend));
+            assertEquals(1, list.getSharedUsers().size());
+            assertTrue(list.getSharedUsers().contains(friend));
 
             verify(friend, times(0)).addSharedList(list);
         }
