@@ -167,7 +167,7 @@ public class GroceryController {
      * @return a Map object describing all lists the authenticated user has access to
      */
     @GetMapping("api/v2/all-lists")
-    public Map<String, Object> shareList() {
+    public Map<String, Object> getAllListsFull() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
