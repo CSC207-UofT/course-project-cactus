@@ -33,32 +33,32 @@ class GroceryListTest {
     }
 
     @Nested
-    class SetUserTest {
+    class SetOwnerTest {
 
-        private User user;
+        private User owner;
         private GroceryList list;
 
         @BeforeEach
-        void setUpSetUser() {
-            user = mock(User.class);
+        void setUpSetOwner() {
+            owner = mock(User.class);
             list = new GroceryList();
         }
 
         @Test
-        void testNoUser() {
-            list.setOwner(user);
+        void testNoOwner() {
+            list.setOwner(owner);
 
-            assertEquals(user, list.getOwner());
+            assertEquals(owner, list.getOwner());
         }
 
         @Test
-        void testExistingUser() {
-            ReflectionTestUtils.setField(list, "owner", user);
+        void testExistingOwner() {
+            ReflectionTestUtils.setField(list, "owner", owner);
 
             User newUser = mock(User.class);
             list.setOwner(newUser);
 
-            assertEquals(user, list.getOwner());
+            assertEquals(owner, list.getOwner());
         }
     }
 
@@ -126,6 +126,53 @@ class GroceryListTest {
             verify(newItem, times(0)).removeList(list);
             assertEquals(1, list.getItems().size());
             assertTrue(list.getItems().contains(item));
+        }
+    }
+
+    @Nested
+    class AddSharedUserTest {
+        GroceryList list;
+
+        User owner;
+        User friend;
+
+        @BeforeEach
+        void setUpAddSharedUser() {
+            owner = mock(User.class);
+            friend = mock(User.class);
+
+            list = new GroceryList();
+            list.setOwner(owner);
+        }
+
+        @Test
+        void testAddSharedUser() {
+            list.addSharedUser(friend);
+
+            assertEquals(1, list.getShared().size());
+            assertTrue(list.getShared().contains(friend));
+
+            verify(friend, times(1)).addSharedList(list);
+        }
+
+        @Test
+        void testAddSharedUserIsOwner() {
+            list.addSharedUser(owner);
+
+            assertEquals(0, list.getShared().size());
+            verify(owner, times(0)).addSharedList(list);
+        }
+
+        @Test
+        void testAddSharedUserExists() {
+            ReflectionTestUtils.setField(list, "shared", new ArrayList<>(List.of(friend)));
+
+            list.addSharedUser(friend);
+
+            assertEquals(1, list.getShared().size());
+            assertTrue(list.getShared().contains(friend));
+
+            verify(friend, times(0)).addSharedList(list);
         }
     }
 

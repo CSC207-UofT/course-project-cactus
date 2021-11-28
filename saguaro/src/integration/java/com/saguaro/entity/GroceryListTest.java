@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.PersistenceException;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -158,6 +161,63 @@ public class GroceryListTest {
 
                     assertTrue(savedItem.getLists().isEmpty());
                 }
+            }
+        }
+
+        @Nested
+        class AddSharedUserTest {
+
+            User friend;
+
+            @BeforeEach
+            void setUpAddSharedUser() {
+                friend = new User();
+                friend.setName("Ron Weasley");
+                friend.setUsername("ronweasley");
+
+                friend = entityManager.persistFlushFind(friend);
+            }
+
+            @Test
+            void testAddSharedUser() {
+                savedList.addSharedUser(friend);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                friend = entityManager.refresh(friend);
+
+                assertEquals(1, savedList.getShared().size());
+                assertTrue(savedList.getShared().contains(friend));
+
+                assertEquals(1, friend.getSharedLists().size());
+                assertTrue(friend.getSharedLists().contains(savedList));
+            }
+
+            @Test
+            void testAddSharedUserIsOwner() {
+                savedList.addSharedUser(user);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                user = entityManager.refresh(user);
+
+                assertTrue(savedList.getShared().isEmpty());
+                assertTrue(friend.getSharedLists().isEmpty());
+            }
+
+            @Test
+            void testAddSharedUserExists() {
+                savedList.addSharedUser(friend);
+                entityManager.persistAndFlush(savedList);
+
+                savedList.addSharedUser(friend);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                friend = entityManager.refresh(friend);
+
+                assertEquals(1, savedList.getShared().size());
+                assertTrue(savedList.getShared().contains(friend));
+
+                assertEquals(1, friend.getSharedLists().size());
+                assertTrue(friend.getSharedLists().contains(savedList));
             }
         }
     }

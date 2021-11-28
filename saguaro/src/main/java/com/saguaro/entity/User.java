@@ -192,6 +192,10 @@ public class User {
         this.befriended.remove(user);
     }
 
+    public List<GroceryList> getSharedLists() {
+        return this.sharedLists;
+    }
+
     void addSharedList(GroceryList list) {
         this.sharedLists.add(list);
     }
