@@ -2,6 +2,7 @@ package com.cactus.adapters;
 
 import com.cactus.entities.User;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
@@ -11,10 +12,7 @@ import javax.inject.Inject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Objects;
-
-import java.util.Properties;
+import java.util.*;
 
 
 /**
@@ -28,6 +26,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
 
     private final String STATIC_IP;
+    private final OkHttpClient client;
 
     @Inject
     public WebAuthAdapter() {
@@ -48,6 +47,8 @@ public class WebAuthAdapter implements AuthAdapter {
         }
 
         STATIC_IP = tempIp;
+
+        client = new OkHttpClient();
     }
 
     /**
@@ -148,7 +149,6 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     private User sendRequest(HashMap<String, String> body, HttpUrl url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
 
         // Create body
         RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(body),
@@ -213,4 +213,56 @@ public class WebAuthAdapter implements AuthAdapter {
             return false;
         }
     }
+
+    /**
+     * Returns the updated list of Friends after adding the given friend.
+     *
+     * @param friend a String representing the username of the friend being added
+     * @param token  a string representing the token of the grocery list's owner
+     * @return a Response to the grocery list deletion operation
+     */
+    @Override
+    public List<String> addFriend(String friend, String token) throws IOException {
+
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("api")
+                .addPathSegment("add-friend")
+                .addQueryParameter("username", friend)
+                .build();
+
+        // Create body
+        RequestBody requestBody = RequestBody.create("",
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .post(requestBody)
+                .build();
+
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+
+            if (response.code() == HTTP_OK){
+                throw new IOException("Adding friend operation failed. Try again");
+            }
+            //Parse response
+            ObjectMapper finalMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
+                    new TypeReference<ArrayList<String>>() {
+                    });
+        } catch (IOException i) {
+            throw new IOException("Adding friend operation failed. Try again");
+        }
+
+    }
+
+
 }

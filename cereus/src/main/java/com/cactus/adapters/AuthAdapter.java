@@ -2,6 +2,9 @@ package com.cactus.adapters;
 
 import com.cactus.entities.User;
 
+import java.io.IOException;
+import java.util.List;
+
 public interface AuthAdapter {
 
     /**
@@ -43,4 +46,15 @@ public interface AuthAdapter {
      * @see User
      */
     boolean logout(String token);
+
+    /**
+     * Returns the updated list of Friends after adding the given friend.
+     *
+     *
+     * @param friend a String representing the username of the friend being added
+     * @param token  a string representing the token of the grocery list's owner
+     * @return a Response to the grocery list deletion operation
+     */
+    List<String> addFriend(String friend, String token) throws IOException;
+
 }
