@@ -49,11 +49,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
     /**
      * Returns a List of GroceryList objects that correspond to the User associated with the given token
      * <p>
-     *
+     * <p>
      * The token is sent to the server to return the list of grocery lists, which returns the names and ids.
-     *
+     * <p>
      * The id of each list is used to get every grocery list using getGroceryList().
-     *
      *
      * @param token a string representing the user token to fetch lists for
      * @return a List of GroceryList objects that are of the User whose token is entered
@@ -83,7 +82,8 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 throw new IOException("Grocery Lists Retrieval Failed. Try again.");
             }
             groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
-                    new TypeReference<HashMap<Integer, String>>() {});
+                    new TypeReference<HashMap<Integer, String>>() {
+                    });
 
         } catch (IOException i) {
             throw new IOException("Grocery Lists Retrieval Failed. Try again.");
@@ -104,7 +104,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * A user token is required for authorization.
      * <p>
      * The token and listID are sent to the server to return the GroceryList.
-     *
+     * <p>
      * If the listID does not correspond to an existing list, then null is returned.
      *
      * @param listID a long representing the ID of the list to get
@@ -144,9 +144,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     /**
      * Returns a list of GroceryItem objects that belong to the given list
-     *
+     * <p>
      * The token and listID are sent to the server to return the list of Grocery Items.
-     *
+     * <p>
      * If the listID does not correspond to an existing list, then null is returned.
      *
      * @param listID id of the list which holds the items you are getting
@@ -202,9 +202,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
     /**
      * Returns a GroceryList with the name given. A user token is required for authorization.
-     *
+     * <p>
      * nameList and token are sent to the server to create a GroceryList.
-     *
+     * <p>
      * If the token does not correspond to the User, null is returned.
      *
      * @param nameList a String containing the name of the new grocery list
@@ -252,7 +252,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     /**
      * Returns whether the list of grocery items are added to the GroceryList that corresponds
      * to the listID given. A user token is required for authorization.
-     *
+     * <p>
      * The items, listID and token are sent to the server to append items to the list corresponding to
      * listID.
      *
@@ -284,7 +284,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .put(requestBody)
                     .build();
             Response response = client.newCall(request).execute();
-            if (response.code() != HTTP_OK){
+            if (response.code() != HTTP_OK) {
                 throw new IOException("Grocery List Modification failed. Try again.");
             }
             return true;
@@ -298,9 +298,8 @@ public class WebGroceryAdapter implements GroceryAdapter {
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.
      * A user token is required for authorization.
-     *
-     *The listID and token are sent to the server to delete the list corresponding to listID.
-     *
+     * <p>
+     * The listID and token are sent to the server to delete the list corresponding to listID.
      *
      * @param listID a long representing the ID of the grocery list to delete
      * @param token  a string representing the token of the grocery list's owner
@@ -328,7 +327,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         } catch (IOException e) {
             throw new IOException("List Deletion failed. Try again.");
         }
-        if(response.code() != HTTP_NO_CONTENT){
+        if (response.code() != HTTP_NO_CONTENT) {
             throw new IOException("List Deletion request failed. Try again.");
         }
         return true;

@@ -204,7 +204,7 @@ public class WebAuthAdapter implements AuthAdapter {
         } catch (IOException e) {
             throw new IOException("Logout failed. Try again.");
         }
-        if(response.code() != HTTP_NO_CONTENT){
+        if (response.code() != HTTP_NO_CONTENT) {
             throw new IOException("Logout request failed. Try again.");
         }
         return true;

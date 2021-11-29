@@ -14,6 +14,7 @@ public class User {
     private String token;
     private long id;
 
+
     /**
      * Creates a new User with the given name, username, password and id number.
      *
