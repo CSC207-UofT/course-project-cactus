@@ -13,6 +13,7 @@ public class User {
     private String name;
     private String token;
     private long id;
+    private String[] friends;
 
     /**
      * Creates a new User with the given name, username, password and id number.
@@ -22,13 +23,15 @@ public class User {
      * @param password A String containing the User's password.
      * @param token    A String containing a token to signify User was successfully retrieved from server
      * @param id       A long value serving as an identifier for the User.
+     * @param friends  An array of Strings that contain the usernames of the Users' friends
      */
-    public User(String name, String username, String password, String token, long id) {
+    public User(String name, String username, String password, String token, long id, String[] friends) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.token = token;
         this.id = id;
+        this.friends = friends;
     }
 
     /**
@@ -57,6 +60,10 @@ public class User {
         return id;
     }
 
+    public String[] getFriends(){
+        return friends;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -75,6 +82,10 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setFriends(String[] friends){
+        this.friends = friends;
     }
 
 }
