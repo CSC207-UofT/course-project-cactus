@@ -2,6 +2,8 @@ package com.cactus.adapters;
 
 import com.cactus.entities.User;
 
+import java.io.IOException;
+
 public interface AuthAdapter {
 
     /**
@@ -15,7 +17,7 @@ public interface AuthAdapter {
      * @return a User object that corresponds to the given parameters
      * @see User
      */
-    User login(String username, String password);
+    User login(String username, String password) throws IOException;
 
 
     /**
@@ -32,7 +34,7 @@ public interface AuthAdapter {
      * @return a User object created with the given parameters
      * @see User
      */
-    User create(String name, String username, String password);
+    User create(String name, String username, String password) throws IOException;
 
 
     /**
@@ -42,5 +44,5 @@ public interface AuthAdapter {
      * @return whether the User corresponding to the token is logged out or not
      * @see User
      */
-    boolean logout(String token);
+    boolean logout(String token) throws IOException;
 }

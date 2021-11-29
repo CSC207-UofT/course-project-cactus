@@ -5,6 +5,7 @@ import com.cactus.entities.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.IOException;
 
 /***
  * Represents the system that controls users
@@ -42,7 +43,7 @@ public class UserSystem {
      * @param password a String containing the password of the new user
      * @return true if a newUser was created
      */
-    public boolean createUser(String name, String username, String password) {
+    public boolean createUser(String name, String username, String password) throws IOException {
         return updateCurrentUser(this.authAdapter.create(name, username, password));
     }
 
@@ -55,7 +56,7 @@ public class UserSystem {
      * @param password the password of the user logging in
      * @return true if login was successful, false otherwise
      */
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws IOException {
         return updateCurrentUser(this.authAdapter.login(username, password));
     }
 
@@ -80,7 +81,7 @@ public class UserSystem {
      *
      * @return true if there existed a valid user id before exiting
      */
-    public boolean logout() {
+    public boolean logout() throws IOException {
         if (this.currentUser != null) {
 
             if (!authAdapter.logout(this.getToken())) {

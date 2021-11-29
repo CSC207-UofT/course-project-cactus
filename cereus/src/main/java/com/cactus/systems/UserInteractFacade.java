@@ -2,6 +2,7 @@ package com.cactus.systems;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class UserInteractFacade {
      * @param password the password of the user that is being created
      * @return true if user was successfully created
      */
-    public boolean createUser(String name, String username, String password) {
+    public boolean createUser(String name, String username, String password) throws IOException {
         return this.userSystem.createUser(name, username, password);
     }
 
@@ -48,7 +49,7 @@ public class UserInteractFacade {
      * @param password the password of the user being logged in
      * @return true if user was successfully logged in
      */
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws IOException {
         return this.userSystem.login(username, password);
     }
 
@@ -57,7 +58,7 @@ public class UserInteractFacade {
      *
      * @return true if user was successfully logged out
      */
-    public boolean logout() {
+    public boolean logout() throws IOException {
         return this.userSystem.logout();
     }
 

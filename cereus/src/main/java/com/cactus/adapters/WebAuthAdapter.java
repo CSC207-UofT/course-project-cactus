@@ -64,7 +64,7 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public User login(String username, String password) {
+    public User login(String username, String password) throws IOException {
         HashMap<String, String> login = new HashMap<>();
         login.put("username", username);
         login.put("password", password);
@@ -80,8 +80,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(login, url);
         } catch (IOException i) {
-            i.printStackTrace();
-            return null;
+            throw new IOException("User login Request failed. Try again.");
         }
         return user;
 
@@ -110,7 +109,7 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public User create(String name, String username, String password) {
+    public User create(String name, String username, String password) throws IOException {
         HashMap<String, String> create = new HashMap<>();
         create.put("username", username);
         create.put("password", password);
@@ -123,8 +122,7 @@ public class WebAuthAdapter implements AuthAdapter {
         try {
             user = sendRequest(create, url);
         } catch (IOException i) {
-            i.printStackTrace();
-            return null;
+            throw new IOException("User creation request failed. Try again.");
         }
         return user;
 
@@ -166,14 +164,13 @@ public class WebAuthAdapter implements AuthAdapter {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         if (response.code() != HTTP_OK) {
-            return null;
+            throw new IOException("Request failed. Try again.");
         }
 
         try {
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
         } catch (NullPointerException e) {
-            e.printStackTrace();
-            return null;
+            throw new NullPointerException("Request failed. Try again.");
         }
     }
 
@@ -189,7 +186,7 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public boolean logout(String token) {
+    public boolean logout(String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
@@ -201,13 +198,15 @@ public class WebAuthAdapter implements AuthAdapter {
                 .build();
 
         // Make request
+        Response response;
         try {
-            Response response = client.newCall(request).execute();
-
-            return response.code() == HTTP_NO_CONTENT;
+            response = client.newCall(request).execute();
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new IOException("Logout failed. Try again.");
         }
+        if(response.code() != HTTP_NO_CONTENT){
+            throw new IOException("Logout request failed. Try again.");
+        }
+        return true;
     }
 }
