@@ -6,6 +6,7 @@ import com.cactus.entities.GroceryList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class GroceryListSystem {
      * @param token token of user
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, String token) {
+    public boolean newGroceryList(String name, String token) throws IOException {
         if (currentListNamesMap.get(name) != null) {
             return false;
         }
@@ -61,7 +62,7 @@ public class GroceryListSystem {
      * @param token token of user
      * @return groceryListNameMap
      */
-    public ArrayList<String> getGroceryListNames(String token) {
+    public ArrayList<String> getGroceryListNames(String token) throws IOException {
         this.currentListNamesMap = new HashMap<>();
         ArrayList<String> listNames = new ArrayList<>();
         List<GroceryList> groceryLists =
@@ -82,7 +83,7 @@ public class GroceryListSystem {
      * @param token token of user
      * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryItemNames(String token) {
+    public ArrayList<String> getGroceryItemNames(String token) throws IOException {
         ArrayList<String> groceryItemNames = new ArrayList<>();
         List<GroceryItem> groceryItems =
                 this.groceryAdapter.getGroceryItems(this.currentGroceryListId, token);
@@ -115,7 +116,7 @@ public class GroceryListSystem {
      * @param token the token of the user that it is being added to
      * @return true of items were added successfully
      **/
-    public boolean addGroceryItems(List<String> items, String token) {
+    public boolean addGroceryItems(List<String> items, String token) throws IOException {
         return this.groceryAdapter.setGroceryItems(items, this.currentGroceryListId, token);
     }
 
@@ -126,7 +127,7 @@ public class GroceryListSystem {
      * @param token the id of the user that the to be deleted list belongs to
      * @return true if the list was successfully deleted and false if list DNE
      */
-    public boolean deleteGroceryList(String token, String listName) {
+    public boolean deleteGroceryList(String token, String listName) throws IOException {
         long toBeDeletedListId = Objects.requireNonNull(this.currentListNamesMap.get(listName));
 
         if (exitGroceryList()) {
@@ -143,7 +144,7 @@ public class GroceryListSystem {
      * @param token token of user
      * @return name of grocery list
      * */
-    public String getListName(String token) {
+    public String getListName(String token) throws IOException {
         return this.groceryAdapter.getGroceryList(this.currentGroceryListId, token).getName();
     }
 

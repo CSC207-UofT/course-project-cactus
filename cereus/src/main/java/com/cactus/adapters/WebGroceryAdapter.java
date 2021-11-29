@@ -59,7 +59,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
     @Override
-    public List<GroceryList> getGroceryListsByUser(String token) {
+    public List<GroceryList> getGroceryListsByUser(String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -73,7 +73,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .build();
 
         HashMap<Integer, String> groceryListNames;
-
         try {
             // Make request
             Response response = client.newCall(request).execute();
@@ -81,15 +80,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             if (response.code() != HTTP_OK) {
-                return null;
+                throw new IOException("Grocery Lists Retrieval Failed. Try again.");
             }
             groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
-                    new TypeReference<HashMap<Integer, String>>() {
-                    });
+                    new TypeReference<HashMap<Integer, String>>() {});
 
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
-            return null;
+        } catch (IOException i) {
+            throw new IOException("Grocery Lists Retrieval Failed. Try again.");
         }
 
         // Retrieve every list whose id was returned
@@ -115,7 +112,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a GroceryList corresponding to the listID given
      */
     @Override
-    public GroceryList getGroceryList(long listID, String token) {
+    public GroceryList getGroceryList(long listID, String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -129,19 +126,19 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .url(url)
                 .addHeader("Authorization", token)
                 .build();
+        Response response;
         try {
             // Make request
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             //Parse response
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             if (response.code() != HTTP_OK) {
-                return null;
+                throw new IOException("Grocery List Retrieval failed. Try again.");
             }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
-            return null;
+        } catch (IOException i) {
+            throw new IOException("Grocery List Retrieval failed. Try again.");
         }
     }
 
@@ -157,7 +154,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a list of GroceryItems in the list
      */
     @Override
-    public List<GroceryItem> getGroceryItems(long listID, String token) {
+    public List<GroceryItem> getGroceryItems(long listID, String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -178,7 +175,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             if (response.code() != HTTP_OK) {
-                return null;
+                throw new IOException("Grocery items retrieval failed. Try again.");
             }
             String responseString = Objects.requireNonNull(response.body()).string();
             JsonNode jsonNode = finalMapper.readTree(responseString);
@@ -196,10 +193,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 groceryItems.add(groceryItem);
             }
             return groceryItems;
+        } catch (IOException i) {
+            throw new IOException("Grocery items retrieval failed. Try again.");
 
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
-            return null;
         }
 
     }
@@ -217,7 +213,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a GroceryList that corresponds to the GroceryList created
      */
     @Override
-    public GroceryList createGroceryList(String nameList, String token) {
+    public GroceryList createGroceryList(String nameList, String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -245,13 +241,11 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             if (response.code() != HTTP_OK) {
-                System.out.println(response.code());
-                return null;
+                throw new IOException("Grocery List Creation failed. Try again.");
             }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException e) {
+            throw new IOException("Grocery List Creation failed. Try again.");
         }
     }
 
@@ -268,7 +262,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a boolean indicating whether the grocery items are appended to the list
      */
     @Override
-    public boolean setGroceryItems(List<String> items, long listID, String token) {
+    public boolean setGroceryItems(List<String> items, long listID, String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -290,11 +284,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .put(requestBody)
                     .build();
             Response response = client.newCall(request).execute();
-            return response.code() == HTTP_OK;
+            if (response.code() != HTTP_OK){
+                throw new IOException("Grocery List Modification failed. Try again.");
+            }
+            return true;
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new IOException("Grocery List Modification failed. Try again.");
         }
 
     }
@@ -311,7 +307,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a Response to the grocery list deletion operation
      */
     @Override
-    public boolean deleteGroceryList(long listID, String token) {
+    public boolean deleteGroceryList(long listID, String token) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -320,18 +316,21 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addPathSegment("delete-list")
                 .addQueryParameter("id", String.valueOf(listID))
                 .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .delete()
+                .build();
+        Response response;
         try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("Authorization", token)
-                    .delete()
-                    .build();
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
 
-            return response.code() == HTTP_NO_CONTENT;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            throw new IOException("List Deletion failed. Try again.");
         }
+        if(response.code() != HTTP_NO_CONTENT){
+            throw new IOException("List Deletion request failed. Try again.");
+        }
+        return true;
     }
 }

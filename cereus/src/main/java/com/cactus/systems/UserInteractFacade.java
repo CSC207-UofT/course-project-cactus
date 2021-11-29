@@ -79,7 +79,7 @@ public class UserInteractFacade {
      * @param name name of the grocery list that is to be created
      * @return true if grocery list was successfully created
      */
-    public boolean newGroceryList(String name) {
+    public boolean newGroceryList(String name) throws IOException {
         return this.groceryListSystem.newGroceryList(name, this.getToken());
     }
 
@@ -88,7 +88,7 @@ public class UserInteractFacade {
      *
      * @return a list of grocery list names belonging to the current user
      */
-    public ArrayList<String> getGroceryListNames() {
+    public ArrayList<String> getGroceryListNames() throws IOException {
         return this.groceryListSystem.getGroceryListNames(this.getToken());
     }
 
@@ -97,7 +97,7 @@ public class UserInteractFacade {
      *
      * @return a list of grocery item names belonging to the current list
      */
-    public ArrayList<String> getGroceryItemNames() {
+    public ArrayList<String> getGroceryItemNames() throws IOException {
         return this.groceryListSystem.getGroceryItemNames(this.getToken());
     }
 
@@ -107,7 +107,7 @@ public class UserInteractFacade {
      * @param items list of names of the items that are to be added to the current grocery list
      * @return true of item was successfully added
      */
-    public boolean addGroceryItems(List<String> items) {
+    public boolean addGroceryItems(List<String> items) throws IOException {
         return this.groceryListSystem.addGroceryItems(items, this.getToken());
     }
 
@@ -116,7 +116,7 @@ public class UserInteractFacade {
      *
      * @return true if grocery list was successfully deleted
      */
-    public boolean deleteGroceryList(String listName) {
+    public boolean deleteGroceryList(String listName) throws IOException {
         return this.groceryListSystem.deleteGroceryList(this.getToken(), listName);
     }
 
@@ -125,7 +125,7 @@ public class UserInteractFacade {
      *
      * @return Name of the current grocery list
      */
-    public String getListName() {
+    public String getListName() throws IOException {
         return this.groceryListSystem.getListName(getToken());
     }
 
