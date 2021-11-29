@@ -35,5 +35,6 @@
             android:id="@+id/logoutButtonList"
             app:layout_constraintLeft_toRightOf="@+id/addListButton"
             android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"
-            android:backgroundTint="@color/design_default_color_error"/>
+            android:backgroundTint="@color/design_default_color_error"
+            android:background="@drawable/customshape"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
