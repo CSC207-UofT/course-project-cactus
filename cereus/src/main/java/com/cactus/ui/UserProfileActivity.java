@@ -20,14 +20,15 @@ public class UserProfileActivity extends AppCompatActivity {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        setTitle(userInteractFacade.getUserName() + "Profile");
 
         displayOptions();
     }
 
     private void displayOptions(){
+        //TODO: Delete unuseful buttons and convert the three change buttons to one change button.
         EditText name = findViewById(R.id.currentName);
         EditText username = findViewById(R.id.currentUsername);
-        EditText password = findViewById(R.id.currentPassword);
         EditText newPassword = findViewById(R.id.changedPassword);
         Button logoutButton = findViewById(R.id.logoutButton);
         Button groceryListsButton = findViewById(R.id.groceryListsButton);
@@ -35,9 +36,9 @@ public class UserProfileActivity extends AppCompatActivity {
         Button changePasswordButton = findViewById(R.id.changePasswordButton);
         Button changeUsernameButton = findViewById(R.id.changeUsernameButton);
         Button changeNameButton = findViewById(R.id.changeNameButton);
-        username.setText(userInteractFacade.getUserName());
+        username.setHint(userInteractFacade.getUserName());
         //TODO: Add a getName method to UserInteractFacade that returns the user's name.
-        //name.setText(userInteractFacade.getName());
+        //name.setHint(userInteractFacade.getName());
         logoutButton.setOnClickListener(view -> {
             if (userInteractFacade.logout()) {
                 Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
@@ -72,16 +73,9 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         changePasswordButton.setOnClickListener(view -> {
-            String givenPassword = password.getText().toString();
             String givenNewPassword = newPassword.getText().toString();
             //userInteractFacade.changePassword(givenPassword, newPassword);
         });
-
-
-
-
-
-
 
 
     }

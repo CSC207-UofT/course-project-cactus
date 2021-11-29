@@ -12,6 +12,8 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.UI"
             android:usesCleartextTraffic="true">
+        <activity android:name=".AddFriendActivity">
+        </activity>
         <activity android:name=".UserProfileActivity">
         </activity>
         <activity android:name=".SignupActivity">

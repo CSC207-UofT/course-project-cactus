@@ -20,4 +20,6 @@ public interface ApplicationComponent {
     void inject(CustomAdapter customAdapter);
 
     void inject (UserProfileActivity userProfileActivity);
+
+    void inject (AddFriendActivity addFriendActivity);
 }
