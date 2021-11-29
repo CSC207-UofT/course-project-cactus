@@ -79,7 +79,18 @@ public class UserInteractFacade {
      * @return true if grocery list was successfully created
      */
     public boolean newGroceryList(String name) {
-        return this.groceryListSystem.newGroceryList(name, this.getToken());
+        return this.groceryListSystem.newGroceryList(name, this.getToken(), false);
+    }
+
+    /**
+     * Create a new Template saved as a GroceryList
+     * using GroceryListSystem's newGroceryList method
+     *
+     * @param name name of the template that is to be created
+     * @return true if template was successfully created
+     */
+    public boolean newTemplate(String name) {
+        return this.groceryListSystem.newGroceryList(name, this.getToken(), true);
     }
 
     /**
@@ -88,7 +99,16 @@ public class UserInteractFacade {
      * @return a list of grocery list names belonging to the current user
      */
     public ArrayList<String> getGroceryListNames() {
-        return this.groceryListSystem.getGroceryListNames(this.getToken());
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), false);
+    }
+
+    /**
+     * Get template names using GroceryListSystem's getGroceryListNames method
+     *
+     * @return a list of template names belonging to the current user
+     */
+    public ArrayList<String> getTemplateNames() {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
     /**

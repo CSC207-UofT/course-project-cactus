@@ -36,12 +36,16 @@ public class GroceryListSystem {
      *
      * @param name given name
      * @param token token of user
+     * @param isTemplate true if list is template, false otherwise
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, String token) {
+    public boolean newGroceryList(String name, String token, Boolean isTemplate) {
         if (currentListNamesMap.get(name) != null) {
             return false;
         }
+
+        // TODO: Remove placeholder (get if grocery list is template from server)
+        if (isTemplate) {return false; }
 
         GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token);
 
@@ -59,11 +63,16 @@ public class GroceryListSystem {
      * so that UI can print the names and tell the controller which ID was picked
      *
      * @param token token of user
+     * @param isTemplate true if list is template, false otherwise
      * @return groceryListNameMap
      */
-    public ArrayList<String> getGroceryListNames(String token) {
+    public ArrayList<String> getGroceryListNames(String token, Boolean isTemplate) {
         this.currentListNamesMap = new HashMap<>();
         ArrayList<String> listNames = new ArrayList<>();
+
+        // TODO: Modify to show template names
+        if (isTemplate) {return listNames;}
+
         List<GroceryList> groceryLists =
                 this.groceryAdapter.getGroceryListsByUser(token);
 

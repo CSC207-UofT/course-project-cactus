@@ -11,6 +11,7 @@ public class GroceryList {
 
     private String name;
     private long id;
+    private Boolean isTemplate;
 
     /**
      * Empty constructor for GroceryList, required for Jackson serialization
@@ -22,9 +23,12 @@ public class GroceryList {
         return name;
     }
 
-
     public long getId() {
         return id;
+    }
+
+    public Boolean getIsTemplate() {
+        return isTemplate;
     }
 
 
@@ -36,4 +40,7 @@ public class GroceryList {
         this.id = id;
     }
 
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
+    }
 }

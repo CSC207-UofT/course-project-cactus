@@ -20,4 +20,6 @@ public interface ApplicationComponent {
     void inject(CustomAdapter customAdapter);
 
     void inject(ListOptionsActivity listOptionsActivity);
+
+    void inject(DisplayingTemplatesActivity displayingTemplatesActivity);
 }
