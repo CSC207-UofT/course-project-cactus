@@ -172,6 +172,11 @@ public class User {
         }
     }
 
+    /**
+     * Remove a user from this user's list of friends.
+     *
+     * @param user the User to remove as a friend
+     */
     public void removeFriend(User user) {
         if (this.friends.remove(user)) {
             user.removeBefriended(user);
@@ -188,6 +193,12 @@ public class User {
         this.befriended.add(user);
     }
 
+    /**
+     * Record a user as not being befriended by this user anymore. Used to maintain the bidirectional
+     * relationship.
+     *
+     * @param user the User to mark as not being befriended by this user anymore
+     */
     private void removeBefriended(User user) {
         this.befriended.remove(user);
     }
