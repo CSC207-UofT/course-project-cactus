@@ -135,6 +135,7 @@ public class User {
         role.addUser(this);
     }
 
+    @JsonIgnore
     public List<GroceryList> getGroceryLists() {
         return this.lists;
     }

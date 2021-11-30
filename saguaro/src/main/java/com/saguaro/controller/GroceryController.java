@@ -179,8 +179,8 @@ public class GroceryController {
 
         Map<String, Object> templates = new HashMap<>();
         // TODO: get templates from service
-        lists.put("owned", new HashMap<>());
-        lists.put("shared", new HashMap<>());
+        templates.put("owned", new HashMap<>());
+        templates.put("shared", new HashMap<>());
 
         body.put("lists", lists);
         body.put("templates", templates);
