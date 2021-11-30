@@ -25,9 +25,9 @@ public class GroceryService {
 
     GroceryItemRepository groceryItemRepository;
 
-    public GroceryService (UserRepository userRepository,
-                           GroceryListRepository groceryListRepository,
-                           GroceryItemRepository groceryItemRepository) {
+    public GroceryService(UserRepository userRepository,
+                          GroceryListRepository groceryListRepository,
+                          GroceryItemRepository groceryItemRepository) {
         this.userRepository = userRepository;
         this.groceryListRepository = groceryListRepository;
         this.groceryItemRepository = groceryItemRepository;
@@ -96,6 +96,34 @@ public class GroceryService {
         }
 
         return groceryListRepository.save(oldList);
+    }
+
+    /**
+     * Set an existing grocery list's name to some new string.
+     * <p>
+     * A ResourceNotFoundException is found in the case where the provided list ID does not match
+     * any grocery list belonging to the user with the provided username.
+     * <p>
+     * If the edit is successful, then the newly modified GroceryList is returned.
+     *
+     * @param listId   a long representing the ID of the grocery list to edit
+     * @param newName  the String to set the name of the grocery list to
+     * @param username the username of the user making the edit
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the provided list ID does not match any grocery list belonging
+     *                                   to the user with the provided username
+     */
+    @Transactional
+    public GroceryList editListName(long listId, String newName, String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        GroceryList list = groceryListRepository.findGroceryListById(listId);
+
+        if (list == null || list.getUser() != user) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(listId), user);
+        }
+
+        list.setName(newName);
+        return groceryListRepository.save(list);
     }
 
     @Transactional
