@@ -9,6 +9,18 @@ import com.saguaro.entity.User;
 public class ResourceNotFoundException extends Exception {
 
     /**
+     * Constructs a exception with some custom message.
+     * <p>
+     * User this when the templated messages provided by the alternative
+     * constructors are not sufficient.
+     *
+     * @param msg the String message to initialize this exception with
+     */
+    public ResourceNotFoundException(String msg) {
+        super(msg);
+    }
+
+    /**
      * Constructor for this exception that will initialize it with a message detailing
      * what was not found
      * <p>
