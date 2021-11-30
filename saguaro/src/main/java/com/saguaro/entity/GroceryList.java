@@ -3,7 +3,6 @@
  */
 package com.saguaro.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -135,10 +134,16 @@ public class GroceryList {
     public void addSharedUser(User user) {
         if (user != this.owner && !this.sharedUsers.contains(user)) {
             this.sharedUsers.add(user);
-             user.addSharedList(this);
+            user.addSharedList(this);
         }
     }
 
+    /**
+     * Remove a shared user from this list. Also unmarks this list as shared for the user, in
+     * order to maintain bidirectional relationship from list to user.
+     *
+     * @param user the User to remove as a shared user
+     */
     public void removeSharedUser(User user) {
         if (this.sharedUsers.remove(user)) {
             user.removeSharedList(this);
@@ -181,7 +186,7 @@ public class GroceryList {
 
     /**
      * Serializer class for a GroceryLists's owner.
-     *
+     * <p>
      * The serialization of GroceryList does not need to return full information on the list's owner. Rather,
      * it only requires some sort of identifier.
      */
@@ -191,8 +196,8 @@ public class GroceryList {
          * Takes the User object, which should be the owner of a GroceryList, and returns just
          * its username as a string
          *
-         * @param value the Users to serialize
-         * @param gen a JsonGenerator to output resulting JSON
+         * @param value       the Users to serialize
+         * @param gen         a JsonGenerator to output resulting JSON
          * @param serializers a SerializerProvider that can be used to get serializers
          *                    for serializing Objects value contains, if any.
          * @throws IOException if there is an error writing JSON content
@@ -205,7 +210,7 @@ public class GroceryList {
 
     /**
      * Serializer class for the shared users of this list
-     *
+     * <p>
      * The serialization of GroceryList does not need to return full information on the list's shared
      * users. Rather, it only requires some sort of identifier for each user.
      */
@@ -215,8 +220,8 @@ public class GroceryList {
          * Takes the User object, which should be the owner of a GroceryList, and returns just
          * its username as a string
          *
-         * @param value the Users to serialize
-         * @param gen a JsonGenerator to output resulting JSON
+         * @param value       the Users to serialize
+         * @param gen         a JsonGenerator to output resulting JSON
          * @param serializers a SerializerProvider that can be used to get serializers
          *                    for serializing Objects value contains, if any.
          * @throws IOException if there is an error writing JSON content

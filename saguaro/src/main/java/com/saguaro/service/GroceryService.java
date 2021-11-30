@@ -174,6 +174,21 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    /**
+     * Remove a user from the shared users of a grocery list. This operation can only be performed by the owner
+     * of a list. In addition, only users that the list is already shared with can be "unshared" from a list. If
+     * the above conditions are not met, then a ResourceNotFoundException will be thrown, with an appropriate
+     * error message.
+     * <p>
+     * If the removal was successful, the newly modified GroceryList object is returned.
+     *
+     * @param id            a long representing the ID of the GroceryList to unshare
+     * @param shareUsername the String username of the user to unshare the list with
+     * @param username      the STring username of the user performing this operation
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the list to be unshared does not belong to the authenticated user, or
+     *                                   if the user to be unshared was not part of the shared users of the list
+     */
     public GroceryList unshareList(long id, String shareUsername, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
 

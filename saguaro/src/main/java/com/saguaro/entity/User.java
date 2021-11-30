@@ -221,6 +221,11 @@ public class User {
         this.sharedLists.add(list);
     }
 
+    /**
+     * Remove a list from the grocery lists that were shared with this user
+     *
+     * @param list the GroceryList to remove from this user's shared lists
+     */
     void removeSharedList(GroceryList list) {
         this.sharedLists.remove(list);
     }
@@ -257,8 +262,8 @@ public class User {
          * Takes the set of users that are a user's friends, and serializes only their
          * usernames, outputting an array of strings.
          *
-         * @param value the Set of Users to serialize
-         * @param gen a JsonGenerator to output resulting JSON
+         * @param value       the Set of Users to serialize
+         * @param gen         a JsonGenerator to output resulting JSON
          * @param serializers a SerializerProvider that can be used to get serializers
          *                    for serializing Objects value contains, if any.
          * @throws IOException if there is an error writing JSON content
