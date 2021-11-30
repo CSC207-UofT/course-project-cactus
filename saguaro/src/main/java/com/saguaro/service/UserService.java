@@ -114,4 +114,33 @@ public class UserService {
         user.addFriend(friend);
         return userRepository.save(user);
     }
+
+    /**
+     * Given a friend username and a username, remove the User represented by the former from
+     * the friends of the latter. This method assumes that the username (but not the
+     * friend's username) belongs to a valid user, since a user must be authenticated
+     * in order to remove a friend.
+     * <p>
+     * If the provided friend username does not map to an existing friend of the user, a
+     * ResourceNotFoundException is thrown.
+     *
+     * @param friendUsername the String username of the user to remove from friends
+     * @param username       the String username of the user removing the friend
+     * @return the newly modified User object
+     * @throws ResourceNotFoundException if the user with the given username is not an existing
+     *                                   friend
+     */
+    @Transactional
+    public User removeFriend(String friendUsername, String username)
+            throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        User friend = userRepository.findUserByUsername(friendUsername);
+
+        if (friend == null) {
+            throw new ResourceNotFoundException(User.class, friendUsername);
+        }
+
+        user.removeFriend(friend);
+        return userRepository.save(user);
+    }
 }

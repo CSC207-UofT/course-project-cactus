@@ -86,4 +86,24 @@ public class UserController {
 
         return userService.addFriend(friendUsername, username);
     }
+
+    /**
+     * Given a username, remove that user from the friends of the currently authenticated user.
+     * <p>
+     * If the provided username does not match a user that is an existing friend of the
+     * authenticated user, a ResourceNotFoundException is thrown.
+     *
+     * @param friendUsername the String username of the user to remove from friends
+     * @return the newly modified User object
+     * @throws ResourceNotFoundException if the user with the given username is not an existing
+     *                                   friend
+     */
+    @DeleteMapping("api/remove-friend")
+    public User removeFriend(@RequestParam("username") String friendUsername)
+            throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return userService.removeFriend(friendUsername, username);
+    }
 }
