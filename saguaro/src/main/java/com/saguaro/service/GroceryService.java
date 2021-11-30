@@ -7,8 +7,8 @@ import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.GroceryItemRepository;
 import com.saguaro.repository.GroceryListRepository;
 import com.saguaro.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -16,16 +16,22 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class GroceryService {
 
-    @Autowired
     UserRepository userRepository;
 
-    @Autowired
     GroceryListRepository groceryListRepository;
 
-    @Autowired
     GroceryItemRepository groceryItemRepository;
+
+    public GroceryService (UserRepository userRepository,
+                           GroceryListRepository groceryListRepository,
+                           GroceryItemRepository groceryItemRepository) {
+        this.userRepository = userRepository;
+        this.groceryListRepository = groceryListRepository;
+        this.groceryItemRepository = groceryItemRepository;
+    }
 
     public Map<Long, String> getListNamesByUsername(String username) {
         User user = userRepository.findUserByUsername(username);
@@ -47,6 +53,7 @@ public class GroceryService {
         return list;
     }
 
+    @Transactional
     public GroceryList createNewList(String name, String username) {
         User user = userRepository.findUserByUsername(username);
 
@@ -57,6 +64,7 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    @Transactional
     public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
@@ -90,6 +98,7 @@ public class GroceryService {
         return groceryListRepository.save(oldList);
     }
 
+    @Transactional
     public void removeList(long id, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
         GroceryList list = groceryListRepository.findGroceryListById(id);
