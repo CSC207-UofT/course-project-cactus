@@ -99,7 +99,8 @@ public class GroceryService {
     }
 
     /**
-     * Set an existing grocery list's name to some new string.
+     * Set an existing grocery list's name to some new string. This method assumes that the username
+     * provided must be valid, since a user must be authenticated in order to edit a list's name.
      * <p>
      * A ResourceNotFoundException is found in the case where the provided list ID does not match
      * any grocery list belonging to the user with the provided username.
