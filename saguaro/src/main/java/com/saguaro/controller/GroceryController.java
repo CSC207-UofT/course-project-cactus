@@ -208,8 +208,8 @@ public class GroceryController {
      *                                   sharee is not a friend of the sharer
      */
     @PostMapping("api/share-list")
-    public GroceryList shareList(@RequestParam("listId") long id,
-                                 @RequestParam("shareUsername") String shareUsername) throws ResourceNotFoundException {
+    public GroceryList shareList(@RequestParam("id") long id,
+                                 @RequestParam("username") String shareUsername) throws ResourceNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
