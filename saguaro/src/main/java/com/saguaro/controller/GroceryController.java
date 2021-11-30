@@ -95,11 +95,12 @@ public class GroceryController {
      * @return the newly created GroceryList object
      */
     @PostMapping("api/create-list")
-    public GroceryList createNewList(@RequestParam("name") String name) {
+    public GroceryList createNewList(@RequestParam("name") String name,
+                                     @RequestParam(value = "template", required = false, defaultValue = "false") boolean template) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
-        return groceryService.createNewList(name, username);
+        return groceryService.createNewList(name, username, template);
     }
 
     /**

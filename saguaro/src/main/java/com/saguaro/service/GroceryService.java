@@ -112,12 +112,13 @@ public class GroceryService {
         return list;
     }
 
-    public GroceryList createNewList(String name, String username) {
+    public GroceryList createNewList(String name, String username, boolean template) {
         User user = userRepository.findUserByUsername(username);
 
         GroceryList list = new GroceryList();
         list.setName(name);
         list.setOwner(user);
+        list.setTemplate(template);
 
         return groceryListRepository.save(list);
     }
