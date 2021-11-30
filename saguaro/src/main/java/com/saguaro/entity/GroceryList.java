@@ -74,6 +74,11 @@ public class GroceryList {
     private List<User> sharedUsers;
 
     /**
+     * Whether this list is a template
+     */
+    private boolean isTemplate;
+
+    /**
      * Creates a new GroceryList.
      */
     public GroceryList() {
@@ -165,6 +170,24 @@ public class GroceryList {
         if (this.items.remove(item)) {
             item.removeList(this);
         }
+    }
+
+    /**
+     * Get whether this list is a template
+     *
+     * @return true if this list is a template, false otherwise
+     */
+    public boolean isTemplate() {
+        return isTemplate;
+    }
+
+    /**
+     * Set whether this list is a template
+     *
+     * @param isTemplate a boolean marking if this list is a template
+     */
+    public void setTemplate(boolean isTemplate) {
+        this.isTemplate = isTemplate;
     }
 
     @PreRemove

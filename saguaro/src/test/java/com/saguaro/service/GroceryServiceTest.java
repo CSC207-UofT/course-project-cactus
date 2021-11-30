@@ -70,7 +70,7 @@ class GroceryServiceTest {
             when(list.getId()).thenReturn(1L, 2L, 3L);
             when(list.getName()).thenReturn("name");
 
-            Map<Long, String> actual = groceryService.getOwnedListNamesByUsername("username");
+            Map<Long, String> actual = groceryService.getOwnedListNames("username");
 
             HashMap<Long, String> expected = new HashMap<>();
             expected.put(1L, "name");

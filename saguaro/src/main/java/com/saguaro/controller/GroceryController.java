@@ -50,7 +50,7 @@ public class GroceryController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
-        return groceryService.getOwnedListNamesByUsername(username);
+        return groceryService.getOwnedListNames(username);
     }
 
     /**
@@ -174,13 +174,12 @@ public class GroceryController {
         Map<String, Object> body = new HashMap<>();
 
         Map<String, Object> lists = new HashMap<>();
-        lists.put("owned", groceryService.getOwnedListNamesByUsername(username));
-        lists.put("shared", groceryService.getSharedListNamesByUsername(username));
+        lists.put("owned", groceryService.getOwnedListNames(username));
+        lists.put("shared", groceryService.getSharedListNames(username));
 
         Map<String, Object> templates = new HashMap<>();
-        // TODO: get templates from service
-        templates.put("owned", new HashMap<>());
-        templates.put("shared", new HashMap<>());
+        templates.put("owned", groceryService.getOwnedTemplateNames(username));
+        templates.put("shared", groceryService.getSharedTemplateNames(username));
 
         body.put("lists", lists);
         body.put("templates", templates);
