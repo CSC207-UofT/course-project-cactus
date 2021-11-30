@@ -139,6 +139,12 @@ public class GroceryList {
         }
     }
 
+    public void removeSharedUser(User user) {
+        if (this.sharedUsers.remove(user)) {
+            user.removeSharedList(this);
+        }
+    }
+
     public List<GroceryItem> getItems() {
         return this.items;
     }

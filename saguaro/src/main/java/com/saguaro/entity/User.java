@@ -221,6 +221,10 @@ public class User {
         this.sharedLists.add(list);
     }
 
+    void removeSharedList(GroceryList list) {
+        this.sharedLists.remove(list);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

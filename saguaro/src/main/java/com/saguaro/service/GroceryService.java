@@ -174,4 +174,26 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    public GroceryList unshareList(long id, String shareUsername, String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+
+        GroceryList list = groceryListRepository.findGroceryListById(id);
+
+        if (list == null || !user.equals(list.getOwner())) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(id), user);
+        }
+
+        User sharee = userRepository.findUserByUsername(shareUsername);
+
+        if (sharee == null) {
+            throw new ResourceNotFoundException(User.class, shareUsername);
+        } else if (!list.getSharedUsers().contains(sharee)) {
+            throw new ResourceNotFoundException("Grocery list " + id + " is not shared with User " + shareUsername);
+        }
+
+        list.removeSharedUser(sharee);
+
+        return groceryListRepository.save(list);
+    }
+
 }

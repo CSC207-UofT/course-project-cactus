@@ -215,4 +215,13 @@ public class GroceryController {
 
         return groceryService.shareList(id, shareUsername, username);
     }
+
+    @DeleteMapping("api/unshare-list")
+    public GroceryList unshareList(@RequestParam("id") long id,
+                                 @RequestParam("username") String shareUsername) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.unshareList(id, shareUsername, username);
+    }
 }
