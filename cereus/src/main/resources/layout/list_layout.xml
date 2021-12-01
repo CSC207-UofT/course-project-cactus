@@ -6,20 +6,31 @@
                 android:backgroundTint="@android:color/holo_blue_light"
                 android:background="@drawable/customshape">
 
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:src="@color/white"/>
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="Sample Text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:id="@+id/text"
+            android:textSize="20dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="120dp"/>
     <Button
             android:text="Delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/deleteButton"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/design_default_color_error"/>
