@@ -34,19 +34,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/listImage"
             android:layout_marginStart="20dp"
             android:textSize="20sp"/>
-    <EditText
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:inputType="textShortMessage"
-            android:ems="10"
-            android:id="@+id/listName"
-            android:hint="List name here"
-            app:layout_constraintTop_toTopOf="@id/listImage"
-            app:layout_constraintBottom_toBottomOf="@id/listImage"
-            app:layout_constraintRight_toLeftOf="@id/addListButton"
-            android:layout_marginEnd="10dp"/>
     <Button
-            android:text="Create List"
+            android:text="New List"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:id="@+id/addListButton" app:layout_constraintRight_toRightOf="@+id/listImage"
@@ -89,7 +78,7 @@
             android:layout_marginStart="20dp"
             android:textSize="20sp"/>
     <Button
-            android:text="Create Template"
+            android:text="New Template"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:id="@+id/addTemplateButton"

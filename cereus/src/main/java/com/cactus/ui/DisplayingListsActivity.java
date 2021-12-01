@@ -36,28 +36,24 @@ public class DisplayingListsActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listViewDisplayList);
         listView.setAdapter(customListAdapter);
 
-        displayOptions(listView, customListAdapter);
+        displayOptions();
     }
 
     /***
-     * Display the add list text field and button along with logout button
-     *
-     * @param listView listView layout variable
-     * @param customListAdapter customListAdapter for displaying list
+     * Display the add list button
      */
-    private void displayOptions(ListView listView, CustomListAdapter customListAdapter) {
-        EditText listName = findViewById(R.id.listName);
-        Button createListButton = findViewById(R.id.addListButton);
+    private void displayOptions() {
+        Button addListButton = findViewById(R.id.addListButton);
+        Button addTemplateButton = findViewById(R.id.addTemplateButton);
 
-        createListButton.setOnClickListener(view -> {
-            String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName)) {
-                customListAdapter.objects.add(givenListName);
-                ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-                listName.getText().clear();
-            } else {
-                Toast.makeText(DisplayingListsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
-            }
+        addListButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DisplayingListsActivity.this, CreateListActivity.class);
+            startActivity(intent);
+        });
+
+        addTemplateButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DisplayingListsActivity.this, CreateTemplateActivity.class);
+            startActivity(intent);
         });
 
     }
