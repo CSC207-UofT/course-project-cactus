@@ -6,39 +6,103 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".DisplayingListsActivity">
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/listImageBack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/dark_blue_stroke"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/listImage"
+            app:layout_constraintTop_toTopOf="@id/listImageBack"
+            app:layout_constraintBottom_toBottomOf="@id/listImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/white_stroke"/>
+    <TextView
+            android:text="Lists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/listImage"
+            app:layout_constraintTop_toTopOf="@+id/listImage"
+            app:layout_constraintBottom_toBottomOf="@+id/listImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
     <EditText
-            android:layout_width="174dp"
+            android:layout_width="150dp"
             android:layout_height="45dp"
             android:inputType="textShortMessage"
             android:ems="10"
             android:id="@+id/listName"
             android:hint="List name here"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" android:layout_marginLeft="4dp" android:layout_marginStart="4dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintTop_toTopOf="@id/listImage"
+            app:layout_constraintBottom_toBottomOf="@id/listImage"
+            app:layout_constraintRight_toLeftOf="@id/addListButton"
+            android:layout_marginEnd="10dp"/>
     <Button
-            android:text="Add List"
+            android:text="Create List"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/addListButton" app:layout_constraintLeft_toRightOf="@+id/listName"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"
-            android:backgroundTint="@android:color/holo_blue_dark"/>
+            android:layout_height="40dp"
+            android:id="@+id/addListButton" app:layout_constraintRight_toRightOf="@+id/listImage"
+            android:layout_marginEnd="10dp" app:layout_constraintTop_toTopOf="@+id/listImage" app:layout_constraintBottom_toBottomOf="@+id/listImage"
+            android:backgroundTint="@android:color/holo_red_dark"/>
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="729dp"
+            android:layout_height="0dp"
             android:id="@+id/listViewDisplayList"
-            app:layout_constraintTop_toBottomOf="@+id/listName"
+            app:layout_constraintTop_toBottomOf="@+id/listImageBack"
             android:layout_margin="10dp"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
             app:layout_constraintStart_toStartOf="parent"/>
-    <Button
-            android:text="logout"
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/templateImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/listViewDisplayList"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/dark_blue_stroke"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/templateImage"
+            app:layout_constraintTop_toTopOf="@+id/templateImageBack"
+            app:layout_constraintBottom_toBottomOf="@+id/templateImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/white_stroke"/>
+    <TextView
+            android:text="Templates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/logoutButtonList"
-            app:layout_constraintLeft_toRightOf="@+id/addListButton"
-            android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/listName"
-            android:backgroundTint="@color/design_default_color_error"/>
+            android:id="@+id/templateText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/templateImage"
+            app:layout_constraintTop_toTopOf="@+id/templateImage"
+            app:layout_constraintBottom_toBottomOf="@+id/templateImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
+    <Button
+            android:text="Create Template"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/addTemplateButton"
+            app:layout_constraintRight_toRightOf="@+id/templateImage"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toTopOf="@+id/templateImage"
+            app:layout_constraintBottom_toBottomOf="@+id/templateImage"
+            android:backgroundTint="@android:color/holo_red_dark"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/listViewDisplayTemplate"
+            app:layout_constraintTop_toBottomOf="@+id/addTemplateButton"
+            app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

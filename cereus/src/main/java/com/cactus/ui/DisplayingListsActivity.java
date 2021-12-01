@@ -47,10 +47,9 @@ public class DisplayingListsActivity extends AppCompatActivity {
      */
     private void displayOptions(ListView listView, CustomListAdapter customListAdapter) {
         EditText listName = findViewById(R.id.listName);
-        Button addListButton = findViewById(R.id.addListButton);
-        Button logoutButton = findViewById(R.id.logoutButtonList);
+        Button createListButton = findViewById(R.id.addListButton);
 
-        addListButton.setOnClickListener(view -> {
+        createListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
             if (this.userInteractFacade.newGroceryList(givenListName)) {
                 customListAdapter.objects.add(givenListName);
@@ -61,14 +60,6 @@ public class DisplayingListsActivity extends AppCompatActivity {
             }
         });
 
-        logoutButton.setOnClickListener(view -> {
-            if (userInteractFacade.logout()) {
-                Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else{
-                Toast.makeText(DisplayingListsActivity.this, "Logout unsuccessful", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
 }
