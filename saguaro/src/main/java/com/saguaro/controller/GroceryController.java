@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ public class GroceryController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
 
-        return groceryService.getListNamesByUsername(username);
+        return groceryService.getOwnedListNamesByUsername(username);
     }
 
     /**
@@ -108,8 +109,8 @@ public class GroceryController {
      * list. The grocery list to be overwritten is identified by the list ID. The
      * name attribute may be null, in which case the list's name will remain unchanged.
      * <p>
-     * If the provided list has an ID which does not exist, or the ID corresponds to a
-     * list that does not belong to the currently authenticated user, a
+     * If the provided list has an ID which does not exist, or the currently authenticated
+     * user does not own or have shared access to the list corresponding to the ID, a
      * ResourceNotFoundException is thrown.
      * <p>
      * If the save is successful, then the newly saved grocery list is returned.
@@ -169,5 +170,98 @@ public class GroceryController {
         String username = (String) auth.getPrincipal();
 
         groceryService.removeList(id, username);
+    }
+
+    /**
+     * Fetch a comprehensive list of all the grocery lists the authenticated user has access to.
+     * <p>
+     * The returned JSON object has two top level properties:
+     * <ul>
+     *     <li>lists
+     *     <li>templates
+     * </ul>
+     * <p>
+     * The values of these are objects with the following two properties:
+     * <ul>
+     *     <li>owned
+     *     <li>shared
+     * </ul>
+     * <p>
+     * These properties correspond to an object mapping list ID to list name, of lists
+     * that the authenticated user owns and has shared access to, respectively.
+     *
+     * @return a Map object describing all lists the authenticated user has access to
+     */
+    @GetMapping("api/v2/all-lists")
+    public Map<String, Object> getAllListsFull() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        Map<String, Object> body = new HashMap<>();
+
+        Map<String, Object> lists = new HashMap<>();
+        lists.put("owned", groceryService.getOwnedListNamesByUsername(username));
+        lists.put("shared", groceryService.getSharedListNamesByUsername(username));
+
+        Map<String, Object> templates = new HashMap<>();
+        // TODO: get templates from service
+        templates.put("owned", new HashMap<>());
+        templates.put("shared", new HashMap<>());
+
+        body.put("lists", lists);
+        body.put("templates", templates);
+
+        return body;
+    }
+
+    /**
+     * Add a user to the shared users of a grocery list. A list can only be shared by the owner of the list,
+     * and if the user it is being shared with is a friend of the owner. If any of these conditions are
+     * not met, then a ResourceNotFoundException is thrown.
+     * <p>
+     * Furthermore, if the user to be shared with cannot be found, or if the list ID does not match any
+     * existing list, a ResourceNotFoundException is thrown.
+     * <p>
+     * Since this endpoint is a protected resource, a valid username must be available from the SecurityContext
+     * when this method is invoked.
+     * <p>
+     * If the sharing was successful, the newly modified GroceryList object is returned.
+     *
+     * @param id            a long representing the ID of the GroceryList to share
+     * @param shareUsername the String username of the user to share the list with
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the list to be shared does not belong to the sharer, or if the
+     *                                   sharee is not a friend of the sharer
+     */
+    @PostMapping("api/share-list")
+    public GroceryList shareList(@RequestParam("id") long id,
+                                 @RequestParam("username") String shareUsername) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.shareList(id, shareUsername, username);
+    }
+
+    /**
+     * Remove a user from the shared users of a grocery list. This operation can only be performed by the owner
+     * of a list. In addition, only users that the list is already shared with can be "unshared" from a list. If
+     * the above conditions are not met, then a ResourceNotFoundException will be thrown, with an appropriate
+     * error message.
+     * <p>
+     * If the removal was successful, the newly modified GroceryList object is returned.
+     *
+     * @param id            a long representing the ID of the GroceryList to unshare
+     * @param shareUsername the String username of the user to unshare the list with
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the list to be unshared does not belong to the authenticated user, or
+     *                                   if the user to be unshared was not part of the shared users of the list
+     */
+    @DeleteMapping("api/unshare-list")
+    public GroceryList unshareList(@RequestParam("id") long id,
+                                   @RequestParam("username") String shareUsername) throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.unshareList(id, shareUsername, username);
     }
 }

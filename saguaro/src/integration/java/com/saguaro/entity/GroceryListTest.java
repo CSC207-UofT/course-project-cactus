@@ -33,12 +33,12 @@ public class GroceryListTest {
     @Test
     void testUserSetAndListAddedToUser() {
         GroceryList list = new GroceryList();
-        list.setUser(user);
+        list.setOwner(user);
 
         GroceryList savedList = entityManager.persistFlushFind(list);
         user = entityManager.refresh(user);
 
-        assertEquals(user, savedList.getUser());
+        assertEquals(user, savedList.getOwner());
         assertEquals(1, user.getGroceryLists().size());
         assertEquals(savedList, user.getGroceryLists().get(0)); // check if user contains saved list
     }
@@ -51,7 +51,7 @@ public class GroceryListTest {
         @BeforeEach
         void SetUpExistingList() {
             GroceryList list = new GroceryList();
-            list.setUser(user);
+            list.setOwner(user);
             savedList = entityManager.persistFlushFind(list);
         }
 
@@ -67,10 +67,10 @@ public class GroceryListTest {
         @Test
         void testResetUser() {
             User newUser = new User();
-            savedList.setUser(newUser);
+            savedList.setOwner(newUser);
             entityManager.persistAndFlush(savedList);
 
-            assertEquals(user, savedList.getUser()); // should not be able to overwrite existing owner of list
+            assertEquals(user, savedList.getOwner()); // should not be able to overwrite existing owner of list
         }
 
         @Nested
@@ -158,6 +158,63 @@ public class GroceryListTest {
 
                     assertTrue(savedItem.getLists().isEmpty());
                 }
+            }
+        }
+
+        @Nested
+        class AddSharedUserTest {
+
+            User friend;
+
+            @BeforeEach
+            void setUpAddSharedUser() {
+                friend = new User();
+                friend.setName("Ron Weasley");
+                friend.setUsername("ronweasley");
+
+                friend = entityManager.persistFlushFind(friend);
+            }
+
+            @Test
+            void testAddSharedUser() {
+                savedList.addSharedUser(friend);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                friend = entityManager.refresh(friend);
+
+                assertEquals(1, savedList.getSharedUsers().size());
+                assertTrue(savedList.getSharedUsers().contains(friend));
+
+                assertEquals(1, friend.getSharedLists().size());
+                assertTrue(friend.getSharedLists().contains(savedList));
+            }
+
+            @Test
+            void testAddSharedUserIsOwner() {
+                savedList.addSharedUser(user);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                user = entityManager.refresh(user);
+
+                assertTrue(savedList.getSharedUsers().isEmpty());
+                assertTrue(friend.getSharedLists().isEmpty());
+            }
+
+            @Test
+            void testAddSharedUserExists() {
+                savedList.addSharedUser(friend);
+                entityManager.persistAndFlush(savedList);
+
+                savedList.addSharedUser(friend);
+                savedList = entityManager.persistFlushFind(savedList);
+
+                friend = entityManager.refresh(friend);
+
+                assertEquals(1, savedList.getSharedUsers().size());
+                assertTrue(savedList.getSharedUsers().contains(friend));
+
+                assertEquals(1, friend.getSharedLists().size());
+                assertTrue(friend.getSharedLists().contains(savedList));
             }
         }
     }

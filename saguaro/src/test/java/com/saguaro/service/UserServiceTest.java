@@ -4,6 +4,7 @@ import com.saguaro.entity.Role;
 import com.saguaro.entity.User;
 import com.saguaro.exception.InvalidLoginException;
 import com.saguaro.exception.InvalidParamException;
+import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.RoleRepository;
 import com.saguaro.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -109,9 +110,7 @@ class UserServiceTest {
             // mock responses
             when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);
 
-            assertThrows(InvalidLoginException.class, () -> {
-                userService.login(username, password);
-            });
+            assertThrows(InvalidLoginException.class, () -> userService.login(username, password));
         }
     }
 
@@ -156,9 +155,7 @@ class UserServiceTest {
         void testRegisterExistingUser() {
             when(userRepository.existsByUsername(username)).thenReturn(true);
 
-            assertThrows(InvalidParamException.class, () -> {
-                userService.registerNewUser(username, password, name);
-            });
+            assertThrows(InvalidParamException.class, () -> userService.registerNewUser(username, password, name));
         }
     }
 
@@ -221,6 +218,40 @@ class UserServiceTest {
             assertEquals(name, actual.getName());
             assertEquals(password, actual.getPassword());
             assertEquals(username, actual.getUsername());
+        }
+    }
+
+    @Nested
+    class AddFriendTest {
+
+        String friendUsername;
+        User friend;
+
+        @BeforeEach
+        void setUpAddFriend() {
+            friendUsername = "friend";
+
+            friend = new User();
+            friend.setUsername(friendUsername);
+        }
+
+        @Test
+        void testAddFriendValid() throws Exception {
+            when(userRepository.findUserByUsername(username)).thenReturn(user);
+            when(userRepository.findUserByUsername(friendUsername)).thenReturn(friend);
+            when(userRepository.save(any(User.class))).thenAnswer(ans -> ans.getArgument(0));
+
+            User savedUser = userService.addFriend(friendUsername, username);
+
+            assertTrue(savedUser.getFriends().contains(friend));
+        }
+
+        @Test
+        void testAddFriendDoesNotExist() {
+            when(userRepository.findUserByUsername(username)).thenReturn(user);
+            when(userRepository.findUserByUsername(friendUsername)).thenReturn(null);
+
+            assertThrows(ResourceNotFoundException.class, () -> userService.addFriend(friendUsername, username));
         }
     }
 }
