@@ -67,7 +67,7 @@ class GroceryControllerTest {
             HashMap<Long, String> lists = new HashMap<>();
             lists.put(1L, "name");
 
-            when(groceryService.getOwnedListNamesByUsername(anyString())).thenReturn(lists);
+            when(groceryService.getOwnedListNames(anyString())).thenReturn(lists);
 
             mvc.perform(get("/api/all-lists"))
                     .andExpect(status().isOk())
@@ -122,10 +122,27 @@ class GroceryControllerTest {
             ReflectionTestUtils.setField(newList, "id", 1L);
 
             // getPrinciple() is stubbed to return "username"
-            when(groceryService.createNewList(newList.getName(), "username")).thenReturn(newList);
+            when(groceryService.createNewList(newList.getName(), "username", false)).thenReturn(newList);
 
             mvc.perform(post("/api/create-list")
                             .queryParam("name", "name"))
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateTemplateSuccess() throws Exception {
+            GroceryList newList = new GroceryList();
+            newList.setName("name");
+            newList.setTemplate(true);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            // getPrinciple() is stubbed to return "username"
+            when(groceryService.createNewList(newList.getName(), "username", true)).thenReturn(newList);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("template", "true"))
                     .andExpect(status().isOk())
                     .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
         }

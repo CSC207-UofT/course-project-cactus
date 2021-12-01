@@ -70,7 +70,7 @@ class GroceryServiceTest {
             when(list.getId()).thenReturn(1L, 2L, 3L);
             when(list.getName()).thenReturn("name");
 
-            Map<Long, String> actual = groceryService.getOwnedListNamesByUsername("username");
+            Map<Long, String> actual = groceryService.getOwnedListNames("username");
 
             HashMap<Long, String> expected = new HashMap<>();
             expected.put(1L, "name");
@@ -117,12 +117,26 @@ class GroceryServiceTest {
         void testCreateListSuccess() {
             when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
 
-            GroceryList list = groceryService.createNewList("name", "username");
+            GroceryList list = groceryService.createNewList("name", "username", false);
 
             verify(groceryListRepository, times(1)).save(any(GroceryList.class));
             assertEquals("name", list.getName());
             assertEquals(user, list.getOwner());
             assertEquals(0, list.getItems().size());
+            assertFalse(list.isTemplate());
+        }
+
+        @Test
+        void testCreateTemplateSuccess() {
+            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
+
+            GroceryList list = groceryService.createNewList("name", "username", true);
+
+            verify(groceryListRepository, times(1)).save(any(GroceryList.class));
+            assertEquals("name", list.getName());
+            assertEquals(user, list.getOwner());
+            assertEquals(0, list.getItems().size());
+            assertTrue(list.isTemplate());
         }
     }
 

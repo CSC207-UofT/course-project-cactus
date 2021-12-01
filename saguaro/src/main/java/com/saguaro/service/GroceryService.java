@@ -38,26 +38,52 @@ public class GroceryService {
      * Given a username, gets all the grocery lists that the corresponding user owns. Returns
      * the results as a map from list ID to list name.
      * <p>
-     * Delegates to {@link #getListNamesByUsername(String, boolean)}.
+     * Delegates to {@link #getListNamesByUsername(String, boolean, boolean)}.
      *
      * @param username the String username of the user to fetch for
      * @return a mapping from list ID to list name of all the lists the user owns
      */
-    public Map<Long, String> getOwnedListNamesByUsername(String username) {
-        return getListNamesByUsername(username, false);
+    public Map<Long, String> getOwnedListNames(String username) {
+        return getListNamesByUsername(username, false, false);
     }
 
     /**
      * Given a username, gets all the grocery lists that the corresponding user has shared
      * access to. Returns the results as a map from list ID to list name.
      * <p>
-     * Delegates to {@link #getListNamesByUsername(String, boolean)}.
+     * Delegates to {@link #getListNamesByUsername(String, boolean, boolean)}.
      *
      * @param username the String username of the user to fetch for
      * @return a mapping from list ID to list name of all the lists the user has shared access to
      */
-    public Map<Long, String> getSharedListNamesByUsername(String username) {
-        return getListNamesByUsername(username, true);
+    public Map<Long, String> getSharedListNames(String username) {
+        return getListNamesByUsername(username, true, false);
+    }
+
+    /**
+     * Given a username, gets all the grocery list templates that the corresponding user owns. Returns
+     * the results as a map from list ID to list name.
+     * <p>
+     * Delegates to {@link #getListNamesByUsername(String, boolean, boolean)}.
+     *
+     * @param username the String username of the user to fetch for
+     * @return a mapping from list ID to list name of all the templates the user owns
+     */
+    public Map<Long, String> getOwnedTemplateNames(String username) {
+        return getListNamesByUsername(username, false, true);
+    }
+
+    /**
+     * Given a username, gets all the grocery list templates that the corresponding user has shared
+     * access to. Returns the results as a map from list ID to list name.
+     * <p>
+     * Delegates to {@link #getListNamesByUsername(String, boolean, boolean)}.
+     *
+     * @param username the String username of the user to fetch for
+     * @return a mapping from list ID to list name of all the templates the user has shared access to
+     */
+    public Map<Long, String> getSharedTemplateNames(String username) {
+        return getListNamesByUsername(username, true, true);
     }
 
     /**
@@ -69,13 +95,14 @@ public class GroceryService {
      *                 if the owned lists are desired
      * @return a mapping from list ID to list name of the desired type of list
      */
-    private Map<Long, String> getListNamesByUsername(String username, boolean shared) {
+    private Map<Long, String> getListNamesByUsername(String username, boolean shared, boolean template) {
         User user = userRepository.findUserByUsername(username);
 
         List<GroceryList> lists = shared ? user.getSharedLists() : user.getGroceryLists();
 
         return lists
                 .stream()
+                .filter(template ? GroceryList::isTemplate : p -> !p.isTemplate())
                 .collect(Collectors.toMap(GroceryList::getId, GroceryList::getName));
     }
 
@@ -92,12 +119,13 @@ public class GroceryService {
     }
 
     @Transactional
-    public GroceryList createNewList(String name, String username) {
+    public GroceryList createNewList(String name, String username, boolean template) {
         User user = userRepository.findUserByUsername(username);
 
         GroceryList list = new GroceryList();
         list.setName(name);
         list.setOwner(user);
+        list.setTemplate(template);
 
         return groceryListRepository.save(list);
     }
