@@ -32,7 +32,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_items);
 
-        setTitle("Cereus App : " + this.userInteractFacade.getListName());
+        setTitle(this.userInteractFacade.getListName());
 
         items = userInteractFacade.getGroceryItemNames();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);

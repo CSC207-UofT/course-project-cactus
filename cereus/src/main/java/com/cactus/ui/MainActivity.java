@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Cereus App : Login");
+        setTitle("Login");
 
         // needs to be set before any networking is done
         // since the entry point to the app will pretty much always be here, set this here

@@ -14,7 +14,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"
-            android:src="@drawable/dark_blue_stroke"/>
+            android:background="@color/green_dark"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="@id/listImageBack"
             app:layout_constraintBottom_toBottomOf="@id/listImageBack"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/white_stroke"/>
+            android:background="@color/green_light"/>
     <TextView
             android:text="Lists"
             android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
             app:layout_constraintTop_toBottomOf="@+id/listViewDisplayList"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="30dp"
-            android:src="@drawable/dark_blue_stroke"/>
+            android:background="@color/green_dark"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -76,7 +76,7 @@
             app:layout_constraintTop_toTopOf="@+id/templateImageBack"
             app:layout_constraintBottom_toBottomOf="@+id/templateImageBack"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/white_stroke"/>
+            android:background="@color/green_light"/>
     <TextView
             android:text="Templates"
             android:layout_width="wrap_content"

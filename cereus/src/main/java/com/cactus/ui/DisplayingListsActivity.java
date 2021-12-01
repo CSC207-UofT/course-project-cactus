@@ -29,7 +29,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_lists);
 
-        setTitle("Cereus App : " + this.userInteractFacade.getUserName());
+        setTitle(this.userInteractFacade.getUserName());
 
         CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
