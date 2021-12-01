@@ -236,6 +236,45 @@ class GroceryServiceTest {
         }
 
         @Test
+        void testSaveListNameUnchanged() throws Exception {
+            GroceryList existingList = new GroceryList();
+            existingList.setName("name");
+            existingList.setUser(user);
+
+            GroceryList newList = new GroceryList();
+            newList.setUser(user);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
+            when(groceryListRepository.findGroceryListById(1L)).thenReturn(existingList);
+
+            GroceryList actual = groceryService.saveList(newList, "username");
+
+            verify(groceryListRepository, times(1)).save(existingList);
+            assertEquals("name", actual.getName());
+        }
+
+        @Test
+        void testSaveListNameChanged() throws Exception {
+            GroceryList existingList = new GroceryList();
+            existingList.setName("name");
+            existingList.setUser(user);
+
+            GroceryList newList = new GroceryList();
+            newList.setName("new");
+            newList.setUser(user);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
+            when(groceryListRepository.findGroceryListById(1L)).thenReturn(existingList);
+
+            GroceryList actual = groceryService.saveList(newList, "username");
+
+            verify(groceryListRepository, times(1)).save(existingList);
+            assertEquals("new", actual.getName());
+        }
+
+        @Test
         void testSaveListInvalidId() {
             when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(null);
 

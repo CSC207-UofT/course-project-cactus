@@ -7,8 +7,8 @@ import com.saguaro.exception.ResourceNotFoundException;
 import com.saguaro.repository.GroceryItemRepository;
 import com.saguaro.repository.GroceryListRepository;
 import com.saguaro.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -16,16 +16,22 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class GroceryService {
 
-    @Autowired
     UserRepository userRepository;
 
-    @Autowired
     GroceryListRepository groceryListRepository;
 
-    @Autowired
     GroceryItemRepository groceryItemRepository;
+
+    public GroceryService(UserRepository userRepository,
+                          GroceryListRepository groceryListRepository,
+                          GroceryItemRepository groceryItemRepository) {
+        this.userRepository = userRepository;
+        this.groceryListRepository = groceryListRepository;
+        this.groceryItemRepository = groceryItemRepository;
+    }
 
     public Map<Long, String> getListNamesByUsername(String username) {
         User user = userRepository.findUserByUsername(username);
@@ -47,6 +53,7 @@ public class GroceryService {
         return list;
     }
 
+    @Transactional
     public GroceryList createNewList(String name, String username) {
         User user = userRepository.findUserByUsername(username);
 
@@ -57,6 +64,7 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    @Transactional
     public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
         GroceryList oldList = groceryListRepository.findGroceryListById(list.getId());
@@ -64,6 +72,10 @@ public class GroceryService {
         if (oldList == null || !user.equals(oldList.getUser())) {
             throw new ResourceNotFoundException(GroceryList.class,
                     String.valueOf(list.getId()), user);
+        }
+
+        if (list.getName() != null) {
+            oldList.setName(list.getName());
         }
 
         HashSet<GroceryItem> foundItems = new HashSet<>();
@@ -86,6 +98,36 @@ public class GroceryService {
         return groceryListRepository.save(oldList);
     }
 
+    /**
+     * Set an existing grocery list's name to some new string. This method assumes that the username
+     * provided must be valid, since a user must be authenticated in order to edit a list's name.
+     * <p>
+     * A ResourceNotFoundException is found in the case where the provided list ID does not match
+     * any grocery list belonging to the user with the provided username.
+     * <p>
+     * If the edit is successful, then the newly modified GroceryList is returned.
+     *
+     * @param listId   a long representing the ID of the grocery list to edit
+     * @param newName  the String to set the name of the grocery list to
+     * @param username the username of the user making the edit
+     * @return the newly modified GroceryList object
+     * @throws ResourceNotFoundException if the provided list ID does not match any grocery list belonging
+     *                                   to the user with the provided username
+     */
+    @Transactional
+    public GroceryList editListName(long listId, String newName, String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        GroceryList list = groceryListRepository.findGroceryListById(listId);
+
+        if (list == null || list.getUser() != user) {
+            throw new ResourceNotFoundException(GroceryList.class, String.valueOf(listId), user);
+        }
+
+        list.setName(newName);
+        return groceryListRepository.save(list);
+    }
+
+    @Transactional
     public void removeList(long id, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
         GroceryList list = groceryListRepository.findGroceryListById(id);

@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 /**
@@ -25,6 +26,7 @@ import java.util.Map;
  * @author Charles Wong
  */
 @RestController
+@Validated
 public class GroceryController {
 
     /**
@@ -105,13 +107,13 @@ public class GroceryController {
      * Given some valid GroceryList object, saves the object as the new state of the
      * list. The grocery list to be overwritten is identified by the list ID. The
      * name attribute may be null, in which case the list's name will remain unchanged.
-     *
+     * <p>
      * If the provided list has an ID which does not exist, or the ID corresponds to a
      * list that does not belong to the currently authenticated user, a
      * ResourceNotFoundException is thrown.
-     *
+     * <p>
      * If the save is successful, then the newly saved grocery list is returned.
-     *
+     * <p>
      * Since this endpoint is a protected resource, a valid username must
      * be available from the SecurityContext when this method is invoked.
      *
@@ -125,6 +127,30 @@ public class GroceryController {
         String username = (String) auth.getPrincipal();
 
         return groceryService.saveList(list, username);
+    }
+
+    /**
+     * Edit the name of some existing grocery list. The grocery list to edit is specified by a long representing
+     * an ID, and a non-blank new name must be provided.
+     * <p>
+     * If the provided list ID does not match any grocery list belonging to the currently authenticated user,
+     * a ResourceNotFoundException is thrown.
+     * <p>
+     * If the edit is successful, the newly modified grocery list is returned.
+     *
+     * @param name the String to set the list name to
+     * @param id   a long representing the ID of the grocery list to edit
+     * @return the newly modified GroceryList
+     * @throws ResourceNotFoundException if the provided list ID does not match any grocery list belonging to
+     *                                   the currently authenticated user
+     */
+    @PutMapping("api/edit-list-name")
+    public GroceryList editListName(@RequestParam("name") @NotBlank String name, @RequestParam("id") long id)
+            throws ResourceNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return groceryService.editListName(id, name, username);
     }
 
     /**

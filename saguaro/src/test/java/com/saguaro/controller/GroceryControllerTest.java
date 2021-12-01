@@ -198,7 +198,7 @@ class GroceryControllerTest {
         }
 
         @Test
-        void testSaveListBlankItem() throws Exception {
+        void testSaveListBadRequestBlankItem() throws Exception {
             HashMap<String, String> bad = new HashMap<>();
             bad.put("iid", "1");
             bad.put("items", "[\" \", \"b\"]");
@@ -206,6 +206,42 @@ class GroceryControllerTest {
             mvc.perform(put("/api/save-list")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content((new ObjectMapper()).writeValueAsString(bad)))
+                    .andExpect(status().isBadRequest());
+        }
+    }
+
+    @Nested
+    class EditListNameTest {
+
+        @Test
+        void testEditListNameValid() throws Exception {
+            GroceryList list = new GroceryList();
+            when(groceryService.editListName(anyLong(), anyString(), anyString())).thenReturn(list);
+
+            mvc.perform(put("/api/edit-list-name")
+                            .queryParam("id", "4")
+                            .queryParam("name", "name"))
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(list).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testEditListNameNotFound() throws Exception {
+            when(groceryService.editListName(anyLong(), anyString(), anyString())).thenThrow(ResourceNotFoundException.class);
+
+            mvc.perform(put("/api/edit-list-name")
+                            .queryParam("id", "4")
+                            .queryParam("name", "name"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof
+                            ResourceNotFoundException));
+        }
+
+        @Test
+        void testEditListNameBlankName() throws Exception {
+            mvc.perform(put("/api/save-list")
+                            .queryParam("list", "4")
+                            .queryParam("name", ""))
                     .andExpect(status().isBadRequest());
         }
     }

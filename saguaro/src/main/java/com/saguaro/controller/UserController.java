@@ -28,20 +28,50 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@Validated @RequestBody RegisterPayload payload) throws InvalidParamException {
+    public User register(@Validated(RegisterGroup.class) @RequestBody UserPayload payload) throws InvalidParamException {
         return userService.registerNewUser(payload.username,
                 payload.password,
                 payload.name);
     }
 
-    private static class RegisterPayload {
-        @NotBlank
+    @PostMapping("/logout")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        userService.logout(username);
+    }
+
+    /**
+     * Given a valid UserPayload, replaced the logged-in user's attributes with any
+     * non-null attributes of the payload. Note that a user's username cannot be
+     * changed; the username property of the payload is ignored by this method.
+     *
+     * @param payload the UserPayload containing user attributes to change
+     * @return the newly saved User object
+     */
+    @PutMapping("/api/edit-user")
+    public User editUser(@Validated(EditGroup.class) @RequestBody UserPayload payload) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+
+        return userService.edit(payload.name, payload.password, username);
+    }
+
+    private interface RegisterGroup {}
+    private interface EditGroup {}
+
+    private static class UserPayload {
+        @NullOrNotBlank(groups = EditGroup.class)
+        @NotBlank(groups = RegisterGroup.class)
         String name;
 
-        @NotBlank
+        @NotBlank(groups = RegisterGroup.class)
         String username;
 
-        @NotBlank
+        @NullOrNotBlank(groups = EditGroup.class)
+        @NotBlank(groups = RegisterGroup.class)
         String password;
 
         public void setName(String name) {
@@ -55,14 +85,5 @@ public class UserController {
         public void setPassword(String password) {
             this.password = password;
         }
-    }
-
-    @PostMapping("/logout")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void logout() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) auth.getPrincipal();
-
-        userService.logout(username);
     }
 }

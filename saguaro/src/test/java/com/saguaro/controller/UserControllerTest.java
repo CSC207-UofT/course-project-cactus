@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -197,6 +198,101 @@ class UserControllerTest {
             ).andExpect(status().isNoContent());
 
             verify(userService, times(1)).logout(anyString());
+        }
+    }
+
+    @Nested
+    class TestEditUser {
+
+        SecurityContext securityContext;
+        Authentication authentication;
+
+        User user;
+
+        @BeforeEach
+        void setUpEditUser() {
+            authentication = mock(Authentication.class);
+            securityContext = mock(SecurityContext.class);
+            SecurityContextHolder.setContext(securityContext);
+
+            user = new User();
+            user.setName("name");
+            user.setPassword("password");
+            user.setUsername("username");
+        }
+
+        @Test
+        void testEditUserValid() throws Exception {
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn("username");
+
+            when(userService.edit("name", "password", "username"))
+                    .thenReturn(user);
+
+            mvc.perform(put("/api/edit-user")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"password\":\"password\"" +
+                                    ",\"name\":\"name\"}")
+                            .header("Authentication", "token")
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
+        }
+
+        @Test
+        void testEditUserUsernameIgnored() throws Exception {
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn("username");
+
+            when(userService.edit("name", "password", "username"))
+                    .thenReturn(user);
+
+            mvc.perform(put("/api/edit-user")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\":\"username\"" +
+                                    ",\"password\":\"password\"" +
+                                    ",\"name\":\"name\"}")
+                            .header("Authentication", "token")
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
+        }
+
+        @Test
+        void testEditUserNullFields() throws Exception {
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn("username");
+
+            when(userService.edit(null, null, "username"))
+                    .thenReturn(user);
+
+            mvc.perform(put("/api/edit-user")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{}")
+                            .header("Authentication", "token")
+                    ).andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
+                            jsonUser.write(user).getJson()));
+        }
+
+        @Test
+        void testEditUserBadRequestBlankName() throws Exception {
+            mvc.perform(put("/api/edit-user")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"password\":\"password\"" +
+                            ",\"name\":\"\"}")
+                    .header("Authentication", "token")
+            ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testEditUserBadRequestBlankPassword() throws Exception {
+            mvc.perform(put("/api/edit-user")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"password\":\" \"" +
+                            ",\"name\":\"name\"}")
+                    .header("Authentication", "token")
+            ).andExpect(status().isBadRequest());
         }
     }
 }
