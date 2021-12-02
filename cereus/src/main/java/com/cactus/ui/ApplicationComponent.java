@@ -17,5 +17,9 @@ public interface ApplicationComponent {
 
     void inject(DisplayingItemsActivity displayingItemsActivity);
 
+    void inject(CreateListActivity createListActivity);
+
+    void inject(CreateTemplateActivity createTemplateActivity);
+
     void inject(CustomAdapter customAdapter);
 }

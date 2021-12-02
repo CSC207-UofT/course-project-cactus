@@ -56,8 +56,6 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view;
-        final TextView text;
-        final Button button;
 
         if (convertView == null) {
             view = this.mInflater.inflate(resource, parent, false);
@@ -65,29 +63,16 @@ public abstract class CustomAdapter extends ArrayAdapter<String> {
             view = convertView;
         }
 
-        text = view.findViewById(R.id.text);
-        text.setText(getItem(position));
-
-        button = view.findViewById(R.id.deleteButton);
-
-        button.setOnClickListener(thisView -> buttonClickAction(position));
-
-        view.setOnClickListener(thisView -> viewClickAction(position));
+        this.ViewAction(view, position);
 
         return view;
     }
 
     /***
-     * Action that is called when the button on a specific element is pressed
+     * Actions for a specified list adapter
      *
+     * @param view the current android view
      * @param position index of the chosen element
      */
-    abstract void buttonClickAction(int position);
-
-    /***
-     * Action that is called when the specific element is pressed (the entire element)
-     *
-     * @param position index of the chosen element
-     */
-    abstract void viewClickAction(int position);
+    abstract void ViewAction(View view, int position);
 }

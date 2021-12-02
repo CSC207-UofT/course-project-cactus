@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        setTitle("Cereus App : Signup");
+        setTitle("Signup");
 
         displayOptions();
     }

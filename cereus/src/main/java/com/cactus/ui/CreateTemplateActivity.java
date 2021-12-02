@@ -1,18 +1,18 @@
 package com.cactus.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
 import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 
 /***
- * Represents the activity responsible for displaying the grocery items
+ * Represents the activity responsible for creating templates
  */
-public class DisplayingItemsActivity extends AppCompatActivity {
+public class CreateTemplateActivity extends AppCompatActivity{
 
     private ArrayList<String> items;
 
@@ -22,7 +22,7 @@ public class DisplayingItemsActivity extends AppCompatActivity {
     /***
      * Logic for what to do when this activity is created
      *
-     * On create, the list, buttons, and text fields are initialized
+     * On create, the buttons, and text fields are initialized
      *
      * @param savedInstanceState state variable
      */
@@ -30,11 +30,11 @@ public class DisplayingItemsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_displaying_items);
+        setContentView(R.layout.activity_creating_template);
 
-        setTitle(this.userInteractFacade.getListName());
+        setTitle("Create Template");
 
-        items = userInteractFacade.getGroceryItemNames();
+        items = new ArrayList<String>();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);
@@ -43,49 +43,37 @@ public class DisplayingItemsActivity extends AppCompatActivity {
     }
 
     /***
-     * Display the add item text field and button along with logout button
+     * Display the add template text field and button
      *
      * @param listView listView layout variable
      */
     private void displayOptions(ListView listView) {
+        EditText templateName = findViewById(R.id.templateName);
         EditText itemName = findViewById(R.id.itemName);
+        Button addTemplateButton = findViewById(R.id.addTemplateButton);
         Button addItemButton = findViewById(R.id.addItemButton);
-        Button logoutButton = findViewById(R.id.logoutButtonItem);
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
 
-            if (!items.contains(givenItemName)) {
+            if (!items.contains(givenItemName)){
                 items.add(givenItemName);
                 ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                 itemName.getText().clear();
             } else {
-                Toast.makeText(DisplayingItemsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateTemplateActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
             }
         });
 
-        logoutButton.setOnClickListener(view ->{
-            if (!this.userInteractFacade.addGroceryItems(items)) {
-                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
-            } else if (!userInteractFacade.logout()) {
-                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
+        addTemplateButton.setOnClickListener(view -> {
+            String givenTemplateName = templateName.getText().toString();
+
+            if (this.userInteractFacade.newGroceryList(givenTemplateName)){
+                this.userInteractFacade.setCurrentGroceryList(givenTemplateName);
+                this.userInteractFacade.addGroceryItems(items);
+                Intent intent = new Intent(CreateTemplateActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
             }
         });
     }
-
-    /**
-     * Logic for what to do when this activity is destroyed
-     * <p>
-     * on delete, the items are saved to the database
-     */
-    @Override
-    protected void onDestroy() {
-        if (!this.userInteractFacade.addGroceryItems(items))
-            Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
-        super.onDestroy();
-    }
-
 }
