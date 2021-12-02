@@ -5,6 +5,7 @@ import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.cactus.systems.UserInteractFacade;
@@ -31,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
         ((CereusApplication) getApplicationContext()).appComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setTitle("Login");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // needs to be set before any networking is done
         // since the entry point to the app will pretty much always be here, set this here

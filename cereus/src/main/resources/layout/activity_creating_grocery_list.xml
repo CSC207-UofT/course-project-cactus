@@ -6,12 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CreateListActivity">
-
+    <include layout="@layout/toolbar"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:id="@+id/listImageBack"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"
             android:background="@color/green_dark"/>

@@ -6,16 +6,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+    <include layout="@layout/toolbar"/>
     <EditText
-            android:layout_width="216dp"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/username"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintVertical_bias="0.262" android:hint="Enter your username"/>
+            app:layout_constraintTop_toBottomOf="@+id/welcomeMessage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="60dp"
+            android:hint="Enter your username"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,40 +25,52 @@
             android:ems="10"
             android:id="@+id/password"
             app:layout_constraintTop_toBottomOf="@+id/username"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.489"
-            app:layout_constraintVertical_bias="0.071" android:hint="Enter your password"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="30dp"
+            android:hint="Enter your password"/>
     <Button
             android:text="LogIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintVertical_bias="0.213" android:id="@+id/loginButton"
+            android:id="@+id/loginButton"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@android:color/holo_blue_dark"/>
     <Button
             android:text="SIGNUP"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/signup"
+            android:layout_height="wrap_content"
+            android:id="@+id/signup"
             app:layout_constraintTop_toBottomOf="@+id/loginButton"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintVertical_bias="0.111" android:backgroundTint="@color/design_default_color_error"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/design_default_color_error"/>
     <TextView
-            android:text="Welcome to Cactus Grocery App"
-            android:layout_width="240dp"
-            android:layout_height="47dp" android:id="@+id/welcomeMessage"
-            app:layout_constraintBottom_toTopOf="@+id/username"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:textColor="@color/teal_700"
-            app:layout_constraintHorizontal_bias="0.567" app:layout_constraintVertical_bias="0.488"/>
+            android:text="Welcome to Cactus Grocery App!"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/welcomeMessage"
+            android:textSize="25sp"
+            android:textColor="@color/teal_700"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:layout_marginTop="65dp"/>
     <TextView
             android:text="If you do not have an account, please first signup"
-            android:layout_width="319dp"
-            android:layout_height="56dp" android:id="@+id/signupText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/signupText"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/teal_700"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="80dp"
             app:layout_constraintTop_toBottomOf="@+id/signup"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintVertical_bias="0.207" android:textColor="@color/teal_700"/>
+            />
 </androidx.constraintlayout.widget.ConstraintLayout>
