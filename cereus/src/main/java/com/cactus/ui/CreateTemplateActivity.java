@@ -68,7 +68,7 @@ public class CreateTemplateActivity extends AppCompatActivity{
         addTemplateButton.setOnClickListener(view -> {
             String givenTemplateName = templateName.getText().toString();
 
-            if (this.userInteractFacade.newGroceryList(givenTemplateName)){
+            if (this.userInteractFacade.newGroceryList(givenTemplateName, true)){
                 this.userInteractFacade.setCurrentGroceryList(givenTemplateName);
                 this.userInteractFacade.addGroceryItems(items);
                 Intent intent = new Intent(CreateTemplateActivity.this, DisplayingListsActivity.class);

@@ -215,10 +215,11 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @param nameList a String containing the name of the new grocery list
      * @param token    a string representing the token of the user creating the
      *                 list
+     * @param template a boolean specifying if the created list should be a template
      * @return a GroceryList that corresponds to the GroceryList created
      */
     @Override
-    public GroceryList createGroceryList(String nameList, String token) {
+    public GroceryList createGroceryList(String nameList, String token, boolean template) {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -226,6 +227,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addPathSegment("api")
                 .addPathSegment("create-list")
                 .addQueryParameter("name", nameList)
+                .addQueryParameter("template", Boolean.toString(template))
                 .build();
 
         // Create body

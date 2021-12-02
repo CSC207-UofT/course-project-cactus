@@ -50,7 +50,7 @@ public class CreateListActivity extends AppCompatActivity{
 
         createListButton.setOnClickListener(view -> {
             String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName)) {
+            if (this.userInteractFacade.newGroceryList(givenListName, false)) {
                 Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
             } else {

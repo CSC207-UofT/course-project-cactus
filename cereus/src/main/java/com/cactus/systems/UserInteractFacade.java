@@ -75,11 +75,12 @@ public class UserInteractFacade {
     /**
      * Create GroceryList using GroceryListSystem's newGroceryList method
      *
-     * @param name name of the grocery list that is to be created
+     * @param name     name of the grocery list that is to be created
+     * @param template a boolean specifying if the created list should be a template
      * @return true if grocery list was successfully created
      */
-    public boolean newGroceryList(String name) {
-        return this.groceryListSystem.newGroceryList(name, this.getToken());
+    public boolean newGroceryList(String name, boolean template) {
+        return this.groceryListSystem.newGroceryList(name, this.getToken(), template);
     }
 
     /**

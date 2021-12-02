@@ -36,14 +36,15 @@ public class GroceryListSystem {
      *
      * @param name given name
      * @param token token of user
+     * @param template a boolean specifying if the created list should be a template
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, String token) {
+    public boolean newGroceryList(String name, String token, boolean template) {
         if (currentListNamesMap.get(name) != null) {
             return false;
         }
 
-        GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token);
+        GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token, template);
 
         if (newGroceryList != null) {
             this.currentGroceryListId = newGroceryList.getId();

@@ -11,8 +11,6 @@ public interface GroceryAdapter {
      * Returns a List of GroceryList objects that correspond to the User associated with the given token
      * <p>
      *
-     *
-     *
      * @param token a string representing the user token to fetch lists for
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
@@ -22,7 +20,6 @@ public interface GroceryAdapter {
      * Returns a GroceryList corresponding to the listID given.
      * A user token is required for authorization.
      * <p>
-     *
      *
      * @param listID a long representing the ID of the list to get
      * @param token  a string representing the token of the user the list belongs to
@@ -42,18 +39,17 @@ public interface GroceryAdapter {
     /**
      * Returns a GroceryList with the name given. A user token is required for authorization.
      *
-     *
      * @param nameList a String containing the name of the new grocery list
      * @param token    a string representing the token of the user creating the
      *                 list
+     * @param template a boolean specifying if the created list should be a template
      * @return a GroceryList that corresponds to the GroceryList created
      */
-    GroceryList createGroceryList(String nameList, String token);
+    GroceryList createGroceryList(String nameList, String token, boolean template);
 
     /**
      * Returns whether the list of grocery items are added to the GroceryList that corresponds
      * to the listID given. A user token is required for authorization.
-     *
      *
      * @param items  a List of Strings containing the names of grocery items to set
      * @param listID a long representing the ID of the list to change
@@ -65,7 +61,6 @@ public interface GroceryAdapter {
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.
      * A user token is required for authorization.
-     *
      *
      * @param listID a long representing the ID of the grocery list to delete
      * @param token  a string representing the token of the grocery list's owner
