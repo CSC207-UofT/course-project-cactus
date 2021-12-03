@@ -16,6 +16,7 @@ import java.util.List;
 public class CustomItemSelectAdapter extends CustomAdapter {
 
     public RadioButton currentRadioButton = null;
+    private String currentItemString;
 
     /***
      * Initializes a new CustomItemSelectAdapter
@@ -42,10 +43,25 @@ public class CustomItemSelectAdapter extends CustomAdapter {
         radioButton.setText(getItem(position));
 
         radioButton.setOnClickListener(thisView -> {
-            if(currentRadioButton != null)
+            if(currentRadioButton != null) {
                 currentRadioButton.setChecked(false);
+                this.currentItemString = null;
+            }
+
             radioButton.setChecked(true);
+            this.currentItemString = this.getItem(position);
+
             currentRadioButton = radioButton;
         });
+    }
+
+    /**
+     * Returns the currently selected String in this adapter, or null
+     * if none are selected
+     *
+     * @return the currently selected String
+     */
+    public String getSelectedString() {
+        return this.currentItemString;
     }
 }
