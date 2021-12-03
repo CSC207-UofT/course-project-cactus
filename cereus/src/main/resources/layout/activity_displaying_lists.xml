@@ -43,7 +43,7 @@
             android:backgroundTint="@android:color/holo_red_dark"/>
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="220dp"
             android:id="@+id/listViewDisplayList"
             app:layout_constraintTop_toBottomOf="@+id/listImageBack"
             android:layout_margin="10dp"
@@ -89,7 +89,7 @@
             android:backgroundTint="@android:color/holo_red_dark"/>
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="220dp"
             android:id="@+id/listViewDisplayTemplate"
             app:layout_constraintTop_toBottomOf="@+id/templateImageBack"
             android:layout_margin="10dp"
