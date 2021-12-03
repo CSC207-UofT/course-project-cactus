@@ -162,9 +162,11 @@ public class GroceryListSystem {
      * @return true if the list was successfully deleted and false if list DNE
      */
     public boolean deleteGroceryList(String token, String listName) {
-        // try both, if one works, the other will have no effect anyways
+
         GroceryList removed = this.currentListNamesMap.remove(listName);
-        removed = this.currentTemplateNamesMap.remove(listName);
+        if (removed == null) {
+            removed = this.currentTemplateNamesMap.remove(listName);
+        }
 
         if (removed != null) {
             this.exitGroceryList();
