@@ -48,6 +48,35 @@ public class WebGroceryAdapter implements GroceryAdapter {
         this.client = client;
     }
 
+    private String makeRequestandGetBodyStringIfOK(Request request) {
+        Response response;
+
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (response.code() != HTTP_OK) {
+            return null;
+        }
+
+        ResponseBody responseBody = response.body();
+        String responseString = "";
+
+        try {
+            if (responseBody != null) {
+                responseString = responseBody.string();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return responseString;
+    }
+
 
     /**
      * Returns a List of GroceryList objects that correspond to the User associated with the given token
@@ -75,28 +104,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addHeader("Authorization", token)
                 .build();
 
-        Response response;
+        String responseString = makeRequestandGetBodyStringIfOK(request);
 
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        if (response.code() != HTTP_OK) {
-            return null;
-        }
-
-        ResponseBody responseBody = response.body();
-        String responseString = "";
-
-        try {
-            if (responseBody != null) {
-                responseString = responseBody.string();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (responseString == null) {
             return null;
         }
 
@@ -178,6 +188,14 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .url(url)
                 .addHeader("Authorization", token)
                 .build();
+
+        String responseString = makeRequestandGetBodyStringIfOK(request);
+
+        if (responseString == null) {
+            return null;
+        }
+
+
         try {
             // Make request
             Response response = client.newCall(request).execute();

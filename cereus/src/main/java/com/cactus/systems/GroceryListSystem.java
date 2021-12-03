@@ -7,7 +7,6 @@ import com.cactus.entities.GroceryList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /***
  * Represents the system that controls grocery lists and grocery items
@@ -17,7 +16,7 @@ public class GroceryListSystem {
 
     private final GroceryAdapter groceryAdapter;
 
-    private long currentGroceryListId;
+    private String currentGroceryListName;
 
     private Map<String, GroceryList> currentListNamesMap;
 
@@ -49,7 +48,7 @@ public class GroceryListSystem {
         GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token, template);
 
         if (newGroceryList != null) {
-            this.currentGroceryListId = newGroceryList.getId();
+            this.currentGroceryListName = name;
             this.currentListNamesMap.put(name, newGroceryList);
             return true;
         }
@@ -95,8 +94,9 @@ public class GroceryListSystem {
      * */
     public ArrayList<String> getGroceryItemNames(String token) {
         ArrayList<String> groceryItemNames = new ArrayList<>();
+
         List<GroceryItem> groceryItems =
-                this.groceryAdapter.getGroceryItems(this.currentGroceryListId, token);
+                this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
 
         for (GroceryItem groceryItem : groceryItems) {
             groceryItemNames.add(groceryItem.getName());
@@ -106,13 +106,13 @@ public class GroceryListSystem {
     }
 
     /**
-     * Exit the list by setting the list id to -1
+     * Exit the list by setting the list id to null
      *
      * @return true if there existed a valid list id before exiting
      */
     public boolean exitGroceryList() {
-        if (this.currentGroceryListId != -1) {
-            this.currentGroceryListId = -1;
+        if (this.currentGroceryListName != null) {
+            this.currentGroceryListName = null;
             return true;
         } else {
             return false;
@@ -127,7 +127,8 @@ public class GroceryListSystem {
      * @return true of items were added successfully
      **/
     public boolean addGroceryItems(List<String> items, String token) {
-        return this.groceryAdapter.setGroceryItems(items, this.currentGroceryListId, token);
+        long id = this.getCurrentList().getId();
+        return this.groceryAdapter.setGroceryItems(items, id, token);
     }
 
 
@@ -153,11 +154,10 @@ public class GroceryListSystem {
     /***
      * Return the current list name so that UI can display it.
      *
-     * @param token token of user
      * @return name of grocery list
      * */
-    public String getListName(String token) {
-        return this.groceryAdapter.getGroceryList(this.currentGroceryListId, token).getName();
+    public String getListName() {
+        return this.currentGroceryListName;
     }
 
 
@@ -167,7 +167,20 @@ public class GroceryListSystem {
      * @param listName name of the to be set grocery list
      */
     public void setCurrentGroceryList(String listName) {
-        this.currentGroceryListId = Objects.requireNonNull(this.currentListNamesMap.get(listName)).getId();
+        assert this.currentListNamesMap.containsKey(listName) || this.currentTemplateNamesMap.containsKey(listName);
+
+        this.currentGroceryListName = listName;
+    }
+
+    private GroceryList getCurrentList() {
+        GroceryList list = this.currentListNamesMap.get(this.currentGroceryListName);
+        if (list == null) {
+            list = this.currentTemplateNamesMap.get(this.currentGroceryListName);
+        }
+
+        assert list != null;
+
+        return list;
     }
 
 }

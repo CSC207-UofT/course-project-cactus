@@ -135,7 +135,7 @@ public class UserInteractFacade {
      * @return Name of the current grocery list
      */
     public String getListName() {
-        return this.groceryListSystem.getListName(getToken());
+        return this.groceryListSystem.getListName();
     }
 
     /***
