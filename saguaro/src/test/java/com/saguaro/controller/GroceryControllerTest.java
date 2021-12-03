@@ -142,9 +142,42 @@ class GroceryControllerTest {
 
             mvc.perform(post("/api/create-list")
                             .queryParam("name", "name")
-                            .queryParam("template", "true"))
+                            .queryParam("template", "true")
+                            .queryParam("templateId", "3")) // this should be ignored
                     .andExpect(status().isOk())
                     .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateListWithTemplateSuccess() throws Exception {
+            GroceryItem item = new GroceryItem("apple");
+
+            GroceryList newList = new GroceryList();
+            newList.setName("name");
+            newList.setTemplate(false);
+            newList.addItem(item);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            // getPrinciple() is stubbed to return "username"
+            when(groceryService.createNewList(newList.getName(), "username", 3)).thenReturn(newList);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("templateId", "3")) // this should be ignored
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateListWithTemplateNotFound() throws Exception {
+            when(groceryService.createNewList(anyString(), anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("templateId", "3")) // this should be ignored
+                    .andExpect(status().isNotFound())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof
+                            ResourceNotFoundException));
         }
 
         @Test

@@ -118,6 +118,15 @@ public class GroceryService {
         return list;
     }
 
+    /**
+     * Create a new grocery list with the provided name, for the user specified by username. Additionally mark
+     * this grocery list as being a template or not.
+     *
+     * @param name a String to initialize the new GroceryList's name with
+     * @param username the String username of the user to create this list for
+     * @param template a boolean specifying whether this grocery list should be a template
+     * @return the newly saved GroceryList object
+     */
     @Transactional
     public GroceryList createNewList(String name, String username, boolean template) {
         User user = userRepository.findUserByUsername(username);
@@ -126,6 +135,39 @@ public class GroceryService {
         list.setName(name);
         list.setOwner(user);
         list.setTemplate(template);
+
+        return groceryListRepository.save(list);
+    }
+
+    /**
+     * Create a new grocery list with the provided name, for the user specified by username.
+     * Additionally initialize this grocery list with the items from a template. If the
+     * template does not exist, a ResourceNotFoundException is thrown.
+     *
+     * Note that a grocery list cannot have been marked as a template if it is being initalized with a template.
+     *
+     * @param name a String to initialize the new GroceryList's name with
+     * @param username the String username of the user to create this list for
+     * @param templateId a long representing the ID of the template to initialize this grocery list with
+     * @return the newly saved GroceryList object
+     * @throws ResourceNotFoundException if the provided template id to initialize this grocery list with does not
+     *                                   exist
+     */
+    @Transactional
+    public GroceryList createNewList(String name, String username, long templateId) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        GroceryList template = groceryListRepository.findGroceryListById(templateId);
+
+        if (template == null || !template.isTemplate() || !user.equals(template.getOwner())) {
+            throw new ResourceNotFoundException("Could not find GroceryList template " + templateId + " for user " + user.getUsername());
+        }
+
+        GroceryList list = new GroceryList();
+        list.setName(name);
+        list.setOwner(user);
+        list.setTemplate(false);
+
+        this.mergeLists(list, template);
 
         return groceryListRepository.save(list);
     }
@@ -144,9 +186,26 @@ public class GroceryService {
             oldList.setName(list.getName());
         }
 
+        this.mergeLists(oldList, list);
+
+        return groceryListRepository.save(oldList);
+    }
+
+
+    /**
+     * Given an old grocery list and a new grocery list, replace the items in the old grocery list with
+     * items from the new. Crucially, if an item with the same name (which translates to the same item, in this
+     * application) exists in both lists, then the item in the old list should not be overwritten with a new instance.
+     * Additionally, if an item needs to be added to the old list from the new list, and that item already exists
+     * in the database, then that is the instance that should be saved to the list (do not duplicate existing items).
+     *
+     * @param oldList the GroceryList to save a new state to
+     * @param newList a GroceryList that the old list's state to be modified to mirror
+     */
+    private void mergeLists(GroceryList oldList, GroceryList newList) {
         HashSet<GroceryItem> foundItems = new HashSet<>();
 
-        for (GroceryItem item : list.getItems()) {
+        for (GroceryItem item : newList.getItems()) {
             if (!oldList.getItems().contains(item)) {
                 GroceryItem savedItem = groceryItemRepository.findGroceryItemByName(item.getName());
                 oldList.addItem(Objects.requireNonNullElse(savedItem, item));
@@ -160,8 +219,6 @@ public class GroceryService {
                 oldList.removeItem(oldList.getItems().get(i));
             }
         }
-
-        return groceryListRepository.save(oldList);
     }
 
     /**
