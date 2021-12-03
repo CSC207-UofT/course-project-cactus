@@ -32,7 +32,7 @@ public class CreateListActivity extends AppCompatActivity{
         setTitle("Create List");
 
         CustomItemSelectAdapter customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
-                this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
+                this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayTemplate);
         listView.setAdapter(customItemSelectAdapter);
 
