@@ -272,29 +272,39 @@ public class WebGroceryAdapter implements GroceryAdapter {
     }
 
     /**
-     * Returns a GroceryList with the name given. A user token is required for authorization.
+     * Create a GroceryList with the name given. A user token is required for authorization.
      * <p>
      * nameList and token are sent to the server to create a GroceryList.
      * <p>
-     * If the token does not correspond to the User, null is returned.
+     * If the request fails, return null.
+     * <p>
+     * If a list should not be initialized with a template, provide a templateId of -1.
      *
-     * @param nameList a String containing the name of the new grocery list
-     * @param token    a string representing the token of the user creating the
-     *                 list
-     * @param template a boolean specifying if the created list should be a template
+     * @param nameList   a String containing the name of the new grocery list
+     * @param token      a string representing the token of the user creating the
+     *                   list
+     * @param template   a boolean specifying if the created list should be a template
+     * @param templateId a long representing the template ID to initialize this list with
      * @return a GroceryList that corresponds to the GroceryList created
      */
     @Override
-    public GroceryList createGroceryList(String nameList, String token, boolean template) {
-        HttpUrl url = new HttpUrl.Builder()
+    public GroceryList createGroceryList(String nameList, String token, boolean template, long templateId) {
+        HttpUrl.Builder urlPart = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
                 .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("create-list")
                 .addQueryParameter("name", nameList)
-                .addQueryParameter("template", Boolean.toString(template))
-                .build();
+                .addQueryParameter("template", Boolean.toString(template));
+
+        HttpUrl url;
+        if (templateId > -1) {
+            url = urlPart.addQueryParameter("templateId", String.valueOf(templateId))
+                    .build();
+        } else {
+            url = urlPart.build();
+        }
 
         // Create body
         RequestBody requestBody = RequestBody.create("",
@@ -314,7 +324,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             if (response.code() != HTTP_OK) {
-                System.out.println(response.code());
                 return null;
             }
 

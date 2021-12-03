@@ -16,6 +16,8 @@ public class CreateListActivity extends AppCompatActivity{
     @Inject
     UserInteractFacade userInteractFacade;
 
+    private CustomItemSelectAdapter customItemSelectAdapter;
+
     /***
      * Logic for what to do when this activity is created
      *
@@ -31,7 +33,7 @@ public class CreateListActivity extends AppCompatActivity{
 
         setTitle("Create List");
 
-        CustomItemSelectAdapter customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
+        customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
                 this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayTemplate);
         listView.setAdapter(customItemSelectAdapter);
@@ -49,8 +51,20 @@ public class CreateListActivity extends AppCompatActivity{
         Button createListButton = findViewById(R.id.addListButton);
 
         createListButton.setOnClickListener(view -> {
+
             String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName, false)) {
+
+            boolean success;
+
+            String selectedString = this.customItemSelectAdapter.getSelectedString();
+
+            if (selectedString != null) {
+                success = this.userInteractFacade.newGroceryListWithTemplate(givenListName, selectedString);
+            } else {
+                success = this.userInteractFacade.newGroceryList(givenListName, false);
+            }
+
+            if (success) {
                 Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
             } else {

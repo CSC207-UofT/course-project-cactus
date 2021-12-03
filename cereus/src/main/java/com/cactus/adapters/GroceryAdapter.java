@@ -38,15 +38,21 @@ public interface GroceryAdapter {
     List<GroceryItem> getGroceryItems(long listID, String token);
 
     /**
-     * Returns a GroceryList with the name given. A user token is required for authorization.
+     * Create a new grocery list with the given name. Optionally mark the new list as a template,
+     * or provide a template ID to initialize it with. Note that the template ID to initialize with is
+     * ignored if the list is marked as a template. If a list is not a template, and should not be
+     * initialized with an existing template, provide a templateID of -1.
+     *
+     * A valid authentication token must be provided.
      *
      * @param nameList a String containing the name of the new grocery list
      * @param token    a string representing the token of the user creating the
      *                 list
      * @param template a boolean specifying if the created list should be a template
+     * @param templateId a long representing the template ID to initialize this list with
      * @return a GroceryList that corresponds to the GroceryList created
      */
-    GroceryList createGroceryList(String nameList, String token, boolean template);
+    GroceryList createGroceryList(String nameList, String token, boolean template, long templateId);
 
     /**
      * Returns whether the list of grocery items are added to the GroceryList that corresponds

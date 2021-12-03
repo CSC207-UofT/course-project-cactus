@@ -31,25 +31,48 @@ public class GroceryListSystem {
     }
 
     /***
-     * Given a name from UI, creates a new GroceryList.
-     * It will return false when .createGroceryList() returns a Response with Status that is not "OK"
-     * telling us that the name was already taken
+     * Create a new grocery list with the given name. Optionally mark the new list as a template,
+     * or provide an existing template name to initialize it with. Note that the template name to initialize with is
+     * ignored if the list is marked as a template. If a list is not a template, and should not be
+     * initialized with an existing template, provide a templateName of null.
+     *
+     * A valid authentication token must be provided.
      *
      * @param name given name
      * @param token token of user
      * @param template a boolean specifying if the created list should be a template
+     * @param templateName the String name of the template to initialize this list with, if it is not a template
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, String token, boolean template) {
+    public boolean newGroceryList(String name, String token, boolean template, String templateName) {
         if (currentListNamesMap.containsKey(name)) {
             return false;
         }
 
-        GroceryList newGroceryList = this.groceryAdapter.createGroceryList(name, token, template);
+        GroceryList newGroceryList;
+
+        if (!template && templateName != null) {
+            if (currentTemplateNamesMap.containsKey(templateName)) {
+                newGroceryList = this.groceryAdapter.createGroceryList(name, token, false,
+                        this.currentTemplateNamesMap.get(templateName).getId());
+
+
+            } else {
+                return false;
+            }
+        } else {
+            newGroceryList = this.groceryAdapter.createGroceryList(name, token, template, -1);
+        }
 
         if (newGroceryList != null) {
             this.currentGroceryListName = name;
-            this.currentListNamesMap.put(name, newGroceryList);
+
+            if (template) {
+                this.currentTemplateNamesMap.put(name, newGroceryList);
+            } else {
+                this.currentListNamesMap.put(name, newGroceryList);
+            }
+
             return true;
         }
 
