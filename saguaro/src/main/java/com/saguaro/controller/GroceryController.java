@@ -85,7 +85,13 @@ public class GroceryController {
     }
 
     /**
-     * Create a new grocery list with the given name. Returns a GroceryList object,
+     * Create a new grocery list with the given name. Optionally mark the grocery list as
+     * a template, or initialize the grocery list with the items from an existing template. Note that
+     * these are mutually exclusive, with marking as template having precedence: if a grocery list is marked
+     * as a template, it will not be initialized with an existing template, regardless of if that argument is
+     * provided.
+     * <p>
+     * Returns a GroceryList object,
      * which in this context is simply a vehicle for the following information:
      * <ul>
      *      <li>list ID
@@ -98,9 +104,17 @@ public class GroceryController {
      */
     @PostMapping("api/create-list")
     public GroceryList createNewList(@RequestParam("name") String name,
-                                     @RequestParam(value = "template", required = false, defaultValue = "false") boolean template) {
+                                     @RequestParam(value = "template", required = false, defaultValue = "false") boolean template,
+                                     @RequestParam(value = "templateId", required = false) Long templateId)
+            throws ResourceNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
+
+        if (template) {
+            return groceryService.createNewList(name, username, template);
+        } else if (templateId != null) {
+            return groceryService.createNewList(name, username, templateId);
+        }
 
         return groceryService.createNewList(name, username, template);
     }
