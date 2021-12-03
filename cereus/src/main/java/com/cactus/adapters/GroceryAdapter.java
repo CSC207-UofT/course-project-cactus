@@ -4,6 +4,7 @@ import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GroceryAdapter {
 
@@ -14,7 +15,7 @@ public interface GroceryAdapter {
      * @param token a string representing the user token to fetch lists for
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
-    List<GroceryList> getGroceryListsByUser(String token);
+    List<GroceryList> getGroceryListNamesByUser(String token);
 
     /**
      * Returns a GroceryList corresponding to the listID given.

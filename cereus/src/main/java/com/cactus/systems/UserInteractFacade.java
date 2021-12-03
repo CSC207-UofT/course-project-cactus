@@ -88,8 +88,17 @@ public class UserInteractFacade {
      *
      * @return a list of grocery list names belonging to the current user
      */
-    public ArrayList<String> getGroceryListNames() {
-        return this.groceryListSystem.getGroceryListNames(this.getToken());
+    public List<String> getGroceryListNames() {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), false);
+    }
+
+    /**
+     * Get grocery template names. Delegates to GroceryListSystem.
+     *
+     * @return a list of grocery template names belonging to the current user
+     */
+    public List<String> getGroceryTemplateNames() {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
     /**
@@ -137,5 +146,4 @@ public class UserInteractFacade {
     public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
-
 }

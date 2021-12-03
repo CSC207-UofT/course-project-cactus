@@ -12,6 +12,7 @@ import okhttp3.*;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -27,7 +28,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     private final OkHttpClient client;
 
     @Inject
-    public WebGroceryAdapter() {
+    public WebGroceryAdapter(OkHttpClient client) {
         String tempIp = "192.168.0.127"; // default to this address
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -44,7 +45,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         }
         STATIC_IP = tempIp;
 
-        client = new OkHttpClient();
+        this.client = client;
     }
 
 
@@ -60,12 +61,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
     @Override
-    public List<GroceryList> getGroceryListsByUser(String token) {
+    public List<GroceryList> getGroceryListNamesByUser(String token) {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
                 .port(8080)
                 .addPathSegment("api")
+                .addPathSegment("v2")
                 .addPathSegment("all-lists").build();
 
         Request request = new Request.Builder()
@@ -73,34 +75,80 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addHeader("Authorization", token)
                 .build();
 
-        HashMap<Integer, String> groceryListNames;
+        Response response;
 
         try {
-            // Make request
-            Response response = client.newCall(request).execute();
-            //Parse response
-            ObjectMapper finalMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HTTP_OK) {
-                return null;
-            }
-            groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
-                    new TypeReference<HashMap<Integer, String>>() {
-                    });
-
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
 
-        // Retrieve every list whose id was returned
-        ArrayList<GroceryList> groceryLists = new ArrayList<>();
-        for (HashMap.Entry<Integer, String> mapElement : groceryListNames.entrySet()) {
-            int id = mapElement.getKey();
-            groceryLists.add(getGroceryList(id, token));
+        if (response.code() != HTTP_OK) {
+            return null;
         }
-        return groceryLists;
 
+        ResponseBody responseBody = response.body();
+        String responseString = "";
+
+        try {
+            if (responseBody != null) {
+                responseString = responseBody.string();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Map<String,
+                Map<String,
+                        Map<Long, String>>> fullListNames;
+
+        try {
+            fullListNames = new ObjectMapper()
+                    .readValue(responseString, new TypeReference<Map<String, Map<String, Map<Long, String>>>>() {
+                    });
+            // TypeReference uses same type as fullListNames
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        assert fullListNames.get("lists") != null;
+        assert fullListNames.get("templates") != null;
+
+        assert fullListNames.get("lists").get("owned") != null;
+        assert fullListNames.get("lists").get("shared") != null;
+
+        assert fullListNames.get("templates").get("owned") != null;
+        assert fullListNames.get("templates").get("shared") != null;
+
+        // O(1) appending
+        int size = fullListNames.get("lists").get("owned").size() +
+                fullListNames.get("lists").get("shared").size() +
+                fullListNames.get("templates").get("owned").size() +
+                fullListNames.get("templates").get("shared").size();
+        List<GroceryList> result = new ArrayList<>(size);
+
+        this.parse(fullListNames.get("lists").get("owned"), true, false, result);
+        this.parse(fullListNames.get("lists").get("shared"), false, false, result);
+
+        this.parse(fullListNames.get("templates").get("owned"), true, true, result);
+        this.parse(fullListNames.get("templates").get("shared"), false, true, result);
+
+        return result;
+    }
+
+    private void parse(Map<Long, String> lists, boolean owned, boolean template, List<GroceryList> result) {
+        for (Map.Entry<Long, String> entry : lists.entrySet()) {
+            GroceryList list = new GroceryList();
+            list.setId(entry.getKey());
+            list.setName(entry.getValue());
+            list.setOwned(owned);
+            list.setTemplate(template);
+
+            result.add(list);
+        }
     }
 
     /**
@@ -251,7 +299,12 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 System.out.println(response.code());
                 return null;
             }
-            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+
+            // we created the list, so we must own it
+            GroceryList list = finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+            list.setOwned(true);
+            return list;
+
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
             return null;
