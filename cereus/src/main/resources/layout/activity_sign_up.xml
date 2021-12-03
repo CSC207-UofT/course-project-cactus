@@ -44,10 +44,20 @@
             android:text="SignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/signup_button"
             app:layout_constraintTop_toBottomOf="@+id/newPassword"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:layout_marginTop="75dp"/>
+    <Button
+            android:text="Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_button"
+            app:layout_constraintTop_toBottomOf="@+id/signup_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:layout_marginTop="45dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

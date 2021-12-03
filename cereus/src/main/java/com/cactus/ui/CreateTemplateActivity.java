@@ -2,52 +2,39 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.widget.*;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.cactus.systems.UserInteractFacade;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 
 /***
  * Represents the activity responsible for creating templates
  */
-public class CreateTemplateActivity extends AppCompatActivity{
+public class CreateTemplateActivity extends AbstractActivity{
 
     private ArrayList<String> items;
+    private ListView listView;
 
-    @Inject
-    UserInteractFacade userInteractFacade;
-
-    /***
-     * Logic for what to do when this activity is created
-     *
-     * On create, the buttons, and text fields are initialized
-     *
-     * @param savedInstanceState state variable
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
-        super.onCreate(savedInstanceState);
+    protected AbstractActivity activity(){
+        return this;
+    }
+
+    @Override
+    protected void activitySetup(){
         setContentView(R.layout.activity_creating_template);
 
         setTitle("Create Template");
 
         items = new ArrayList<String>();
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
-        ListView listView = findViewById(R.id.itemViewDisplayItem);
+        listView = findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);
-
-        displayOptions(listView);
     }
 
     /***
      * Display the add template text field and button
-     *
-     * @param listView listView layout variable
      */
-    private void displayOptions(ListView listView) {
+    @Override
+    protected void displayOptions() {
         EditText templateName = findViewById(R.id.templateName);
         EditText itemName = findViewById(R.id.itemName);
         Button addTemplateButton = findViewById(R.id.addTemplateButton);
