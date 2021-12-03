@@ -113,10 +113,13 @@ class GroceryServiceTest {
     @Nested
     class CreateListTest {
 
+        @BeforeEach
+        void setUpCreateList() {
+            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
+        }
+
         @Test
         void testCreateListSuccess() {
-            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
-
             GroceryList list = groceryService.createNewList("name", "username", false);
 
             verify(groceryListRepository, times(1)).save(any(GroceryList.class));
@@ -128,8 +131,6 @@ class GroceryServiceTest {
 
         @Test
         void testCreateTemplateSuccess() {
-            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
-
             GroceryList list = groceryService.createNewList("name", "username", true);
 
             verify(groceryListRepository, times(1)).save(any(GroceryList.class));
@@ -137,6 +138,63 @@ class GroceryServiceTest {
             assertEquals(user, list.getOwner());
             assertEquals(0, list.getItems().size());
             assertTrue(list.isTemplate());
+        }
+    }
+
+    @Nested
+    class CreateListWithTemplateTest {
+
+        GroceryList template;
+
+        GroceryItem item;
+
+        @BeforeEach
+        void setUpCreateListWithTemplate() {
+            this.template = mock(GroceryList.class);
+            this.item = mock(GroceryItem.class);
+        }
+
+        @Test
+        void testCreateListWithTemplateSuccess() throws Exception {
+            when(groceryListRepository.save(any(GroceryList.class))).thenAnswer(ans -> ans.getArgument(0));
+            when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(template);
+            when(template.getOwner()).thenReturn(user);
+            when(template.isTemplate()).thenReturn(true);
+            when(template.getItems()).thenReturn(List.of(item));
+
+            System.out.println(user.equals(template.getOwner()));
+
+            GroceryList list = groceryService.createNewList("name", "username", 1L);
+
+            verify(groceryListRepository, times(1)).save(any(GroceryList.class));
+            assertEquals("name", list.getName());
+            assertEquals(user, list.getOwner());
+            assertEquals(template.getItems(), list.getItems());
+            assertFalse(list.isTemplate());
+        }
+
+        @Test
+        void testCreateListWithTemplateNotFound() {
+            when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(null);
+
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.createNewList("name", "username", 1L));
+        }
+
+        @Test
+        void testCreateListWithTemplateNotTemplate() {
+            when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(template);
+            when(template.isTemplate()).thenReturn(false);
+
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.createNewList("name", "username", 1L));
+        }
+
+        @Test
+        void testCreateListWithTemplateNotOwned() {
+            when(groceryListRepository.findGroceryListById(anyLong())).thenReturn(template);
+            when(template.isTemplate()).thenReturn(true);
+            when(template.getOwner()).thenReturn(mock(User.class));
+
+            assertThrows(ResourceNotFoundException.class, () -> groceryService.createNewList("name", "username", 1L));
         }
     }
 

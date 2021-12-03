@@ -158,7 +158,7 @@ public class GroceryService {
         User user = userRepository.findUserByUsername(username);
         GroceryList template = groceryListRepository.findGroceryListById(templateId);
 
-        if (template == null || !template.isTemplate() || template.getOwner() != user) {
+        if (template == null || !template.isTemplate() || !user.equals(template.getOwner())) {
             throw new ResourceNotFoundException("Could not find GroceryList template " + templateId + " for user " + user.getUsername());
         }
 
