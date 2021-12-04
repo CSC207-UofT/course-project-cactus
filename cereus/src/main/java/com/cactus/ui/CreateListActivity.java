@@ -8,6 +8,8 @@ import android.widget.*;
  */
 public class CreateListActivity extends AbstractActivity{
 
+    private CustomItemSelectAdapter customItemSelectAdapter;
+
     @Override
     protected AbstractActivity activity(){
         return this;
@@ -18,8 +20,8 @@ public class CreateListActivity extends AbstractActivity{
         setContentView(R.layout.activity_creating_grocery_list);
         setTitle("Create List");
 
-        CustomItemSelectAdapter customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
-                this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
+        customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
+                this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayTemplate);
         listView.setAdapter(customItemSelectAdapter);
 
@@ -35,8 +37,20 @@ public class CreateListActivity extends AbstractActivity{
         Button createListButton = findViewById(R.id.addListButton);
 
         createListButton.setOnClickListener(view -> {
+
             String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName)) {
+
+            boolean success;
+
+            String selectedString = this.customItemSelectAdapter.getSelectedString();
+
+            if (selectedString != null) {
+                success = this.userInteractFacade.newGroceryListWithTemplate(givenListName, selectedString);
+            } else {
+                success = this.userInteractFacade.newGroceryList(givenListName, false);
+            }
+
+            if (success) {
                 Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
             } else {

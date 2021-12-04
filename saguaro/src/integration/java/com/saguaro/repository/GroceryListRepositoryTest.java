@@ -35,7 +35,7 @@ public class GroceryListRepositoryTest {
 
         list = new GroceryList();
         list.setName("New List");
-        list.setUser(user);
+        list.setOwner(user);
     }
 
     @Test

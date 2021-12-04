@@ -12,6 +12,7 @@ import okhttp3.*;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -27,7 +28,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
     private final OkHttpClient client;
 
     @Inject
-    public WebGroceryAdapter() {
+    public WebGroceryAdapter(OkHttpClient client) {
         String tempIp = "192.168.0.127"; // default to this address
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -44,7 +45,36 @@ public class WebGroceryAdapter implements GroceryAdapter {
         }
         STATIC_IP = tempIp;
 
-        client = new OkHttpClient();
+        this.client = client;
+    }
+
+    private String makeRequestandGetBodyStringIfOK(Request request) {
+        Response response;
+
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (response.code() != HTTP_OK) {
+            return null;
+        }
+
+        ResponseBody responseBody = response.body();
+        String responseString = "";
+
+        try {
+            if (responseBody != null) {
+                responseString = responseBody.string();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return responseString;
     }
 
 
@@ -60,12 +90,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
     @Override
-    public List<GroceryList> getGroceryListsByUser(String token) {
+    public List<GroceryList> getGroceryListNamesByUser(String token) {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
                 .port(8080)
                 .addPathSegment("api")
+                .addPathSegment("v2")
                 .addPathSegment("all-lists").build();
 
         Request request = new Request.Builder()
@@ -73,34 +104,61 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addHeader("Authorization", token)
                 .build();
 
-        HashMap<Integer, String> groceryListNames;
+        String responseString = makeRequestandGetBodyStringIfOK(request);
 
-        try {
-            // Make request
-            Response response = client.newCall(request).execute();
-            //Parse response
-            ObjectMapper finalMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HTTP_OK) {
-                return null;
-            }
-            groceryListNames = finalMapper.readValue(Objects.requireNonNull(response.body()).string(),
-                    new TypeReference<HashMap<Integer, String>>() {
-                    });
-
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
+        if (responseString == null) {
             return null;
         }
 
-        // Retrieve every list whose id was returned
-        ArrayList<GroceryList> groceryLists = new ArrayList<>();
-        for (HashMap.Entry<Integer, String> mapElement : groceryListNames.entrySet()) {
-            int id = mapElement.getKey();
-            groceryLists.add(getGroceryList(id, token));
-        }
-        return groceryLists;
+        Map<String,
+                Map<String,
+                        Map<Long, String>>> fullListNames;
 
+        try {
+            fullListNames = new ObjectMapper()
+                    .readValue(responseString, new TypeReference<Map<String, Map<String, Map<Long, String>>>>() {
+                    });
+            // TypeReference uses same type as fullListNames
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        assert fullListNames.get("lists") != null;
+        assert fullListNames.get("templates") != null;
+
+        assert fullListNames.get("lists").get("owned") != null;
+        assert fullListNames.get("lists").get("shared") != null;
+
+        assert fullListNames.get("templates").get("owned") != null;
+        assert fullListNames.get("templates").get("shared") != null;
+
+        // O(1) appending
+        int size = fullListNames.get("lists").get("owned").size() +
+                fullListNames.get("lists").get("shared").size() +
+                fullListNames.get("templates").get("owned").size() +
+                fullListNames.get("templates").get("shared").size();
+        List<GroceryList> result = new ArrayList<>(size);
+
+        this.parse(fullListNames.get("lists").get("owned"), true, false, result);
+        this.parse(fullListNames.get("lists").get("shared"), false, false, result);
+
+        this.parse(fullListNames.get("templates").get("owned"), true, true, result);
+        this.parse(fullListNames.get("templates").get("shared"), false, true, result);
+
+        return result;
+    }
+
+    private void parse(Map<Long, String> lists, boolean owned, boolean template, List<GroceryList> result) {
+        for (Map.Entry<Long, String> entry : lists.entrySet()) {
+            GroceryList list = new GroceryList();
+            list.setId(entry.getKey());
+            list.setName(entry.getValue());
+            list.setOwned(owned);
+            list.setTemplate(template);
+
+            result.add(list);
+        }
     }
 
     /**
@@ -130,6 +188,14 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .url(url)
                 .addHeader("Authorization", token)
                 .build();
+
+        String responseString = makeRequestandGetBodyStringIfOK(request);
+
+        if (responseString == null) {
+            return null;
+        }
+
+
         try {
             // Make request
             Response response = client.newCall(request).execute();
@@ -206,27 +272,39 @@ public class WebGroceryAdapter implements GroceryAdapter {
     }
 
     /**
-     * Returns a GroceryList with the name given. A user token is required for authorization.
+     * Create a GroceryList with the name given. A user token is required for authorization.
      * <p>
      * nameList and token are sent to the server to create a GroceryList.
      * <p>
-     * If the token does not correspond to the User, null is returned.
+     * If the request fails, return null.
+     * <p>
+     * If a list should not be initialized with a template, provide a templateId of -1.
      *
-     * @param nameList a String containing the name of the new grocery list
-     * @param token    a string representing the token of the user creating the
-     *                 list
+     * @param nameList   a String containing the name of the new grocery list
+     * @param token      a string representing the token of the user creating the
+     *                   list
+     * @param template   a boolean specifying if the created list should be a template
+     * @param templateId a long representing the template ID to initialize this list with
      * @return a GroceryList that corresponds to the GroceryList created
      */
     @Override
-    public GroceryList createGroceryList(String nameList, String token) {
-        HttpUrl url = new HttpUrl.Builder()
+    public GroceryList createGroceryList(String nameList, String token, boolean template, long templateId) {
+        HttpUrl.Builder urlPart = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
                 .port(8080)
                 .addPathSegment("api")
                 .addPathSegment("create-list")
                 .addQueryParameter("name", nameList)
-                .build();
+                .addQueryParameter("template", Boolean.toString(template));
+
+        HttpUrl url;
+        if (templateId > -1) {
+            url = urlPart.addQueryParameter("templateId", String.valueOf(templateId))
+                    .build();
+        } else {
+            url = urlPart.build();
+        }
 
         // Create body
         RequestBody requestBody = RequestBody.create("",
@@ -246,10 +324,14 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             if (response.code() != HTTP_OK) {
-                System.out.println(response.code());
                 return null;
             }
-            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+
+            // we created the list, so we must own it
+            GroceryList list = finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+            list.setOwned(true);
+            return list;
+
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
             return null;

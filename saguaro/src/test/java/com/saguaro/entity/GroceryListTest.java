@@ -21,7 +21,7 @@ class GroceryListTest {
         GroceryItem item2 = mock(GroceryItem.class);
 
         GroceryList list = new GroceryList();
-        list.setUser(user);
+        list.setOwner(user);
         list.addItem(item1);
         list.addItem(item2);
 
@@ -33,32 +33,32 @@ class GroceryListTest {
     }
 
     @Nested
-    class SetUserTest {
+    class SetOwnerTest {
 
-        private User user;
+        private User owner;
         private GroceryList list;
 
         @BeforeEach
-        void setUpSetUser() {
-            user = mock(User.class);
+        void setUpSetOwner() {
+            owner = mock(User.class);
             list = new GroceryList();
         }
 
         @Test
-        void testNoUser() {
-            list.setUser(user);
+        void testNoOwner() {
+            list.setOwner(owner);
 
-            assertEquals(user, list.getUser());
+            assertEquals(owner, list.getOwner());
         }
 
         @Test
-        void testExistingUser() {
-            ReflectionTestUtils.setField(list, "user", user);
+        void testExistingOwner() {
+            ReflectionTestUtils.setField(list, "owner", owner);
 
             User newUser = mock(User.class);
-            list.setUser(newUser);
+            list.setOwner(newUser);
 
-            assertEquals(user, list.getUser());
+            assertEquals(owner, list.getOwner());
         }
     }
 
@@ -130,6 +130,53 @@ class GroceryListTest {
     }
 
     @Nested
+    class AddSharedUserTest {
+        GroceryList list;
+
+        User owner;
+        User friend;
+
+        @BeforeEach
+        void setUpAddSharedUser() {
+            owner = mock(User.class);
+            friend = mock(User.class);
+
+            list = new GroceryList();
+            list.setOwner(owner);
+        }
+
+        @Test
+        void testAddSharedUser() {
+            list.addSharedUser(friend);
+
+            assertEquals(1, list.getSharedUsers().size());
+            assertTrue(list.getSharedUsers().contains(friend));
+
+            verify(friend, times(1)).addSharedList(list);
+        }
+
+        @Test
+        void testAddSharedUserIsOwner() {
+            list.addSharedUser(owner);
+
+            assertEquals(0, list.getSharedUsers().size());
+            verify(owner, times(0)).addSharedList(list);
+        }
+
+        @Test
+        void testAddSharedUserExists() {
+            ReflectionTestUtils.setField(list, "sharedUsers", new ArrayList<>(List.of(friend)));
+
+            list.addSharedUser(friend);
+
+            assertEquals(1, list.getSharedUsers().size());
+            assertTrue(list.getSharedUsers().contains(friend));
+
+            verify(friend, times(0)).addSharedList(list);
+        }
+    }
+
+    @Nested
     class EqualsTest {
 
         User user;
@@ -143,7 +190,7 @@ class GroceryListTest {
         void testEqualsSameObj() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1L);
 
             assertEquals(first, first);
@@ -153,12 +200,12 @@ class GroceryListTest {
         void testEqualsTrue() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1L);
 
             GroceryList second = new GroceryList();
             second.setName("Harry's List");
-            second.setUser(user);
+            second.setOwner(user);
             ReflectionTestUtils.setField(second, "id", 1L);
 
             assertEquals(first, second);
@@ -168,12 +215,12 @@ class GroceryListTest {
         void testEqualsNullId() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1L);
 
             GroceryList second = new GroceryList();
             second.setName("Harry's List");
-            second.setUser(user);
+            second.setOwner(user);
 
             assertNotEquals(first, second);
         }
@@ -182,13 +229,13 @@ class GroceryListTest {
         void testEqualsNullItems() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1);
             ReflectionTestUtils.setField(first, "items", null);
 
             GroceryList second = new GroceryList();
             second.setName("Harry's List");
-            second.setUser(user);
+            second.setOwner(user);
             ReflectionTestUtils.setField(second, "id", 1);
 
             assertThrows(NullPointerException.class, () -> first.equals(second));
@@ -203,7 +250,7 @@ class GroceryListTest {
         void testEqualsNull() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1L);
 
             assertNotEquals(first, null);
@@ -213,7 +260,7 @@ class GroceryListTest {
         void testEqualsDiffClass() {
             GroceryList first = new GroceryList();
             first.setName("Harry's List");
-            first.setUser(user);
+            first.setOwner(user);
             ReflectionTestUtils.setField(first, "id", 1L);
 
             assertNotEquals(first, new HashMap<Character, String>());

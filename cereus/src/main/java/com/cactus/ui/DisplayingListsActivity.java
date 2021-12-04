@@ -24,10 +24,19 @@ public class DisplayingListsActivity extends AbstractActivity {
 
         setTitle(this.userInteractFacade.getUserName());
 
-        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
+        CustomListAdapter listAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayList);
-        listView.setAdapter(customListAdapter);
+
+        listView.setAdapter(listAdapter);
+
+        // display templates
+        CustomListAdapter templateAdapter = new CustomListAdapter(this, R.layout.list_layout,
+                this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
+        ListView templateView = findViewById(R.id.listViewDisplayTemplate);
+        templateView.setAdapter(templateAdapter);
+
+        displayOptions();
     }
 
     /***

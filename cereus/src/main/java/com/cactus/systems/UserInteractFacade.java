@@ -73,13 +73,27 @@ public class UserInteractFacade {
     // GroceryListSystem methods
 
     /**
-     * Create GroceryList using GroceryListSystem's newGroceryList method
+     * Create a new grocery list with the given name. Additionally specify if this list should be
+     * a template.
      *
-     * @param name name of the grocery list that is to be created
+     * @param name     the String name of the grocery list that is to be created
+     * @param template a boolean specifying if the created list should be a template
      * @return true if grocery list was successfully created
      */
-    public boolean newGroceryList(String name) {
-        return this.groceryListSystem.newGroceryList(name, this.getToken());
+    public boolean newGroceryList(String name, boolean template) {
+        return this.groceryListSystem.newGroceryList(name, this.getToken(), template, null);
+    }
+
+    /**
+     * Create a new grocery list with the given name, and initialize it with a template, specified by name.
+     * This implies that the new grocery list is not a template.
+     *
+     * @param name         the String to initialize the name of the new grocery list to
+     * @param templateName the String name of the template to initialize the new grocery list with
+     * @return true if the specified grocery list was successfully created, false otherwise
+     */
+    public boolean newGroceryListWithTemplate(String name, String templateName) {
+        return this.groceryListSystem.newGroceryList(name, this.getToken(), false, templateName);
     }
 
     /**
@@ -87,8 +101,17 @@ public class UserInteractFacade {
      *
      * @return a list of grocery list names belonging to the current user
      */
-    public ArrayList<String> getGroceryListNames() {
-        return this.groceryListSystem.getGroceryListNames(this.getToken());
+    public List<String> getGroceryListNames() {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), false);
+    }
+
+    /**
+     * Get grocery template names. Delegates to GroceryListSystem.
+     *
+     * @return a list of grocery template names belonging to the current user
+     */
+    public List<String> getGroceryTemplateNames() {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
     /**
@@ -125,7 +148,7 @@ public class UserInteractFacade {
      * @return Name of the current grocery list
      */
     public String getListName() {
-        return this.groceryListSystem.getListName(getToken());
+        return this.groceryListSystem.getListName();
     }
 
     /***
@@ -136,5 +159,4 @@ public class UserInteractFacade {
     public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
-
 }
