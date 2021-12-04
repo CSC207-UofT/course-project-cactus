@@ -2,13 +2,13 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
-
-import java.io.IOException;
 
 /***
  * Represents the activity responsible for the login screen
@@ -26,6 +26,14 @@ public class MainActivity extends AbstractActivity {
     protected void activitySetup(){
         setContentView(R.layout.activity_main);
         setTitle("Login");
+
+        // hide user and home buttons, since we're not logged in yet
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        Button userButton = toolbar.findViewById(R.id.user_button);
+        userButton.setVisibility(View.INVISIBLE);
+
+        Button homeButton = toolbar.findViewById(R.id.home_button);
+        homeButton.setVisibility(View.INVISIBLE);
     }
 
     /***
@@ -62,15 +70,5 @@ public class MainActivity extends AbstractActivity {
                 Toast.makeText(MainActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Override
-    protected void homeButtonAction(){
-        Toast.makeText(MainActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void userButtonAction(){
-        Toast.makeText(MainActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
     }
 }

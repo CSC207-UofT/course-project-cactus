@@ -2,9 +2,11 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
@@ -24,6 +26,15 @@ public class SignupActivity extends AbstractActivity {
     protected void activitySetup(){
         setContentView(R.layout.activity_sign_up);
         setTitle("Signup");
+
+        // repurpose home button to be back button
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        Button backButton = toolbar.findViewById(R.id.home_button);
+        backButton.setText("Back");
+
+        // hide user button, since we're not logged in yet
+        Button userButton = toolbar.findViewById(R.id.user_button);
+        userButton.setVisibility(View.INVISIBLE);
     }
 
     /***
@@ -61,11 +72,7 @@ public class SignupActivity extends AbstractActivity {
 
     @Override
     protected void homeButtonAction(){
-        Toast.makeText(SignupActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void userButtonAction(){
-        Toast.makeText(SignupActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
