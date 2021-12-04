@@ -48,7 +48,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="30dp"
-            android:backgroundTint="@color/design_default_color_error"/>
+            android:backgroundTint="@color/red"/>
     <TextView
             android:text="Welcome to Cactus Grocery App!"
             android:layout_width="match_parent"

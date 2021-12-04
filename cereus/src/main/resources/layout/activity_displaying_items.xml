@@ -54,7 +54,7 @@
             android:layout_marginEnd="10dp"
             app:layout_constraintTop_toTopOf="@+id/itemImage"
             app:layout_constraintBottom_toBottomOf="@+id/itemImage"
-            android:backgroundTint="@android:color/holo_red_dark"/>
+            android:backgroundTint="@color/red"/>
     <ListView
             android:layout_width="match_parent"
             android:layout_height="600dp"
@@ -71,5 +71,5 @@
             android:id="@+id/logoutButtonItem"
             app:layout_constraintLeft_toRightOf="@+id/addItemButton"
             android:layout_marginLeft="10dp" app:layout_constraintTop_toTopOf="@+id/itemName"
-            android:backgroundTint="@color/design_default_color_error" android:textFontWeight="15"/>
+            android:backgroundTint="@color/red" android:textFontWeight="15"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

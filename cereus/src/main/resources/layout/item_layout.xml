@@ -32,5 +32,5 @@
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
-            android:backgroundTint="@android:color/holo_red_dark"/>
+            android:backgroundTint="@color/red"/>
 </RelativeLayout>
