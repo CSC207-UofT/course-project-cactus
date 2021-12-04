@@ -1,13 +1,8 @@
 package com.cactus.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.List;
 
 /***
@@ -17,6 +12,8 @@ public class CustomItemSelectAdapter extends CustomAdapter {
 
     public RadioButton currentRadioButton = null;
     private String currentItemString;
+
+    private RadioButton zerothButton;
 
     /***
      * Initializes a new CustomItemSelectAdapter
@@ -28,6 +25,8 @@ public class CustomItemSelectAdapter extends CustomAdapter {
      */
     public CustomItemSelectAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects, applicationComponent);
+
+        this.objects.add(0, "No template");
     }
 
     /***
@@ -42,14 +41,21 @@ public class CustomItemSelectAdapter extends CustomAdapter {
         radioButton = view.findViewById(R.id.radioButton);
         radioButton.setText(getItem(position));
 
+        if (position == 0) {
+            zerothButton = radioButton;
+            zerothButton.setChecked(true);
+        }
+
         radioButton.setOnClickListener(thisView -> {
+            zerothButton.setChecked(false);
+
             if(currentRadioButton != null) {
                 currentRadioButton.setChecked(false);
                 this.currentItemString = null;
             }
 
             radioButton.setChecked(true);
-            this.currentItemString = this.getItem(position);
+            this.currentItemString = position == 0 ? null : this.getItem(position);
 
             currentRadioButton = radioButton;
         });
