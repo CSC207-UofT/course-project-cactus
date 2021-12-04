@@ -11,6 +11,8 @@ import javax.inject.Singleton;
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
 
+    void inject(AbstractActivity abstractActivity);
+
     void inject(SignupActivity signupActivity);
 
     void inject(DisplayingListsActivity displayingListsActivity);

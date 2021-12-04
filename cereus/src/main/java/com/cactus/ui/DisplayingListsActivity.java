@@ -11,22 +11,15 @@ import javax.inject.Inject;
 /***
  * Represents the activity responsible for displaying the grocery lists
  */
-public class DisplayingListsActivity extends AppCompatActivity {
+public class DisplayingListsActivity extends AbstractActivity {
 
-    @Inject
-    UserInteractFacade userInteractFacade;
-
-    /***
-     * Logic for what to do when this activity is created
-     *
-     * On create, the list, buttons, and text fields are initialized
-     *
-     * @param savedInstanceState state variable
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
-        super.onCreate(savedInstanceState);
+    protected AbstractActivity activity(){
+        return this;
+    }
+
+    @Override
+    protected void activitySetup(){
         setContentView(R.layout.activity_displaying_lists);
 
         setTitle(this.userInteractFacade.getUserName());
@@ -34,6 +27,7 @@ public class DisplayingListsActivity extends AppCompatActivity {
         CustomListAdapter listAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayList);
+
         listView.setAdapter(listAdapter);
 
         // display templates
@@ -48,7 +42,8 @@ public class DisplayingListsActivity extends AppCompatActivity {
     /***
      * Display the add list button
      */
-    private void displayOptions() {
+    @Override
+    protected void displayOptions() {
         Button addListButton = findViewById(R.id.addListButton);
         Button addTemplateButton = findViewById(R.id.addTemplateButton);
 

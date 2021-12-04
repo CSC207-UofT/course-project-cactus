@@ -1,50 +1,36 @@
 package com.cactus.ui;
 
 import android.content.Intent;
-import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.cactus.systems.UserInteractFacade;
-
-import javax.inject.Inject;
 
 /***
  * Represents the activity responsible for displaying the signup page
  */
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AbstractActivity {
 
-    @Inject
-    UserInteractFacade userInteractFacade;
-
-    /***
-     * Logic for what to do when this activity is created
-     *
-     * On create, the signup options are initialized
-     *
-     * @param savedInstanceState state variable
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
-        super.onCreate(savedInstanceState);
+    protected AbstractActivity activity(){
+        return this;
+    }
+
+    @Override
+    protected void activitySetup(){
         setContentView(R.layout.activity_sign_up);
-
         setTitle("Signup");
-
-        displayOptions();
     }
 
     /***
      * Display the signup text boxes and button
      */
-    private void displayOptions() {
+    @Override
+    protected void displayOptions() {
         EditText name = findViewById(R.id.name);
         EditText username = findViewById(R.id.newUsername);
         EditText password = findViewById(R.id.newPassword);
-        Button signupButton = findViewById(R.id.button);
+        Button signupButton = findViewById(R.id.signup_button);
+        Button loginButton = findViewById(R.id.login_button);
 
         signupButton.setOnClickListener(view -> {
             String givenName = name.getText().toString();
@@ -58,5 +44,20 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
             }
         });
+
+        loginButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    protected void homeButtonAction(){
+        Toast.makeText(SignupActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void userButtonAction(){
+        Toast.makeText(SignupActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
     }
 }
