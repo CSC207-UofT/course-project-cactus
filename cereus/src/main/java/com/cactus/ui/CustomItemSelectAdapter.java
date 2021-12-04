@@ -28,6 +28,7 @@ public class CustomItemSelectAdapter extends CustomAdapter {
      */
     public CustomItemSelectAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects, applicationComponent);
+        this.objects.add(0, "Default");
     }
 
     /***
@@ -43,13 +44,18 @@ public class CustomItemSelectAdapter extends CustomAdapter {
         radioButton.setText(getItem(position));
 
         radioButton.setOnClickListener(thisView -> {
-            if(currentRadioButton != null) {
+            if (currentRadioButton != null) {
                 currentRadioButton.setChecked(false);
                 this.currentItemString = null;
             }
 
             radioButton.setChecked(true);
-            this.currentItemString = this.getItem(position);
+
+            if (position == 0){
+                this.currentItemString = null;
+            } else {
+                this.currentItemString = this.getItem(position);
+            }
 
             currentRadioButton = radioButton;
         });
