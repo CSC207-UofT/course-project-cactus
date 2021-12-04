@@ -61,13 +61,22 @@ public class UserInteractFacade {
         return this.userSystem.logout();
     }
 
+    /***
+     * Return the current user's username so that UI can display it.
+     *
+     * @return username of user
+     * */
+    public String getUsername() {
+        return this.userSystem.getUsername();
+    }
+
     /**
      * Get username of current user using UserSystem's getUserName method
      *
      * @return username of current user
      */
-    public String getUserName() {
-        return this.userSystem.getUserName();
+    public String getName() {
+        return this.userSystem.getName();
     }
 
     // GroceryListSystem methods

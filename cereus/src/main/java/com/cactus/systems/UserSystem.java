@@ -95,12 +95,21 @@ public class UserSystem {
         }
     }
 
-    /***
+    /**
+     * Return the current user's username so that UI can display it.
+     *
+     * @return username of user
+     */
+    public String getUsername() {
+        return this.currentUser.getUsername();
+    }
+
+    /**
      * Return the current user's name so that UI can display it.
      *
      * @return name of user
-     * */
-    public String getUserName() {
+     */
+    public String getName() {
         return this.currentUser.getName();
     }
 
