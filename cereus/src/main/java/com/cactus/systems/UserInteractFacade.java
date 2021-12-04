@@ -5,7 +5,6 @@ import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +93,19 @@ public class UserInteractFacade {
      */
     public void editUserDetails(String name, String password) throws InvalidParamException, ServerException {
         this.userSystem.editUser(name, password);
+    }
+
+    /**
+     * Get all the usernames of the friends of the current user as a list
+     *
+     * @return the usernames of the friends of the current user
+     */
+    public List<String> getFriends() {
+        return this.userSystem.getFriends();
+    }
+
+    public void addFriend(String username) throws InvalidParamException, ServerException {
+        this.userSystem.addFriend(username);
     }
 
     // GroceryListSystem methods

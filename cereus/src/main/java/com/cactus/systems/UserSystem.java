@@ -7,6 +7,8 @@ import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.List;
 
 /***
  * Represents the system that controls users
@@ -140,6 +142,19 @@ public class UserSystem {
         }
 
         this.currentUser = this.authAdapter.editUserDetails(name, password, this.getToken());
+    }
+
+    /**
+     * Get all the usernames of the friends of the current user as a list
+     *
+     * @return the usernames of the friends of the current user
+     */
+    public List<String> getFriends() {
+        return this.currentUser.getFriends();
+    }
+
+    public void addFriend(String username) throws InvalidParamException, ServerException {
+        this.currentUser = this.authAdapter.addFriend(username, this.getToken());
     }
 
 }

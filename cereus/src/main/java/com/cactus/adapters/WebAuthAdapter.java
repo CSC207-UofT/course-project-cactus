@@ -261,7 +261,41 @@ public class WebAuthAdapter implements AuthAdapter {
         }
     }
 
-    private String makeRequest(Request request) throws ServerException, InvalidParamException {
+    @Override
+    public User addFriend(String username, String token) throws InvalidParamException, ServerException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("api")
+                .addPathSegment("add-friend")
+                .addQueryParameter("username", username)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .post(RequestBody.create(new byte[0], null))
+                .build();
+
+        String responseBody = makeRequest(request, "Could not add friend " + username);
+
+        try {
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, User.class);
+        } catch (JsonProcessingException e) {
+            // Should always be compatible
+            e.printStackTrace();
+            throw new ServerException(e.getMessage());
+        }
+    }
+
+    private String makeRequest(Request request) throws InvalidParamException, ServerException {
+        return this.makeRequest(request, null);
+    }
+
+    private String makeRequest(Request request, String is4xxMessage) throws ServerException, InvalidParamException {
         Response response;
 
         try {
@@ -272,11 +306,25 @@ public class WebAuthAdapter implements AuthAdapter {
         }
 
         if (is5xx(response.code())) {
-            throw new ServerException(response.message());
+            try {
+                throw new ServerException(response + "\n" + response.body().string());
+            } catch (IOException e) {
+                // doubly bad
+                e.printStackTrace();
+            }
         }
 
         if (is4xx(response.code())) {
-            throw new InvalidParamException("Invalid parameters provided", response.toString());
+            if (is4xxMessage == null) {
+                throw new InvalidParamException("Invalid parameters provided", response.toString());
+            } else {
+                try {
+                    throw new InvalidParamException(is4xxMessage, response + "\n" + response.body().string());
+                } catch (IOException e) {
+                    // doubly bad
+                    e.printStackTrace();
+                }
+            }
         }
 
         try {

@@ -58,7 +58,18 @@ public interface AuthAdapter {
      * @param token    a String authentication token
      * @return the newly edited User object
      * @throws InvalidParamException if invalid parameters were provided
-     * @throws ServerException if the server response contains a 5xx response code
+     * @throws ServerException       if the server response contains a 5xx response code
      */
     User editUserDetails(String name, String password, String token) throws InvalidParamException, ServerException;
+
+    /**
+     * Add a friend for an authenticated user
+     *
+     * @param username the String username of the friend to add
+     * @param token    a String authentication token
+     * @return the newly edited User object
+     * @throws InvalidParamException if the provided username is invalid
+     * @throws ServerException       if some unexpected server or request error occurs
+     */
+    User addFriend(String username, String token) throws InvalidParamException, ServerException;
 }
