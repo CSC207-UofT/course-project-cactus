@@ -32,7 +32,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Button addFriendButton = findViewById(R.id.addFriendButton);
         Button changeButton = findViewById(R.id.changeButton);
         name.setHint(userInteractFacade.getName());
-        //TODO: Add a getName method to UserInteractFacade that returns the user's name.
+        //TODO: Add a getName mthod to UserInteractFacade that returns the user's name.
         logoutButton.setOnClickListener(view -> {
             if (userInteractFacade.logout()) {
                 Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);

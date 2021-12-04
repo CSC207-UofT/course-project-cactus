@@ -6,61 +6,108 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".UserProfileActivity" android:id="@+id/userProfile">
+    <include layout="@layout/toolbar"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/changeImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/green_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/changeImage"
+            app:layout_constraintTop_toTopOf="@id/changeImageBack"
+            app:layout_constraintBottom_toBottomOf="@id/changeImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/green_light"/>
+    <TextView
+            android:text="Change Name / Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/changeText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/changeImage"
+            app:layout_constraintTop_toTopOf="@+id/changeImage"
+            app:layout_constraintBottom_toBottomOf="@+id/changeImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/currentName"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginTop="60dp"/>
+            app:layout_constraintTop_toBottomOf="@id/changeImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="30dp"
+            android:hint="New Name"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/changedPassword"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginBottom="560dp" android:hint="New Password"
-    />
+            app:layout_constraintTop_toBottomOf="@id/currentName"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="30dp"
+            android:hint="New Password"/>
     <Button
             android:text="Change"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/changeButton"
-            app:layout_constraintStart_toEndOf="@+id/currentName" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="96dp"
-            app:layout_constraintHorizontal_bias="0.531"/>
-    <Button
-            android:text="Add Friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/addFriendButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.206" tools:layout_editor_absoluteY="468dp"/>
-    <Button
-            android:text="logout"
-            android:layout_width="101dp"
-            android:layout_height="58dp" android:id="@+id/logoutButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addFriendButton" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.229"
-            app:layout_constraintVertical_bias="0.213"/>
-    <TextView
-            android:text="Change Name /Username"
-            android:layout_width="245dp"
-            android:layout_height="26dp" android:id="@+id/textView2"
-            app:layout_constraintBottom_toTopOf="@+id/currentName"
-            android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.615"
-            android:background="#03A9F4"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/changeButton"
+            app:layout_constraintTop_toBottomOf="@id/changedPassword"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="40dp"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/optionImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/changeButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="30dp"
+            android:background="@color/blue_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/optionImage"
+            app:layout_constraintTop_toTopOf="@id/optionImageBack"
+            app:layout_constraintBottom_toBottomOf="@id/optionImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/blue_light"/>
     <TextView
             android:text="Options"
-            android:layout_width="224dp"
-            android:layout_height="28dp" android:id="@+id/textView3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:background="#009688"
-            app:layout_constraintHorizontal_bias="0.021" tools:layout_editor_absoluteY="332dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/optionText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/optionImage"
+            app:layout_constraintTop_toTopOf="@+id/optionImage"
+            app:layout_constraintBottom_toBottomOf="@+id/optionImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
+    <Button
+            android:text="Add Friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addFriendButton"
+            app:layout_constraintTop_toBottomOf="@+id/optionImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="40dp"/>
+    <Button
+            android:text="logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoutButton"
+            app:layout_constraintTop_toBottomOf="@+id/addFriendButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="40dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
