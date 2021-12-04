@@ -29,7 +29,6 @@ public class UserProfileActivity extends AppCompatActivity {
         EditText name = findViewById(R.id.currentName);
         EditText password = findViewById(R.id.changedPassword);
         Button logoutButton = findViewById(R.id.logoutButton);
-        Button groceryListsButton = findViewById(R.id.groceryListsButton);
         Button addFriendButton = findViewById(R.id.addFriendButton);
         Button changeButton = findViewById(R.id.changeButton);
         name.setHint(userInteractFacade.getName());
@@ -46,13 +45,6 @@ public class UserProfileActivity extends AppCompatActivity {
         addFriendButton.setOnClickListener(view -> {
 
             Intent intent = new Intent(UserProfileActivity.this, AddFriendActivity.class);
-            startActivity(intent);
-
-        });
-
-        groceryListsButton.setOnClickListener(view -> {
-
-            Intent intent = new Intent(UserProfileActivity.this, DisplayingListsActivity.class);
             startActivity(intent);
 
         });
