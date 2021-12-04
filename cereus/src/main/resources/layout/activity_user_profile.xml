@@ -34,27 +34,53 @@
             app:layout_constraintBottom_toBottomOf="@+id/changeImage"
             android:layout_marginStart="20dp"
             android:textSize="20sp"/>
+    <TextView
+            android:text="Name: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameText"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@id/currentName"
+            app:layout_constraintTop_toBottomOf="@+id/changeImageBack"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/currentName"
-            app:layout_constraintTop_toBottomOf="@id/changeImageBack"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/nameText"
+            app:layout_constraintBottom_toBottomOf="@id/nameText"
+            app:layout_constraintLeft_toRightOf="@id/nameText"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="80dp"
             android:hint="New Name"/>
+    <TextView
+            android:text="Password: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordText"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@id/changedPassword"
+            app:layout_constraintTop_toBottomOf="@+id/nameText"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/changedPassword"
-            app:layout_constraintTop_toBottomOf="@id/currentName"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/passwordText"
+            app:layout_constraintBottom_toBottomOf="@id/passwordText"
+            app:layout_constraintLeft_toRightOf="@id/passwordText"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="80dp"
             android:hint="New Password"/>
     <Button
             android:text="Change"
@@ -64,7 +90,8 @@
             app:layout_constraintTop_toBottomOf="@id/changedPassword"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="40dp"
+            android:backgroundTint="@color/red"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -100,7 +127,8 @@
             app:layout_constraintTop_toBottomOf="@+id/optionImageBack"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="40dp"
+            android:backgroundTint="@color/blue_dark"/>
     <Button
             android:text="logout"
             android:layout_width="wrap_content"
@@ -109,5 +137,6 @@
             app:layout_constraintTop_toBottomOf="@+id/addFriendButton"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="40dp"
+            android:backgroundTint="@color/red"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
