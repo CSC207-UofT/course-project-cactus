@@ -40,7 +40,11 @@ public class MainActivity extends AbstractActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
+            password.setText("");
+
             if (userInteractFacade.login(givenUsername, givenPassword)) {
+                username.setText("");
+
                 Intent intent = new Intent(MainActivity.this, DisplayingListsActivity.class);
                 startActivity(intent);
 

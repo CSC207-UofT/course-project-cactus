@@ -3,16 +3,24 @@
  */
 package com.cactus.entities;
 
+import java.util.List;
+
 /**
  * User Entity
  */
 public class User {
 
     private String username;
+
     private String password;
+
     private String name;
+
     private String token;
+
     private long id;
+
+    private List<String> friends;
 
     /**
      * Creates a new User with the given name, username, password and id number.
@@ -77,4 +85,18 @@ public class User {
         this.id = id;
     }
 
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+
+        // some weirdness occurs with empty lists returning with null inside them
+        for (int i = friends.size() - 1; i >= 0; i--) {
+            if (this.friends.get(i) == null) {
+                this.friends.remove(i);
+            }
+        }
+    }
 }

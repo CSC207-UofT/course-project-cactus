@@ -38,7 +38,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
     protected void displayOptions() {
         EditText itemName = findViewById(R.id.itemName);
         Button addItemButton = findViewById(R.id.addItemButton);
-        Button logoutButton = findViewById(R.id.logoutButtonItem);
+//        Button logoutButton = findViewById(R.id.logoutButtonItem);
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
@@ -52,16 +52,16 @@ public class DisplayingItemsActivity extends AbstractActivity {
             }
         });
 
-        logoutButton.setOnClickListener(view ->{
-            if (!this.userInteractFacade.addGroceryItems(items)) {
-                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
-            } else if (!userInteractFacade.logout()) {
-                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        logoutButton.setOnClickListener(view ->{
+//            if (!this.userInteractFacade.addGroceryItems(items)) {
+//                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
+//            } else if (!userInteractFacade.logout()) {
+//                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
+//            } else {
+//                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     /**

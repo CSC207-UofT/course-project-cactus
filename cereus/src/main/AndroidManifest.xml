@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.cactus.ui">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".CereusApplication"
             android:icon="@mipmap/ic_launcher"
@@ -10,6 +12,10 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.UI"
             android:usesCleartextTraffic="true">
+        <activity android:name=".AddFriendActivity">
+        </activity>
+        <activity android:name=".UserProfileActivity">
+        </activity>
         <activity android:name=".SignupActivity">
         </activity>
         <activity android:name=".DisplayingListsActivity">

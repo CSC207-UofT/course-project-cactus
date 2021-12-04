@@ -22,7 +22,7 @@ public class DisplayingListsActivity extends AbstractActivity {
     protected void activitySetup(){
         setContentView(R.layout.activity_displaying_lists);
 
-        setTitle(this.userInteractFacade.getUserName());
+        setTitle(this.userInteractFacade.getName());
 
         CustomListAdapter listAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);

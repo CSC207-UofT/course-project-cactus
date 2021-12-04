@@ -1,5 +1,8 @@
 package com.cactus.systems;
 
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -61,13 +64,48 @@ public class UserInteractFacade {
         return this.userSystem.logout();
     }
 
+    /***
+     * Return the current user's username so that UI can display it.
+     *
+     * @return username of user
+     * */
+    public String getUsername() {
+        return this.userSystem.getUsername();
+    }
+
     /**
      * Get username of current user using UserSystem's getUserName method
      *
      * @return username of current user
      */
-    public String getUserName() {
-        return this.userSystem.getUserName();
+    public String getName() {
+        return this.userSystem.getName();
+    }
+
+    /**
+     * Edit a user's details to be the provided strings. Only the name and password
+     * of a user can be set. If a password of an empty string is provided, it is assumed that
+     * the password remains unchanged. The submitted strings cannot be blank.
+     *
+     * @param name the String name to change to
+     * @param password the String password to change to
+     * @throws InvalidParamException if the provided strings are invalid edits
+     */
+    public void editUserDetails(String name, String password) throws InvalidParamException, ServerException {
+        this.userSystem.editUser(name, password);
+    }
+
+    /**
+     * Get all the usernames of the friends of the current user as a list
+     *
+     * @return the usernames of the friends of the current user
+     */
+    public List<String> getFriends() {
+        return this.userSystem.getFriends();
+    }
+
+    public void addFriend(String username) throws InvalidParamException, ServerException {
+        this.userSystem.addFriend(username);
     }
 
     // GroceryListSystem methods
