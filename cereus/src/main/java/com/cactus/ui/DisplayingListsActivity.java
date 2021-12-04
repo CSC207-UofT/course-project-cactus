@@ -29,46 +29,39 @@ public class DisplayingListsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_displaying_lists);
 
-        setTitle("Cereus App : " + this.userInteractFacade.getUserName());
+        setTitle(this.userInteractFacade.getUserName());
 
-        CustomListAdapter customListAdapter = new CustomListAdapter(this, R.layout.list_layout,
+        CustomListAdapter listAdapter = new CustomListAdapter(this, R.layout.list_layout,
                 this.userInteractFacade.getGroceryListNames(), ((CereusApplication) getApplicationContext()).appComponent);
         ListView listView = findViewById(R.id.listViewDisplayList);
-        listView.setAdapter(customListAdapter);
+        listView.setAdapter(listAdapter);
 
-        displayOptions(listView, customListAdapter);
+        // display templates
+        CustomListAdapter templateAdapter = new CustomListAdapter(this, R.layout.list_layout,
+                this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
+        ListView templateView = findViewById(R.id.listViewDisplayTemplate);
+        templateView.setAdapter(templateAdapter);
+
+        displayOptions();
     }
 
     /***
-     * Display the add list text field and button along with logout button
-     *
-     * @param listView listView layout variable
-     * @param customListAdapter customListAdapter for displaying list
+     * Display the add list button
      */
-    private void displayOptions(ListView listView, CustomListAdapter customListAdapter) {
-        EditText listName = findViewById(R.id.listName);
+    private void displayOptions() {
         Button addListButton = findViewById(R.id.addListButton);
-        Button logoutButton = findViewById(R.id.logoutButtonList);
+        Button addTemplateButton = findViewById(R.id.addTemplateButton);
 
         addListButton.setOnClickListener(view -> {
-            String givenListName = listName.getText().toString();
-            if (this.userInteractFacade.newGroceryList(givenListName)) {
-                customListAdapter.objects.add(givenListName);
-                ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-                listName.getText().clear();
-            } else {
-                Toast.makeText(DisplayingListsActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
-            }
+            Intent intent = new Intent(DisplayingListsActivity.this, CreateListActivity.class);
+            startActivity(intent);
         });
 
-        logoutButton.setOnClickListener(view -> {
-            if (userInteractFacade.logout()) {
-                Intent intent = new Intent(DisplayingListsActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else{
-                Toast.makeText(DisplayingListsActivity.this, "Logout unsuccessful", Toast.LENGTH_LONG).show();
-            }
+        addTemplateButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DisplayingListsActivity.this, CreateTemplateActivity.class);
+            startActivity(intent);
         });
+
     }
 
 }

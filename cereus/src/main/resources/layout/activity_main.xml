@@ -33,7 +33,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintVertical_bias="0.213" android:id="@+id/loginButton"/>
+            app:layout_constraintVertical_bias="0.213" android:id="@+id/loginButton"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
     <Button
             android:text="SIGNUP"
             android:layout_width="wrap_content"
@@ -41,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@+id/loginButton"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintVertical_bias="0.111"/>
+            app:layout_constraintVertical_bias="0.111" android:backgroundTint="@color/design_default_color_error"/>
     <TextView
             android:text="Welcome to Cactus Grocery App"
             android:layout_width="240dp"

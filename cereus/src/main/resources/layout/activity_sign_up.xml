@@ -42,5 +42,5 @@
             app:layout_constraintTop_toBottomOf="@+id/newPassword"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintVertical_bias="0.168"/>
+            app:layout_constraintVertical_bias="0.168" android:backgroundTint="@android:color/holo_blue_dark"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
