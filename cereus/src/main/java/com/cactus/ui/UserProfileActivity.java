@@ -25,7 +25,7 @@ public class UserProfileActivity extends AbstractActivity {
         setContentView(R.layout.activity_user_profile);
 
         // hide user button, since we're already on the activity
-        Toolbar toolbar = findViewById(R.id.cereusToolBar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         Button userButton = toolbar.findViewById(R.id.user_button);
         userButton.setVisibility(View.INVISIBLE);
 
