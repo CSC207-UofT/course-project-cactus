@@ -1,9 +1,10 @@
 package com.cactus.exceptions;
 
 /**
- * This class defines an exception thrown whenever a 5xx server response is returned.
+ * This class defines an exception thrown whenever a 5xx server response is returned, or
+ * when a request fails.
  */
-public class ServerException extends Exception {
+public class ServerException extends CereusException {
 
     /**
      * Constructs an InvalidParamException, with a message to log for debugging.
@@ -11,7 +12,7 @@ public class ServerException extends Exception {
      * @param logMessage a String message intended for logs
      */
     public ServerException(String logMessage) {
-        super(logMessage);
+        super(null, logMessage);
     }
 
     /**
@@ -22,6 +23,7 @@ public class ServerException extends Exception {
      *
      * @return an exception message for the user
      */
+    @Override
     public String getToastMessage() {
         return "Something went wrong. Please try again later.";
     }
