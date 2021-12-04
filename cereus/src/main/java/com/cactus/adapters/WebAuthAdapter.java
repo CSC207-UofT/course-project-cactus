@@ -136,13 +136,7 @@ public class WebAuthAdapter implements AuthAdapter {
         bodyMap.put("password", password);
         bodyMap.put("name", name);
 
-        RequestBody requestBody = null;
-        try {
-            requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(bodyMap),
-                    MediaType.get("application/json; charset=utf-8"));
-        } catch (JsonProcessingException e) {
-            throw new InternalException(e);
-        }
+        RequestBody requestBody = writeMapAsBody(bodyMap);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -199,13 +193,7 @@ public class WebAuthAdapter implements AuthAdapter {
         bodyMap.put("name", name);
         if (password != null) bodyMap.put("password", password);
 
-        RequestBody requestBody = null;
-        try {
-            requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(bodyMap),
-                    MediaType.get("application/json; charset=utf-8"));
-        } catch (JsonProcessingException e) {
-            throw new InternalException(e);
-        }
+        RequestBody requestBody = writeMapAsBody(bodyMap);
 
         Request request = new Request.Builder()
                 .url(url)

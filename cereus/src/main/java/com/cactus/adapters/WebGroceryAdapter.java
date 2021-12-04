@@ -1,15 +1,12 @@
 package com.cactus.adapters;
 
-import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
-import com.cactus.entities.User;
 import com.cactus.exceptions.InternalException;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -21,6 +18,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import static com.cactus.adapters.HttpUtil.makeRequest;
+import static com.cactus.adapters.HttpUtil.writeMapAsBody;
 
 /**
  * The WebGroceryAdapter class implements the GroceryAdapter Interface by interacting with a server
@@ -52,36 +50,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
         this.client = client;
     }
-
-    private String makeRequestandGetBodyStringIfOK(Request request) {
-        Response response;
-
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        if (response.code() != HttpUtil.HTTP_OK) {
-            return null;
-        }
-
-        ResponseBody responseBody = response.body();
-        String responseString = "";
-
-        try {
-            if (responseBody != null) {
-                responseString = responseBody.string();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return responseString;
-    }
-
 
     /**
      * Returns a List of GroceryList objects that correspond to the User associated with the given token
@@ -225,7 +193,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a GroceryList that corresponds to the GroceryList created
      */
     @Override
-    public GroceryList createGroceryList(String nameList, String token, boolean template, long templateId) {
+    public GroceryList createGroceryList(String nameList, String token, boolean template, long templateId) throws InvalidParamException, ServerException {
         HttpUrl.Builder urlPart = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -252,26 +220,18 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addHeader("Authorization", token)
                 .post(requestBody)
                 .build();
+
+        String responseBody = makeRequest(this.client, request, "Cannot create list with these settings");
+
         try {
-            // Make request
-            Response response = client.newCall(request).execute();
-
-            // Parse response
-            ObjectMapper finalMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            if (response.code() != HttpUtil.HTTP_OK) {
-                return null;
-            }
-
-            // we created the list, so we must own it
-            GroceryList list = finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
+            GroceryList list = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, GroceryList.class);
             list.setOwned(true);
-            return list;
 
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
-            return null;
+            return list;
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
         }
     }
 
@@ -288,7 +248,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a boolean indicating whether the grocery items are appended to the list
      */
     @Override
-    public boolean setGroceryItems(List<String> items, long listID, String token) {
+    public void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -297,26 +257,19 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addPathSegment("save-list")
                 .build();
 
-        HashMap<String, Object> save = new HashMap<>();
-        save.put("id", listID);
-        save.put("items", items);
-        try {
-            // Create body
-            RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(save),
-                    MediaType.get("application/json; charset=utf-8"));
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("Authorization", token)
-                    .put(requestBody)
-                    .build();
-            Response response = client.newCall(request).execute();
-            return response.code() == HttpUtil.HTTP_OK;
+        HashMap<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("id", listID);
+        bodyMap.put("items", items);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        RequestBody requestBody = writeMapAsBody(bodyMap);
 
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .put(requestBody)
+                .build();
+
+        makeRequest(this.client, request, "Could not save to this list");
     }
 
     /**
@@ -330,7 +283,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a Response to the grocery list deletion operation
      */
     @Override
-    public boolean deleteGroceryList(long listID, String token) {
+    public void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -339,18 +292,13 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addPathSegment("delete-list")
                 .addQueryParameter("id", String.valueOf(listID))
                 .build();
-        try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("Authorization", token)
-                    .delete()
-                    .build();
-            Response response = client.newCall(request).execute();
 
-            return response.code() == HttpUtil.HTTP_NO_CONTENT;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", token)
+                .delete()
+                .build();
+
+        makeRequest(this.client, request, "Could not delete list");
     }
 }

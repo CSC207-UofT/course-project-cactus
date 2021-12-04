@@ -1,12 +1,17 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.util.Log;
 import android.widget.*;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 /***
  * Represents the activity responsible for creating grocery lists
  */
 public class CreateListActivity extends AbstractActivity{
+
+    private final static String LOG_TAG = "CreateListActivity";
 
     private CustomItemSelectAdapter customItemSelectAdapter;
 
@@ -20,12 +25,17 @@ public class CreateListActivity extends AbstractActivity{
         setContentView(R.layout.activity_creating_grocery_list);
         setTitle("Create List");
 
-        customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
-                this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
-        ListView listView = findViewById(R.id.listViewDisplayTemplate);
-        listView.setAdapter(customItemSelectAdapter);
+        try {
+            customItemSelectAdapter = new CustomItemSelectAdapter(this, R.layout.selectable_template_layout,
+                    this.userInteractFacade.getGroceryTemplateNames(), ((CereusApplication) getApplicationContext()).appComponent);
+            ListView listView = findViewById(R.id.listViewDisplayTemplate);
+            listView.setAdapter(customItemSelectAdapter);
 
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        } catch (InvalidParamException | ServerException e) {
+            Log.d(CreateListActivity.LOG_TAG, e.getMessage());
+            Toast.makeText(CreateListActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     /***
@@ -40,22 +50,21 @@ public class CreateListActivity extends AbstractActivity{
 
             String givenListName = listName.getText().toString();
 
-            boolean success;
-
             String selectedString = this.customItemSelectAdapter.getSelectedString();
 
-            if (selectedString != null) {
-                success = this.userInteractFacade.newGroceryListWithTemplate(givenListName, selectedString);
-            } else {
-                success = this.userInteractFacade.newGroceryList(givenListName, false);
+            try {
+                if (selectedString != null) {
+                    this.userInteractFacade.newGroceryListWithTemplate(givenListName, selectedString);
+                } else {
+                    this.userInteractFacade.newGroceryList(givenListName, false);
+                }
+            } catch (InvalidParamException | ServerException e) {
+                Log.d(CreateListActivity.LOG_TAG, e.getMessage());
+                Toast.makeText(CreateListActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
 
-            if (success) {
-                Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(CreateListActivity.this, "That name is already taken", Toast.LENGTH_LONG).show();
-            }
+            Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
+            startActivity(intent);
         });
 
     }

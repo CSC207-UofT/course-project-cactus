@@ -1,13 +1,10 @@
 package com.cactus.ui;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.*;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /***
@@ -85,8 +82,14 @@ public class DisplayingItemsActivity extends AbstractActivity {
      */
     @Override
     protected void onDestroy() {
-        if (!this.userInteractFacade.addGroceryItems(items))
-            Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
+        try {
+            userInteractFacade.addGroceryItems(items);
+
+        } catch (InvalidParamException | ServerException e) {
+            Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
+            Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+        }
+
         super.onDestroy();
     }
 

@@ -3,11 +3,12 @@ package com.cactus.adapters;
 import com.cactus.exceptions.InternalException;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpUtil {
 
@@ -73,6 +74,15 @@ public class HttpUtil {
         try {
             return response.body().string();
         } catch (IOException e) {
+            throw new InternalException(e);
+        }
+    }
+
+    public static RequestBody writeMapAsBody(Map<?, ?> map) {
+        try {
+            return RequestBody.create((new ObjectMapper()).writeValueAsString(map),
+                    MediaType.get("application/json; charset=utf-8"));
+        } catch (JsonProcessingException e) {
             throw new InternalException(e);
         }
     }
