@@ -6,23 +6,62 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AddFriendActivity">
-
+    <include layout="@layout/toolbar"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/friendImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/green_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/friendImage"
+            app:layout_constraintTop_toTopOf="@id/friendImageBack"
+            app:layout_constraintBottom_toBottomOf="@id/friendImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/green_light"/>
+    <TextView
+            android:text="Friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/friendText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/friendImage"
+            app:layout_constraintTop_toTopOf="@+id/friendImage"
+            app:layout_constraintBottom_toBottomOf="@+id/friendImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
     <EditText
-            android:layout_width="292dp"
-            android:layout_height="51dp"
-            android:inputType="textPersonName"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:inputType="textShortMessage"
             android:ems="10"
             android:id="@+id/friendUsername"
-            app:layout_constraintBottom_toTopOf="@+id/addButton"
-            android:layout_marginBottom="72dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495" app:layout_constraintVertical_bias="0.93"
-            android:hint="Enter Username"/>
+            android:hint="Item name here"
+            app:layout_constraintTop_toTopOf="@id/friendImage"
+            app:layout_constraintBottom_toBottomOf="@id/friendImage"
+            app:layout_constraintRight_toLeftOf="@id/addFriendButton"
+            android:layout_marginEnd="10dp"/>
     <Button
-            android:text="Add"
-            android:layout_width="165dp"
-            android:layout_height="61dp" android:id="@+id/addButton"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.455"
-            android:layout_marginBottom="364dp"/>
+            android:text="Add Friend"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:id="@+id/addFriendButton"
+            app:layout_constraintRight_toRightOf="@+id/friendImage"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toTopOf="@+id/friendImage"
+            app:layout_constraintBottom_toBottomOf="@+id/friendImage"
+            android:backgroundTint="@color/red"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:id="@+id/itemViewDisplayFriend"
+            app:layout_constraintTop_toBottomOf="@+id/friendImageBack"
+            android:layout_margin="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
+            app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

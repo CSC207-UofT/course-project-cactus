@@ -9,24 +9,23 @@ import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 
-public class AddFriendActivity extends AppCompatActivity {
-
-    @Inject
-    UserInteractFacade userInteractFacade;
+public class AddFriendActivity extends AbstractActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_friend);
-
-        setTitle("Add Friend");
-
-        displayOptions();
+    protected AbstractActivity activity(){
+        return this;
     }
 
-    private void displayOptions(){
+    @Override
+    protected void activitySetup(){
+        setContentView(R.layout.activity_add_friend);
+        setTitle("Add Friend");
+    }
+
+    @Override
+    protected void displayOptions(){
         EditText friendUsername = findViewById(R.id.friendUsername);
-        Button addFriendButton = findViewById(R.id.addButton);
+        Button addFriendButton = findViewById(R.id.addFriendButton);
 
         addFriendButton.setOnClickListener(view -> {
             //TODO: Add "addFriend" method to UserInteractFacade so you will be able to handle this case.
