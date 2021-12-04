@@ -2,30 +2,44 @@ package com.cactus.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.*;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /***
  * Represents the activity responsible for displaying the grocery items
  */
 public class DisplayingItemsActivity extends AbstractActivity {
 
-    private ArrayList<String> items;
+    private final static String LOG_TAG = "DisplayItemsActivity";
+
+    private List<String> items;
     private ListView listView;
 
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity activity() {
         return this;
     }
 
     @Override
-    protected void activitySetup(){
+    protected void activitySetup() {
         setContentView(R.layout.activity_displaying_items);
 
         setTitle(this.userInteractFacade.getListName());
 
-        items = userInteractFacade.getGroceryItemNames();
+
+        try {
+            items = userInteractFacade.getGroceryItemNames();
+
+        } catch (InvalidParamException | ServerException e) {
+            Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
+            Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+        }
+
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
         listView = findViewById(R.id.itemViewDisplayItem);
         listView.setAdapter(customItemAdapter);

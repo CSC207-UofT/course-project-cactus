@@ -3,6 +3,8 @@ package com.cactus.systems;
 import com.cactus.adapters.*;
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -115,17 +117,8 @@ public class GroceryListSystem {
      * @param token token of user
      * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryItemNames(String token) {
-        ArrayList<String> groceryItemNames = new ArrayList<>();
-
-        List<GroceryItem> groceryItems =
-                this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
-
-        for (GroceryItem groceryItem : groceryItems) {
-            groceryItemNames.add(groceryItem.getName());
-        }
-
-        return groceryItemNames;
+    public List<String> getGroceryItemNames(String token) throws InvalidParamException, ServerException {
+        return this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
     }
 
     /**

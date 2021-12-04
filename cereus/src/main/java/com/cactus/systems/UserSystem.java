@@ -46,7 +46,11 @@ public class UserSystem {
      * @param password a String containing the password of the new user
      * @return true if a newUser was created
      */
-    public boolean createUser(String name, String username, String password) {
+    public boolean createUser(String name, String username, String password) throws InvalidParamException, ServerException {
+        if (name.trim().isEmpty() || name.trim().isEmpty() || name.trim().isEmpty() ){
+            throw new InvalidParamException("Fields cannot be blank",
+                    "Blank fields. Input was \nName = \"" + name + "\"\nUsername = \"" + username + "\"\nPassword = \"" + password + "\"");
+        }
         return updateCurrentUser(this.authAdapter.create(name, username, password));
     }
 
@@ -59,7 +63,7 @@ public class UserSystem {
      * @param password the password of the user logging in
      * @return true if login was successful, false otherwise
      */
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws InvalidParamException, ServerException {
         return updateCurrentUser(this.authAdapter.login(username, password));
     }
 
@@ -84,18 +88,12 @@ public class UserSystem {
      *
      * @return true if there existed a valid user id before exiting
      */
-    public boolean logout() {
+    public void logout() throws InvalidParamException, ServerException {
         if (this.currentUser != null) {
 
-            if (!authAdapter.logout(this.getToken())) {
-                return false;
-            }
+            authAdapter.logout(this.getToken());
 
             this.currentUser = null;
-            return true;
-
-        } else {
-            return false;
         }
     }
 

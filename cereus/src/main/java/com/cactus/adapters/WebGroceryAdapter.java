@@ -2,8 +2,14 @@ package com.cactus.adapters;
 
 import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
+import com.cactus.entities.User;
+import com.cactus.exceptions.InternalException;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -13,6 +19,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+
+import static com.cactus.adapters.HttpUtil.makeRequest;
 
 /**
  * The WebGroceryAdapter class implements the GroceryAdapter Interface by interacting with a server
@@ -38,7 +46,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 tempIp = props.getProperty("staticIp");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new InternalException(e);
         }
         STATIC_IP = tempIp;
 
@@ -87,7 +95,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
     @Override
-    public List<GroceryList> getGroceryListNamesByUser(String token) {
+    public List<GroceryList> getGroceryListNamesByUser(String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -101,11 +109,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .addHeader("Authorization", token)
                 .build();
 
-        String responseString = makeRequestandGetBodyStringIfOK(request);
-
-        if (responseString == null) {
-            return null;
-        }
+        String responseString = makeRequest(this.client, request);
 
         Map<String,
                 Map<String,
@@ -117,8 +121,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     });
             // TypeReference uses same type as fullListNames
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new InternalException(e);
         }
 
         assert fullListNames.get("lists") != null;
@@ -159,57 +162,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
     }
 
     /**
-     * Returns a GroceryList corresponding to the listID given.
-     * A user token is required for authorization.
-     * <p>
-     * The token and listID are sent to the server to return the GroceryList.
-     * <p>
-     * If the listID does not correspond to an existing list, then null is returned.
-     *
-     * @param listID a long representing the ID of the list to get
-     * @param token  a string representing the token of the user the list belongs to
-     * @return a GroceryList corresponding to the listID given
-     */
-    @Override
-    public GroceryList getGroceryList(long listID, String token) {
-        HttpUrl url = new HttpUrl.Builder()
-                .scheme("http")
-                .host(STATIC_IP)
-                .port(8080)
-                .addPathSegment("api")
-                .addPathSegment("list")
-                .addQueryParameter("id", String.valueOf(listID))
-                .build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", token)
-                .build();
-
-        String responseString = makeRequestandGetBodyStringIfOK(request);
-
-        if (responseString == null) {
-            return null;
-        }
-
-
-        try {
-            // Make request
-            Response response = client.newCall(request).execute();
-            //Parse response
-            ObjectMapper finalMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HttpUtil.HTTP_OK) {
-                return null;
-            }
-            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * Returns a list of GroceryItem objects that belong to the given list
      * <p>
      * The token and listID are sent to the server to return the list of Grocery Items.
@@ -221,7 +173,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a list of GroceryItems in the list
      */
     @Override
-    public List<GroceryItem> getGroceryItems(long listID, String token) {
+    public List<String> getGroceryItems(long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -235,37 +187,25 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .url(url)
                 .addHeader("Authorization", token)
                 .build();
+
+        String responseBody = makeRequest(this.client, request, "Grocery list could not be found");
+
         try {
-            // Make request
-            Response response = client.newCall(request).execute();
-            //Parse response
-            ObjectMapper finalMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HttpUtil.HTTP_OK) {
-                return null;
-            }
-            String responseString = Objects.requireNonNull(response.body()).string();
-            JsonNode jsonNode = finalMapper.readTree(responseString);
-            ArrayNode arrayNode = (ArrayNode) jsonNode.get("items");
-            ArrayList<String> itemNames = new ArrayList<>();
-            for (JsonNode jsonNode1 : arrayNode) {
-                String itemName = jsonNode1.get("name").asText();
-                itemNames.add(itemName);
+            JsonNode root = new ObjectMapper()
+                    .readTree(responseBody);
+
+            ArrayNode items = (ArrayNode) root.get("items");
+            List<String> output = new ArrayList<>();
+
+            for (JsonNode item : items) {
+                String itemName = item.get("name").asText();
+                output.add(itemName);
             }
 
-            // Create GroceryItem objects
-            ArrayList<GroceryItem> groceryItems = new ArrayList<>();
-            for (String name : itemNames) {
-                GroceryItem groceryItem = new GroceryItem(name);
-                groceryItems.add(groceryItem);
-            }
-            return groceryItems;
-
-        } catch (NullPointerException | IOException i) {
-            i.printStackTrace();
-            return null;
+            return output;
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
         }
-
     }
 
     /**

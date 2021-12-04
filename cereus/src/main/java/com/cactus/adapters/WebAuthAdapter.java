@@ -2,6 +2,7 @@ package com.cactus.adapters;
 
 import com.cactus.entities.User;
 
+import com.cactus.exceptions.InternalException;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,8 +21,7 @@ import java.util.Objects;
 
 import java.util.Properties;
 
-import static com.cactus.adapters.HttpUtil.is4xx;
-import static com.cactus.adapters.HttpUtil.is5xx;
+import static com.cactus.adapters.HttpUtil.*;
 
 
 /**
@@ -49,7 +49,7 @@ public class WebAuthAdapter implements AuthAdapter {
                 tempIp = props.getProperty("staticIp");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new InternalException(e);
         }
 
         STATIC_IP = tempIp;
@@ -73,27 +73,31 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public User login(String username, String password) {
-        HashMap<String, String> login = new HashMap<>();
-        login.put("username", username);
-        login.put("password", password);
-
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-
-        HttpUrl url = baseUrl.addPathSegment("login")
+    public User login(String username, String password) throws InvalidParamException, ServerException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("login")
                 .addQueryParameter("username", username)
                 .addQueryParameter("password", password)
                 .build();
 
-        User user;
-        try {
-            user = sendRequest(login, url);
-        } catch (IOException i) {
-            i.printStackTrace();
-            return null;
-        }
-        return user;
+        Request request = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(new byte[0], null))
+                .build();
 
+        String responseBody = makeRequest(this.client, request, "Invalid username/password");
+
+        try {
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, User.class);
+        } catch (JsonProcessingException e) {
+            // Should always be compatible
+            throw new InternalException(e);
+        }
     }
 
     /**
@@ -119,71 +123,43 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public User create(String name, String username, String password) {
-        HashMap<String, String> create = new HashMap<>();
-        create.put("username", username);
-        create.put("password", password);
-        create.put("name", name);
+    public User create(String name, String username, String password) throws InvalidParamException, ServerException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("register")
+                .build();
 
-        HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
-        HttpUrl url = baseUrl.addPathSegment("register").build();
+        HashMap<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("username", username);
+        bodyMap.put("password", password);
+        bodyMap.put("name", name);
 
-        User user;
+        RequestBody requestBody = null;
         try {
-            user = sendRequest(create, url);
-        } catch (IOException i) {
-            i.printStackTrace();
-            return null;
+            requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(bodyMap),
+                    MediaType.get("application/json; charset=utf-8"));
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
         }
-        return user;
 
-    }
-
-    /**
-     * Sends a http request to the server and returns the User object constructed from the results.
-     * <p>
-     * Takes a hashmap of the required properties and constructs them into a string.
-     * The function also takes in a Universal Resource Identifier (URI), the location of where the HttpRequest is sent,
-     * and the string and URI are passed into a HttpRequest.
-     * <p>
-     * After the request is sent, the response is stored in a HttpResponse object. Then the body of the
-     * response is mapped into a User object, which is returned
-     *
-     * @param body a Hashmap containing the required properties for the HttpRequest
-     * @param url  a URL object that gives the location of the request
-     * @return a User object created from the response object
-     * @see User
-     */
-    private User sendRequest(HashMap<String, String> body, HttpUrl url) throws IOException {
-        // Create body
-        RequestBody requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(body),
-                MediaType.get("application/json; charset=utf-8"));
-
-        // Create request
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .build();
 
-        // Make request
-        Response response = this.client.newCall(request).execute();
-
-        // Parse response
-        ObjectMapper finalMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        if (response.code() != HttpUtil.HTTP_OK) {
-            return null;
-        }
+        String responseBody = makeRequest(this.client, request);
 
         try {
-            return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), User.class);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return null;
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, User.class);
+        } catch (JsonProcessingException e) {
+            // Should always be compatible
+            throw new InternalException(e);
         }
     }
-
 
     /**
      * Returns whether the User object with the corresponding token is successfully logged out of the application.
@@ -196,7 +172,7 @@ public class WebAuthAdapter implements AuthAdapter {
      * @see User
      */
     @Override
-    public boolean logout(String token) {
+    public void logout(String token) throws InvalidParamException, ServerException {
         HttpUrl.Builder baseUrl = new HttpUrl.Builder().scheme("http").host(STATIC_IP).port(8080);
         HttpUrl url = baseUrl.addPathSegment("logout").build();
 
@@ -206,27 +182,18 @@ public class WebAuthAdapter implements AuthAdapter {
                 .addHeader("Authorization", token)
                 .build();
 
-        // Make request
-        try {
-            Response response = this.client.newCall(request).execute();
-
-            return response.code() == HttpUtil.HTTP_NO_CONTENT;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        makeRequest(this.client, request);
     }
 
     @Override
     public User editUserDetails(String name, String password, String token) throws InvalidParamException, ServerException {
-        HttpUrl.Builder builder = new HttpUrl.Builder()
+        HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
                 .port(8080)
                 .addPathSegment("api")
-                .addPathSegment("edit-user");
-
-        HttpUrl url = builder.build();
+                .addPathSegment("edit-user")
+                .build();
 
         Map<String, String> bodyMap = new HashMap<>();
         bodyMap.put("name", name);
@@ -237,9 +204,7 @@ public class WebAuthAdapter implements AuthAdapter {
             requestBody = RequestBody.create((new ObjectMapper()).writeValueAsString(bodyMap),
                     MediaType.get("application/json; charset=utf-8"));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            // should never happen, but if it does disguise as server error
-            throw new ServerException("Failed to write JSON");
+            throw new InternalException(e);
         }
 
         Request request = new Request.Builder()
@@ -248,7 +213,7 @@ public class WebAuthAdapter implements AuthAdapter {
                 .put(requestBody)
                 .build();
 
-        String responseBody = this.makeRequest(request);
+        String responseBody = makeRequest(this.client, request);
 
         try {
             return new ObjectMapper()
@@ -256,8 +221,7 @@ public class WebAuthAdapter implements AuthAdapter {
                     .readValue(responseBody, User.class);
         } catch (JsonProcessingException e) {
             // Should always be compatible
-            e.printStackTrace();
-            throw new ServerException(e.getMessage());
+            throw new InternalException(e);
         }
     }
 
@@ -278,7 +242,7 @@ public class WebAuthAdapter implements AuthAdapter {
                 .post(RequestBody.create(new byte[0], null))
                 .build();
 
-        String responseBody = makeRequest(request, "Could not add friend " + username);
+        String responseBody = makeRequest(this.client, request, "Could not add friend " + username);
 
         try {
             return new ObjectMapper()
@@ -286,57 +250,7 @@ public class WebAuthAdapter implements AuthAdapter {
                     .readValue(responseBody, User.class);
         } catch (JsonProcessingException e) {
             // Should always be compatible
-            e.printStackTrace();
-            throw new ServerException(e.getMessage());
-        }
-    }
-
-    private String makeRequest(Request request) throws InvalidParamException, ServerException {
-        return this.makeRequest(request, null);
-    }
-
-    private String makeRequest(Request request, String is4xxMessage) throws ServerException, InvalidParamException {
-        Response response;
-
-        try {
-            response = this.client.newCall(request).execute();
-
-        } catch (IOException e) {
-            throw new ServerException(e.getMessage());
-        }
-
-        if (is5xx(response.code())) {
-            try {
-                throw new ServerException(response + "\n" + response.body().string());
-            } catch (IOException e) {
-                // doubly bad
-                e.printStackTrace();
-            }
-        }
-
-        if (is4xx(response.code())) {
-            String body = "";
-            try {
-                body = response.body().string();
-            } catch (IOException e) {
-                // doubly bad
-                e.printStackTrace();
-            }
-
-            // return server message if no dedicated message is specified
-            if (is4xxMessage == null) {
-                throw new InvalidParamException(body, response + "\n" + body);
-            } else {
-                throw new InvalidParamException(is4xxMessage, response + "\n" + body);
-            }
-        }
-
-        try {
-            return response.body().string();
-        } catch (IOException e) {
-            // this should never be invoked, so if it does i want to know what happened, print a stack trace
-            e.printStackTrace();
-            throw new ServerException(e.getMessage());
+            throw new InternalException(e);
         }
     }
 }

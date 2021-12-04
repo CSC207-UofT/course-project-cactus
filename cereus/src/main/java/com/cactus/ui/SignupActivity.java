@@ -1,14 +1,19 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 /***
  * Represents the activity responsible for displaying the signup page
  */
 public class SignupActivity extends AbstractActivity {
+
+    private final static String LOG_TAG = "SignupActivity";
 
     @Override
     protected AbstractActivity activity(){
@@ -37,11 +42,14 @@ public class SignupActivity extends AbstractActivity {
             String givenUsername = username.getText().toString();
             String givenPassword = password.getText().toString();
 
-            if (userInteractFacade.createUser(givenName, givenUsername, givenPassword)) {
+            try {
+                userInteractFacade.createUser(givenName, givenUsername, givenPassword);
+
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else {
-                Toast.makeText(SignupActivity.this, "The username already exists", Toast.LENGTH_LONG).show();
+            } catch (InvalidParamException | ServerException e) {
+                Log.d(SignupActivity.LOG_TAG, e.getMessage());
+                Toast.makeText(SignupActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

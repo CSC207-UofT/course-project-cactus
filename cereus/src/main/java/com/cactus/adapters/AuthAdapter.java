@@ -17,7 +17,7 @@ public interface AuthAdapter {
      * @return a User object that corresponds to the given parameters
      * @see User
      */
-    User login(String username, String password);
+    User login(String username, String password) throws InvalidParamException, ServerException;
 
 
     /**
@@ -34,7 +34,7 @@ public interface AuthAdapter {
      * @return a User object created with the given parameters
      * @see User
      */
-    User create(String name, String username, String password);
+    User create(String name, String username, String password) throws InvalidParamException, ServerException;
 
 
     /**
@@ -44,7 +44,7 @@ public interface AuthAdapter {
      * @return whether the User corresponding to the token is logged out or not
      * @see User
      */
-    boolean logout(String token);
+    void logout(String token) throws InvalidParamException, ServerException;
 
     /**
      * Edit a user's details. If null is provided for the password, then the password
