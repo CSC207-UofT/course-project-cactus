@@ -26,19 +26,14 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void displayOptions(){
-        //TODO: Delete unuseful buttons and convert the three change buttons to one change button.
         EditText name = findViewById(R.id.currentName);
-        EditText username = findViewById(R.id.currentUsername);
-        EditText newPassword = findViewById(R.id.changedPassword);
+        EditText password = findViewById(R.id.changedPassword);
         Button logoutButton = findViewById(R.id.logoutButton);
         Button groceryListsButton = findViewById(R.id.groceryListsButton);
         Button addFriendButton = findViewById(R.id.addFriendButton);
-        Button changePasswordButton = findViewById(R.id.changePasswordButton);
-        Button changeUsernameButton = findViewById(R.id.changeUsernameButton);
-        Button changeNameButton = findViewById(R.id.changeNameButton);
-        username.setHint(userInteractFacade.getUserName());
+        Button changeButton = findViewById(R.id.changeButton);
+        name.setHint(userInteractFacade.getName());
         //TODO: Add a getName method to UserInteractFacade that returns the user's name.
-        //name.setHint(userInteractFacade.getName());
         logoutButton.setOnClickListener(view -> {
             if (userInteractFacade.logout()) {
                 Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
@@ -62,21 +57,21 @@ public class UserProfileActivity extends AppCompatActivity {
 
         });
 
-        changeNameButton.setOnClickListener(view -> {
-            String givenName = name.getText().toString();
-            //userInteractFacade.changeName(givenName);
+        changeButton.setOnClickListener(view -> {
+            String newName = name.getText().toString();
+            String newPassword = password.getText().toString();
+            if ((!newName.equals("")) & (!newPassword.equals(""))) {
+            //TODO: create a changeName and changePassword methods in the userInteractFacade
+                userInteractFacade.changeName(newName);
+                userInteractFacade.changePassword(newPassword);
+            } else if (!newName.equals("")){
+                userInteractFacade.changeName(newName);
+            } else if (!newPassword.equals("")) {
+                userInteractFacade.changePassword(newPassword);
+            }else{
+                Toast.makeText(UserProfileActivity.this, "Enter new username or password", Toast.LENGTH_LONG).show();
+            }
         });
-
-        changeUsernameButton.setOnClickListener(view -> {
-            String givenUsername = username.getText().toString();
-            //userInteractFacade.changeUsername(givenUsername);
-        });
-
-        changePasswordButton.setOnClickListener(view -> {
-            String givenNewPassword = newPassword.getText().toString();
-            //userInteractFacade.changePassword(givenPassword, newPassword);
-        });
-
 
     }
 }
