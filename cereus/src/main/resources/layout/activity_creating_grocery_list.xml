@@ -5,24 +5,87 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".CreatingGroceryListActivity">
-
-    <EditText
+        tools:context=".CreateListActivity">
+    <include layout="@layout/toolbar"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/listImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/green_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/listImage"
+            app:layout_constraintTop_toTopOf="@id/listImageBack"
+            app:layout_constraintBottom_toBottomOf="@id/listImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/green_light"/>
+    <TextView
+            android:text="List Name:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:id="@+id/listText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/listImage"
+            app:layout_constraintTop_toTopOf="@+id/listImage"
+            app:layout_constraintBottom_toBottomOf="@+id/listImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
+    <EditText
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:inputType="textShortMessage"
             android:ems="10"
-            android:id="@+id/groceryListName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.349"
-            android:hint="Enter grocery list name"/>
+            android:id="@+id/listName"
+            android:hint="Enter here"
+            app:layout_constraintTop_toTopOf="@id/listImage"
+            app:layout_constraintBottom_toBottomOf="@id/listImage"
+            app:layout_constraintRight_toLeftOf="@id/addListButton"
+            app:layout_constraintLeft_toRightOf="@id/listText"/>
     <Button
-            android:text="Create Grocery List"
+            android:text="Create"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/addListNameButton"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groceryListName"
-            app:layout_constraintHorizontal_bias="0.498" app:layout_constraintVertical_bias="0.253"/>
+            android:layout_height="40dp"
+            android:id="@+id/addListButton" app:layout_constraintRight_toRightOf="@+id/listImage"
+            android:layout_marginEnd="10dp" app:layout_constraintTop_toTopOf="@+id/listImage" app:layout_constraintBottom_toBottomOf="@+id/listImage"
+            android:backgroundTint="@color/red"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/templateImageBack"
+            app:layout_constraintTop_toBottomOf="@+id/listImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="15dp"
+            android:background="@color/blue_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/templateImage"
+            app:layout_constraintTop_toTopOf="@+id/templateImageBack"
+            app:layout_constraintBottom_toBottomOf="@+id/templateImageBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/blue_light"/>
+    <TextView
+            android:text="Pick a template"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/templateText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/templateImage"
+            app:layout_constraintTop_toTopOf="@+id/templateImage"
+            app:layout_constraintBottom_toBottomOf="@+id/templateImage"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/listViewDisplayTemplate"
+            app:layout_constraintTop_toBottomOf="@+id/templateImageBack"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

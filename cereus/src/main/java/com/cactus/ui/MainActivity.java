@@ -4,41 +4,28 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.cactus.systems.UserInteractFacade;
-
-import javax.inject.Inject;
 
 /***
  * Represents the activity responsible for the login screen
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AbstractActivity {
 
-    @Inject
-    UserInteractFacade userInteractFacade;
-
-    /***
-     * Logic for what to do when this activity is created
-     *
-     * On create, the login boxes, buttons and signup button are initialized
-     *
-     * @param savedInstanceState state variable
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ((CereusApplication) getApplicationContext()).appComponent.inject(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("Cereus App : Login");
+    protected AbstractActivity activity(){
+        return this;
+    }
 
-        displayOptions();
+    @Override
+    protected void activitySetup(){
+        setContentView(R.layout.activity_main);
+        setTitle("Login");
     }
 
     /***
      * Display the login options and signup button
      */
-    private void displayOptions() {
+    @Override
+    protected void displayOptions() {
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
@@ -61,5 +48,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Invalid username/password", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void homeButtonAction(){
+        Toast.makeText(MainActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void userButtonAction(){
+        Toast.makeText(MainActivity.this, "Please Login first", Toast.LENGTH_LONG).show();
     }
 }

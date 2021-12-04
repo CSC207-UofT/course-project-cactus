@@ -8,7 +8,6 @@ import okhttp3.*;
 import okhttp3.Response;
 
 import javax.inject.Inject;
-import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +34,15 @@ public class WebAuthAdapter implements AuthAdapter {
         String tempIp = "192.168.0.127"; // default to this address
 
         try {
-            InputStream input = new FileInputStream("src/main/resources/network.properties");
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream input = classloader.getResourceAsStream("network.properties");
 
-            Properties props = new Properties();
-            props.load(input);
+            if (input != null) {
+                Properties props = new Properties();
+                props.load(input);
 
-            tempIp = props.getProperty("staticIp");
+                tempIp = props.getProperty("staticIp");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,6 +199,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
         Request request = new Request.Builder()
                 .url(url)
+                .post(RequestBody.create("", null))
                 .addHeader("Authorization", token)
                 .build();
 

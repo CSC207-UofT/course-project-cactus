@@ -67,7 +67,7 @@ class GroceryControllerTest {
             HashMap<Long, String> lists = new HashMap<>();
             lists.put(1L, "name");
 
-            when(groceryService.getListNamesByUsername(anyString())).thenReturn(lists);
+            when(groceryService.getOwnedListNames(anyString())).thenReturn(lists);
 
             mvc.perform(get("/api/all-lists"))
                     .andExpect(status().isOk())
@@ -122,12 +122,62 @@ class GroceryControllerTest {
             ReflectionTestUtils.setField(newList, "id", 1L);
 
             // getPrinciple() is stubbed to return "username"
-            when(groceryService.createNewList(newList.getName(), "username")).thenReturn(newList);
+            when(groceryService.createNewList(newList.getName(), "username", false)).thenReturn(newList);
 
             mvc.perform(post("/api/create-list")
                             .queryParam("name", "name"))
                     .andExpect(status().isOk())
                     .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateTemplateSuccess() throws Exception {
+            GroceryList newList = new GroceryList();
+            newList.setName("name");
+            newList.setTemplate(true);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            // getPrinciple() is stubbed to return "username"
+            when(groceryService.createNewList(newList.getName(), "username", true)).thenReturn(newList);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("template", "true")
+                            .queryParam("templateId", "3")) // this should be ignored
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateListWithTemplateSuccess() throws Exception {
+            GroceryItem item = new GroceryItem("apple");
+
+            GroceryList newList = new GroceryList();
+            newList.setName("name");
+            newList.setTemplate(false);
+            newList.addItem(item);
+            ReflectionTestUtils.setField(newList, "id", 1L);
+
+            // getPrinciple() is stubbed to return "username"
+            when(groceryService.createNewList(newList.getName(), "username", 3)).thenReturn(newList);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("templateId", "3")) // this should be ignored
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(newList).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testCreateListWithTemplateNotFound() throws Exception {
+            when(groceryService.createNewList(anyString(), anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
+
+            mvc.perform(post("/api/create-list")
+                            .queryParam("name", "name")
+                            .queryParam("templateId", "3")) // this should be ignored
+                    .andExpect(status().isNotFound())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof
+                            ResourceNotFoundException));
         }
 
         @Test
@@ -198,7 +248,7 @@ class GroceryControllerTest {
         }
 
         @Test
-        void testSaveListBlankItem() throws Exception {
+        void testSaveListBadRequestBlankItem() throws Exception {
             HashMap<String, String> bad = new HashMap<>();
             bad.put("iid", "1");
             bad.put("items", "[\" \", \"b\"]");
@@ -206,6 +256,42 @@ class GroceryControllerTest {
             mvc.perform(put("/api/save-list")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content((new ObjectMapper()).writeValueAsString(bad)))
+                    .andExpect(status().isBadRequest());
+        }
+    }
+
+    @Nested
+    class EditListNameTest {
+
+        @Test
+        void testEditListNameValid() throws Exception {
+            GroceryList list = new GroceryList();
+            when(groceryService.editListName(anyLong(), anyString(), anyString())).thenReturn(list);
+
+            mvc.perform(put("/api/edit-list-name")
+                            .queryParam("id", "4")
+                            .queryParam("name", "name"))
+                    .andExpect(status().isOk())
+                    .andExpect(result -> assertEquals(jsonGroceryList.write(list).getJson(), result.getResponse().getContentAsString()));
+        }
+
+        @Test
+        void testEditListNameNotFound() throws Exception {
+            when(groceryService.editListName(anyLong(), anyString(), anyString())).thenThrow(ResourceNotFoundException.class);
+
+            mvc.perform(put("/api/edit-list-name")
+                            .queryParam("id", "4")
+                            .queryParam("name", "name"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof
+                            ResourceNotFoundException));
+        }
+
+        @Test
+        void testEditListNameBlankName() throws Exception {
+            mvc.perform(put("/api/save-list")
+                            .queryParam("list", "4")
+                            .queryParam("name", ""))
                     .andExpect(status().isBadRequest());
         }
     }

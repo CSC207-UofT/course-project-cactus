@@ -25,6 +25,7 @@ dependencies {
 
     // test dependencies - Android doesn't support JUnit5 officially yet
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:3.9.0'
 
     // android test dependencies
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -62,4 +63,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
 }

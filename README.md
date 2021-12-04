@@ -15,7 +15,7 @@ Android 11 (API Level 30)
 ### Static IP
 In order for the Android app to connect to the server, your device must have a static IP. The instructions for how to set this can be found [here for Windows](https://kb.netgear.com/27476/How-do-I-set-a-static-IP-address-in-Windows) or [here for Mac](https://www.macinstruct.com/tutorials/how-to-set-a-static-ip-address-on-a-mac/). 
 
-By default, Cereus assumes that Saguaro is located at `192.169.0.127`. In other words, it assumes that your computer has this static IP. However, you can specify a different IP by creating a `network.properties` file in `cereus/src/main/resources`, and adding the property `staticIp`.
+By default, Cereus assumes that Saguaro is located at `192.168.0.127`. In other words, it assumes that your computer has this static IP. However, you can specify a different IP by creating a `network.properties` file in `cereus/src/main/resources`, and adding the property `staticIp`.
 
 ### Android SDK
 

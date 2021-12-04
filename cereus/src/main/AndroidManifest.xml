@@ -22,9 +22,12 @@
         </activity>
         <activity android:name=".DisplayingItemsActivity">
         </activity>
-        <activity
-                android:name=".MainActivity"
-                android:exported="true">
+        <activity android:name=".CreateListActivity">
+        </activity>
+        <activity android:name=".CreateTemplateActivity">
+        </activity>
+        <activity android:name=".MainActivity"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
