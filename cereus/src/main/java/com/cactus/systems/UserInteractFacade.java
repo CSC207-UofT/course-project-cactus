@@ -1,7 +1,11 @@
 package com.cactus.systems;
 
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +81,19 @@ public class UserInteractFacade {
      */
     public String getName() {
         return this.userSystem.getName();
+    }
+
+    /**
+     * Edit a user's details to be the provided strings. Only the name and password
+     * of a user can be set. If a password of an empty string is provided, it is assumed that
+     * the password remains unchanged. The submitted strings cannot be blank.
+     *
+     * @param name the String name to change to
+     * @param password the String password to change to
+     * @throws InvalidParamException if the provided strings are invalid edits
+     */
+    public void editUserDetails(String name, String password) throws InvalidParamException, ServerException {
+        this.userSystem.editUser(name, password);
     }
 
     // GroceryListSystem methods

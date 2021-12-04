@@ -1,6 +1,8 @@
 package com.cactus.adapters;
 
 import com.cactus.entities.User;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 public interface AuthAdapter {
 
@@ -43,4 +45,20 @@ public interface AuthAdapter {
      * @see User
      */
     boolean logout(String token);
+
+    /**
+     * Edit a user's details. If null is provided for the password, then the password
+     * remains unchanged.
+     * <p>
+     * On server error, throws a ServerException. This method can also throw a InvalidParamException,
+     * but the caller is expected to sanitize inputs as much as possible.
+     *
+     * @param name     the String name to set
+     * @param password the String password to set
+     * @param token    a String authentication token
+     * @return the newly edited User object
+     * @throws InvalidParamException if invalid parameters were provided
+     * @throws ServerException if the server response contains a 5xx response code
+     */
+    User editUserDetails(String name, String password, String token) throws InvalidParamException, ServerException;
 }

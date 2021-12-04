@@ -2,6 +2,8 @@ package com.cactus.systems;
 
 import com.cactus.adapters.AuthAdapter;
 import com.cactus.entities.User;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -111,6 +113,33 @@ public class UserSystem {
      */
     public String getName() {
         return this.currentUser.getName();
+    }
+
+    /**
+     * Edit a user's details to be the provided strings. Only the name and password
+     * of a user can be set. If a password of an empty string is provided, it is assumed that
+     * the password remains unchanged.
+     * <p>
+     * This method checks for valid inputs. If the provided name and password do not contain at least
+     * one non-whitespace character, then an InvalidParamException is thrown.
+     *
+     * @param name     the String name to set
+     * @param password the String password to set
+     * @throws InvalidParamException if the name or password do not contain at least one non-whitespace
+     *                               character, assuming the password is changing
+     * @throws ServerException if something went wrong during the request
+     */
+    public void editUser(String name, String password) throws InvalidParamException, ServerException {
+        if ((!password.isEmpty() && password.trim().isEmpty()) || name.trim().isEmpty()) {
+            throw new InvalidParamException("Name/password cannot be blank",
+                    "Blank username/password. Input was \nName = \"" + name + "\"\nPassword = \"" + password + "\"");
+        }
+
+        if (password.isEmpty()) {
+            password = null;
+        }
+
+        this.currentUser = this.authAdapter.editUserDetails(name, password, this.getToken());
     }
 
 }

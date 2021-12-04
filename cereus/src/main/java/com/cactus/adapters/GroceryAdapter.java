@@ -42,13 +42,13 @@ public interface GroceryAdapter {
      * or provide a template ID to initialize it with. Note that the template ID to initialize with is
      * ignored if the list is marked as a template. If a list is not a template, and should not be
      * initialized with an existing template, provide a templateID of -1.
-     *
+     * <p>
      * A valid authentication token must be provided.
      *
-     * @param nameList a String containing the name of the new grocery list
-     * @param token    a string representing the token of the user creating the
-     *                 list
-     * @param template a boolean specifying if the created list should be a template
+     * @param nameList   a String containing the name of the new grocery list
+     * @param token      a string representing the token of the user creating the
+     *                   list
+     * @param template   a boolean specifying if the created list should be a template
      * @param templateId a long representing the template ID to initialize this list with
      * @return a GroceryList that corresponds to the GroceryList created
      */

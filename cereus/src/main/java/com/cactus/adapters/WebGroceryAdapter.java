@@ -12,7 +12,6 @@ import okhttp3.*;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -21,8 +20,6 @@ import java.util.*;
  */
 public class WebGroceryAdapter implements GroceryAdapter {
 
-    private final static int HTTP_OK = 200;
-    private final static int HTTP_NO_CONTENT = 204;
     private final String STATIC_IP;
 
     private final OkHttpClient client;
@@ -58,7 +55,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             return null;
         }
 
-        if (response.code() != HTTP_OK) {
+        if (response.code() != HttpUtil.HTTP_OK) {
             return null;
         }
 
@@ -202,7 +199,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             //Parse response
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HTTP_OK) {
+            if (response.code() != HttpUtil.HTTP_OK) {
                 return null;
             }
             return finalMapper.readValue(Objects.requireNonNull(response.body()).string(), GroceryList.class);
@@ -244,7 +241,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             //Parse response
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            if (response.code() != HTTP_OK) {
+            if (response.code() != HttpUtil.HTTP_OK) {
                 return null;
             }
             String responseString = Objects.requireNonNull(response.body()).string();
@@ -323,7 +320,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
             ObjectMapper finalMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            if (response.code() != HTTP_OK) {
+            if (response.code() != HttpUtil.HTTP_OK) {
                 return null;
             }
 
@@ -373,7 +370,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .put(requestBody)
                     .build();
             Response response = client.newCall(request).execute();
-            return response.code() == HTTP_OK;
+            return response.code() == HttpUtil.HTTP_OK;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -410,7 +407,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                     .build();
             Response response = client.newCall(request).execute();
 
-            return response.code() == HTTP_NO_CONTENT;
+            return response.code() == HttpUtil.HTTP_NO_CONTENT;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

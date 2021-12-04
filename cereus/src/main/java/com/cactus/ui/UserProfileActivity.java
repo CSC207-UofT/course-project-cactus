@@ -1,13 +1,18 @@
 package com.cactus.ui;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 public class UserProfileActivity extends AbstractActivity {
 
+    private final static String LOG_TAG = "UserProfileActivity";
     private boolean editing;
 
     @Override
@@ -46,7 +51,6 @@ public class UserProfileActivity extends AbstractActivity {
         editButton.setOnClickListener(view -> {
             Button clicked = (Button) view;
 
-            EditText usernameText = this.findViewById(R.id.username_text);
             EditText nameText = findViewById(R.id.name_text);
             EditText passwordText = findViewById(R.id.password_text);
 
@@ -58,14 +62,21 @@ public class UserProfileActivity extends AbstractActivity {
 
                 this.enableFields(passwordText);
             } else {
-                editing = false;
-                clicked.setText("Edit");
-                // TODO: save edits
-                
-                this.disableFields(nameText);
+                try {
+                    this.userInteractFacade.editUserDetails(nameText.getText().toString(), passwordText.getText().toString());
 
-                passwordText.setText("");
-                this.disableFields(passwordText);
+                    editing = false;
+                    clicked.setText("Edit");
+
+                    this.disableFields(nameText);
+
+                    passwordText.setText("");
+                    this.disableFields(passwordText);
+
+                } catch (InvalidParamException | ServerException e) {
+                    Log.d(UserProfileActivity.LOG_TAG, e.getMessage());
+                    Toast.makeText(UserProfileActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
