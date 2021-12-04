@@ -58,7 +58,7 @@ abstract public class AbstractActivity extends AppCompatActivity {
     }
 
     protected void userButtonAction(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 }
