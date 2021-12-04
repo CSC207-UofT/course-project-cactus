@@ -54,8 +54,6 @@ public class UserProfileActivity extends AbstractActivity {
                 editing = true;
                 clicked.setText("Save");
 
-                this.enableFields(usernameText);
-
                 this.enableFields(nameText);
 
                 this.enableFields(passwordText);
@@ -63,9 +61,7 @@ public class UserProfileActivity extends AbstractActivity {
                 editing = false;
                 clicked.setText("Edit");
                 // TODO: save edits
-
-                this.disableFields(usernameText);
-
+                
                 this.disableFields(nameText);
 
                 passwordText.setText("");
