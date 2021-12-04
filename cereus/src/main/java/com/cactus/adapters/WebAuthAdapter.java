@@ -315,15 +315,19 @@ public class WebAuthAdapter implements AuthAdapter {
         }
 
         if (is4xx(response.code())) {
+            String body = "";
+            try {
+                body = response.body().string();
+            } catch (IOException e) {
+                // doubly bad
+                e.printStackTrace();
+            }
+
+            // return server message if no dedicated message is specified
             if (is4xxMessage == null) {
-                throw new InvalidParamException("Invalid parameters provided", response.toString());
+                throw new InvalidParamException(body, response + "\n" + body);
             } else {
-                try {
-                    throw new InvalidParamException(is4xxMessage, response + "\n" + response.body().string());
-                } catch (IOException e) {
-                    // doubly bad
-                    e.printStackTrace();
-                }
+                throw new InvalidParamException(is4xxMessage, response + "\n" + body);
             }
         }
 
