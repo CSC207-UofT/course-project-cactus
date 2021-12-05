@@ -43,8 +43,7 @@
             android:hint="Enter username"
             app:layout_constraintTop_toTopOf="@id/friendImage"
             app:layout_constraintBottom_toBottomOf="@id/friendImage"
-            app:layout_constraintRight_toLeftOf="@id/addFriendButton"
-    />
+            app:layout_constraintRight_toLeftOf="@id/addFriendButton"/>
     <Button
             android:text="Add Friend"
             android:layout_width="wrap_content"
