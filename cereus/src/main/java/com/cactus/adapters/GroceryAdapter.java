@@ -24,7 +24,7 @@ public interface GroceryAdapter {
      * @param token  token of the user who holds the list
      * @return a list of GroceryItems in the list
      */
-    List<String> getGroceryItems(long listID, String token) throws InvalidParamException, ServerException;
+    GroceryList getGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Create a new grocery list with the given name. Optionally mark the new list as a template,
@@ -52,7 +52,7 @@ public interface GroceryAdapter {
      * @param token  a string representing the token of the list's owner
      * @return a boolean indicating whether the grocery items are appended to the list
      */
-    void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
+    GroceryList setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.
@@ -64,4 +64,7 @@ public interface GroceryAdapter {
      */
     void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
+    GroceryList shareList(long id, String username, String token) throws InvalidParamException, ServerException;
+
+    GroceryList unshareList(long id, String username, String token) throws InvalidParamException, ServerException;
 }

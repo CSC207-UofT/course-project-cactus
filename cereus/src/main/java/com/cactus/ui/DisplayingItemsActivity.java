@@ -1,9 +1,13 @@
 package com.cactus.ui;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.*;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -16,6 +20,8 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
     private List<String> items;
     private ListView listView;
+
+    private List<String> sharedUsers;
 
     @Override
     protected AbstractActivity activity() {
@@ -31,6 +37,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
         try {
             items = userInteractFacade.getGroceryItemNames();
+            sharedUsers = userInteractFacade.getGroceryListSharedUsers();
 
         } catch (InvalidParamException | ServerException e) {
             Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
@@ -38,7 +45,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
         }
 
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
-        listView = findViewById(R.id.itemViewDisplayItem);
+        listView = findViewById(R.id.listViewDisplayItem);
         listView.setAdapter(customItemAdapter);
     }
 
@@ -49,7 +56,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
     protected void displayOptions() {
         EditText itemName = findViewById(R.id.itemName);
         Button addItemButton = findViewById(R.id.addItemButton);
-//        Button logoutButton = findViewById(R.id.logoutButtonItem);
+        Button shareButton = findViewById(R.id.share_link);
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
@@ -63,16 +70,54 @@ public class DisplayingItemsActivity extends AbstractActivity {
             }
         });
 
-//        logoutButton.setOnClickListener(view ->{
-//            if (!this.userInteractFacade.addGroceryItems(items)) {
-//                Toast.makeText(DisplayingItemsActivity.this, "Failed to save items", Toast.LENGTH_LONG).show();
-//            } else if (!userInteractFacade.logout()) {
-//                Toast.makeText(DisplayingItemsActivity.this, "Logout failed", Toast.LENGTH_LONG).show();
-//            } else {
-//                Intent intent = new Intent(DisplayingItemsActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        shareButton.setOnClickListener(view ->{
+            // inflate popup
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.share_list_layout, null);
+
+            // setup popup title
+            TextView title = popupView.findViewById(R.id.share_title);
+            title.setText("Share list: " + this.userInteractFacade.getListName());
+
+            // setup adapter
+            ListView sharedList = popupView.findViewById(R.id.shared_friends);
+            CustomSharedAdapter customSharedAdapter = new CustomSharedAdapter(this, R.layout.share_friend_individual_layout, sharedUsers, ((CereusApplication) getApplicationContext()).appComponent);
+            sharedList.setAdapter(customSharedAdapter);
+
+            // setup share functionality
+            EditText submitInput = popupView.findViewById(R.id.share_input);
+            Button submitShare = popupView.findViewById(R.id.submit_share);
+            submitShare.setOnClickListener(submitView -> {
+                String inputString = submitInput.getText().toString();
+
+                if (!sharedUsers.contains(inputString)) {
+                    try {
+                        this.userInteractFacade.shareList(inputString);
+
+                        sharedUsers.add(inputString);
+                        ((BaseAdapter) sharedList.getAdapter()).notifyDataSetChanged();
+                        submitInput.getText().clear();
+                    } catch (InvalidParamException | ServerException e) {
+                        Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
+                        Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(DisplayingItemsActivity.this, "List is already shared with this user", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+            // make popup
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true; // lets taps outside the popup also dismiss it
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            // show the popup window
+            // which view you pass in doesn't matter, it is only used for the window tolken
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        });
     }
 
     /**
@@ -81,7 +126,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
      * on delete, the items are saved to the database
      */
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         try {
             userInteractFacade.addGroceryItems(items);
 
@@ -90,7 +135,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
             Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
         }
 
-        super.onDestroy();
+        super.onStop();
     }
 
 }

@@ -50,13 +50,12 @@ public class CustomListAdapter extends CustomAdapter {
             try {
                 this.userInteractFacade.deleteGroceryList(this.objects.get(position));
 
+                this.objects.remove(this.objects.get(position));
+                this.notifyDataSetChanged();
             } catch (InvalidParamException | ServerException e) {
                 Log.d(CustomListAdapter.LOG_TAG, e.getMessage());
                 Toast.makeText(this.context, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
-
-            this.objects.remove(this.objects.get(position));
-            this.notifyDataSetChanged();
         });
 
         view.setOnClickListener(thisView -> {

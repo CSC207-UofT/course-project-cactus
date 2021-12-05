@@ -3,6 +3,9 @@
  */
 package com.cactus.entities;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Grocery List Entity
  */
@@ -15,7 +18,11 @@ public class GroceryList {
 
     private boolean isTemplate;
 
-    private boolean owned;
+    private String owner;
+
+    private List<String> sharedUsers;
+
+    private List<GroceryItem> items;
 
     /**
      * Empty constructor for GroceryList, required for Jackson serialization
@@ -49,11 +56,42 @@ public class GroceryList {
         isTemplate = template;
     }
 
-    public boolean isOwned() {
-        return owned;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setOwned(boolean owned) {
-        this.owned = owned;
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public List<String> getSharedUsers() {
+        return sharedUsers;
+    }
+
+    public void setSharedUsers(List<String> sharedUsers) {
+        this.sharedUsers = sharedUsers;
+
+        // some weirdness occurs with empty lists returning with null inside them
+        for (int i = sharedUsers.size() - 1; i >= 0; i--) {
+            if (this.sharedUsers.get(i) == null) {
+                this.sharedUsers.remove(i);
+            }
+        }
+    }
+
+    public List<String> getItems() {
+        return this.items.stream()
+                .map(GroceryItem::getName).collect(Collectors.toList());
+    }
+
+    public void setItems(List<GroceryItem> items) {
+        this.items = items;
+
+        // some weirdness occurs with empty lists returning with null inside them
+        for (int i = items.size() - 1; i >= 0; i--) {
+            if (this.items.get(i) == null) {
+                this.items.remove(i);
+            }
+        }
     }
 }

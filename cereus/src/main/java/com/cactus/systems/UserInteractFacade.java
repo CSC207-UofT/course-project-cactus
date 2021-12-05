@@ -61,6 +61,7 @@ public class UserInteractFacade {
      */
     public void logout() throws InvalidParamException, ServerException {
         this.userSystem.logout();
+        this.groceryListSystem.clearData();
     }
 
     /***
@@ -151,13 +152,25 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
+    public List<String> getGroceryListNamesForce() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), false, true);
+    }
+
+    public List<String> getGroceryTemplateNamesForce() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), true, true);
+    }
+
     /**
      * Get grocery item names using GroceryListSystem's getGroceryItemNames method
      *
      * @return a list of grocery item names belonging to the current list
      */
     public List<String> getGroceryItemNames() throws InvalidParamException, ServerException {
-        return this.groceryListSystem.getGroceryItemNames(this.getToken());
+        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getItems();
+    }
+
+    public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getSharedUsers();
     }
 
     /**
@@ -195,5 +208,13 @@ public class UserInteractFacade {
      */
     public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
+    }
+
+    public void shareList(String username) throws InvalidParamException, ServerException {
+        this.groceryListSystem.shareList(username, this.getToken());
+    }
+
+    public void unshareList(String username) throws InvalidParamException, ServerException {
+        this.groceryListSystem.unshareList(username, this.getToken());
     }
 }
