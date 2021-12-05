@@ -82,6 +82,10 @@ public class GroceryListSystem {
         }
     }
 
+    public List<String> getGroceryListNames(String token, boolean template) throws InvalidParamException, ServerException {
+        return this.getGroceryListNames(token, template, false);
+    }
+
     /***
      * Return a list of all grocery list names. Can specify whether to return the set of
      * grocery template names or grocery list names.
@@ -90,13 +94,15 @@ public class GroceryListSystem {
      * @param template a boolean specifying if the created list should be a template
      * @return groceryListNameMap
      */
-    public List<String> getGroceryListNames(String token, boolean template) throws InvalidParamException, ServerException {
+    public List<String> getGroceryListNames(String token, boolean template, boolean force) throws InvalidParamException, ServerException {
         // if one of them is null, but not the other, somethings wrong so just fetch all anew
-        if (this.currentListNamesMap == null || this.currentTemplateNamesMap == null) {
+        if (this.currentListNamesMap == null || this.currentTemplateNamesMap == null || force) {
             this.currentListNamesMap = new HashMap<>();
             this.currentTemplateNamesMap = new HashMap<>();
 
             List<GroceryList> lists = groceryAdapter.getGroceryListNamesByUser(token);
+            this.currentListNamesMap.clear();
+            this.currentTemplateNamesMap.clear();
 
             for (GroceryList list : lists) {
                 if (list.isTemplate()) {
@@ -107,9 +113,9 @@ public class GroceryListSystem {
             }
         }
 
-        Map<String, GroceryList> selectedtLists = template ? this.currentTemplateNamesMap : this.currentListNamesMap;
+        Map<String, GroceryList> selectedLists = template ? this.currentTemplateNamesMap : this.currentListNamesMap;
 
-        return new ArrayList<>(selectedtLists.keySet());
+        return new ArrayList<>(selectedLists.keySet());
     }
 
     /***

@@ -57,9 +57,7 @@ public class DisplayingListsActivity extends AbstractActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.wtf("CALLED", "in");
         fetch();
-        Log.wtf("LIST VIEW", this.listNames.toString());
 
         ((BaseAdapter) this.listView.getAdapter()).notifyDataSetChanged();
         ((BaseAdapter) this.templateView.getAdapter()).notifyDataSetChanged();
@@ -72,10 +70,10 @@ public class DisplayingListsActivity extends AbstractActivity {
         try {
             // do this to not overwrite the object so the adapters can see updates
             this.listNames.clear();
-            this.listNames.addAll(this.userInteractFacade.getGroceryListNames());
+            this.listNames.addAll(this.userInteractFacade.getGroceryListNamesForce());
 
             this.templateNames.clear();
-            this.templateNames.addAll(this.userInteractFacade.getGroceryTemplateNames());
+            this.templateNames.addAll(this.userInteractFacade.getGroceryTemplateNamesForce());
 
         } catch (InvalidParamException | ServerException e) {
             Log.d(DisplayingListsActivity.LOG_TAG, e.getMessage());

@@ -152,6 +152,14 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
+    public List<String> getGroceryListNamesForce() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), false, true);
+    }
+
+    public List<String> getGroceryTemplateNamesForce() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryListNames(this.getToken(), true, true);
+    }
+
     /**
      * Get grocery item names using GroceryListSystem's getGroceryItemNames method
      *

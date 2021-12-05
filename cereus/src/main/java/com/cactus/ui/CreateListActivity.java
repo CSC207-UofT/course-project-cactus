@@ -58,13 +58,13 @@ public class CreateListActivity extends AbstractActivity{
                 } else {
                     this.userInteractFacade.newGroceryList(givenListName, false);
                 }
+
+                Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
+                startActivity(intent);
             } catch (InvalidParamException | ServerException e) {
                 Log.d(CreateListActivity.LOG_TAG, e.getMessage());
                 Toast.makeText(CreateListActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
-
-            Intent intent = new Intent(CreateListActivity.this, DisplayingListsActivity.class);
-            startActivity(intent);
         });
 
     }
