@@ -218,5 +218,12 @@ public class GroceryListSystem {
         long id = this.getCurrentList().getId();
         this.cache = this.groceryAdapter.unshareList(id, username, token);
     }
+
+    public void clearData() {
+        this.currentGroceryListName = null;
+        this.currentListNamesMap = null;
+        this.currentTemplateNamesMap = null;
+        this.cache = null;
+    }
 }
 

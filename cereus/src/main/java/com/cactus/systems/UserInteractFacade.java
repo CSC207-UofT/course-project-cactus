@@ -61,6 +61,7 @@ public class UserInteractFacade {
      */
     public void logout() throws InvalidParamException, ServerException {
         this.userSystem.logout();
+        this.groceryListSystem.clearData();
     }
 
     /***
