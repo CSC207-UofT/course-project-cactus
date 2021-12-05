@@ -20,6 +20,9 @@ public class GroceryItem {
         this.name = name;
     }
 
+    public GroceryItem() {
+    }
+
     public String getName() {
         return name;
     }

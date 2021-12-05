@@ -4,6 +4,7 @@
 package com.cactus.entities;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Grocery List Entity
@@ -21,7 +22,7 @@ public class GroceryList {
 
     private List<String> sharedUsers;
 
-    private List<String> items;
+    private List<GroceryItem> items;
 
     /**
      * Empty constructor for GroceryList, required for Jackson serialization
@@ -72,10 +73,11 @@ public class GroceryList {
     }
 
     public List<String> getItems() {
-        return items;
+        return this.items.stream()
+                .map(GroceryItem::getName).collect(Collectors.toList());
     }
 
-    public void setItems(List<String> items) {
+    public void setItems(List<GroceryItem> items) {
         this.items = items;
     }
 }
