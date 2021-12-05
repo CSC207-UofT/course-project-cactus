@@ -13,8 +13,7 @@
             android:textStyle="bold"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="150dp"/>
+            android:layout_marginEnd="100dp"/>
     <Button
             android:text="Delete"
             android:layout_width="wrap_content"
@@ -22,6 +21,5 @@
             android:id="@+id/unshare_button"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="55dp"
             android:backgroundTint="@color/red"/>
 </RelativeLayout>
