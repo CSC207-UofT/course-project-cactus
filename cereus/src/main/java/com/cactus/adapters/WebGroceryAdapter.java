@@ -7,6 +7,7 @@ import com.cactus.exceptions.ServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
@@ -233,7 +234,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a boolean indicating whether the grocery items are appended to the list
      */
     @Override
-    public void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException {
+    public GroceryList setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -254,7 +255,15 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .put(requestBody)
                 .build();
 
-        makeRequest(this.client, request, "Could not save to this list");
+        String responseBody = makeRequest(this.client, request, "Could not save to this list");
+
+        try {
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, GroceryList.class);
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
+        }
     }
 
     /**

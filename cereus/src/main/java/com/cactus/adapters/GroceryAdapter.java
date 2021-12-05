@@ -52,7 +52,7 @@ public interface GroceryAdapter {
      * @param token  a string representing the token of the list's owner
      * @return a boolean indicating whether the grocery items are appended to the list
      */
-    void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
+    GroceryList setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.

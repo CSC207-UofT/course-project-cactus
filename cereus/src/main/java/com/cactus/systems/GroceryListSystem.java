@@ -151,7 +151,7 @@ public class GroceryListSystem {
      **/
     public void addGroceryItems(List<String> items, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
-        this.groceryAdapter.setGroceryItems(items, id, token);
+        this.cache = this.groceryAdapter.setGroceryItems(items, id, token);
     }
 
 
@@ -171,6 +171,7 @@ public class GroceryListSystem {
         if (removed != null) {
             this.exitGroceryList();
             groceryAdapter.deleteGroceryList(removed.getId(), token);
+            cache = null;
         }
 
         return false;
