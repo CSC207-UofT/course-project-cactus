@@ -1,9 +1,13 @@
 package com.cactus.ui;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.*;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -67,7 +71,53 @@ public class DisplayingItemsActivity extends AbstractActivity {
         });
 
         shareButton.setOnClickListener(view ->{
-            // TODO: fill in
+            // inflate popup
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.share_list_layout, null);
+
+            // setup popup title
+            TextView title = popupView.findViewById(R.id.share_title);
+            title.setText("Share list: " + this.userInteractFacade.getListName());
+
+            // setup adapter
+            ListView sharedList = popupView.findViewById(R.id.shared_friends);
+            CustomSharedAdapter customSharedAdapter = new CustomSharedAdapter(this, R.layout.share_friend_individual_layout, sharedUsers, ((CereusApplication) getApplicationContext()).appComponent);
+            sharedList.setAdapter(customSharedAdapter);
+
+            // setup share functionality
+            EditText submitInput = popupView.findViewById(R.id.share_input);
+            Button submitShare = popupView.findViewById(R.id.submit_share);
+            submitShare.setOnClickListener(submitView -> {
+                String inputString = submitInput.getText().toString();
+
+                if (!sharedUsers.contains(inputString)) {
+                    try {
+                        this.userInteractFacade.shareList(inputString);
+
+                    } catch (InvalidParamException | ServerException e) {
+                        Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
+                        Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                    items.add(inputString);
+                    ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                    submitInput.getText().clear();
+                } else {
+                    Toast.makeText(DisplayingItemsActivity.this, "List is already shared with this user", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+            // make popup
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true; // lets taps outside the popup also dismiss it
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            // show the popup window
+            // which view you pass in doesn't matter, it is only used for the window tolken
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
     }
 

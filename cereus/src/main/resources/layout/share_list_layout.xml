@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="300dp"
+        android:background="#62def8" android:layout_width="wrap_content">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:paddingLeft="5dp" android:paddingTop="3dp"
+            android:paddingRight="5dp" android:paddingBottom="3dp">
+        <TextView
+                android:layout_width="198dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:text="Sample" android:layout_marginTop="30dp" android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp" android:layout_marginBottom="30dp" android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" android:id="@+id/share_title" android:textAlignment="center"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/share_input" android:hint="Enter username"/>
+        <Button
+                android:text="Share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/submit_share"/>
+        <TextView
+                android:text="Shared"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/share_label"/>
+        <ListView
+                android:layout_width="300dp"
+                android:layout_height="200dp" android:id="@+id/shared_friends"/>
+    </LinearLayout>
+
+</RelativeLayout>
