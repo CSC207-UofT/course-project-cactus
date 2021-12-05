@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="@id/itemImageBack"
             app:layout_constraintBottom_toBottomOf="@id/itemImageBack"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/green_light" app:layout_constraintVertical_bias="0.3"/>
+            android:background="@color/green_light" app:layout_constraintVertical_bias="0.50"/>
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="@id/itemImageBack2"
             app:layout_constraintBottom_toBottomOf="@id/itemImageBack2"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/green_light" app:layout_constraintVertical_bias="0.6"
+            android:background="@color/green_light" app:layout_constraintVertical_bias="0.4"
             android:layout_marginLeft="4dp"/>
     <TextView
             android:text="List Name"
@@ -111,7 +111,7 @@
             app:layout_constraintBottom_toBottomOf="@id/itemImage2"
             app:layout_constraintLeft_toRightOf="@id/listNameBox" app:layout_constraintTop_toTopOf="@id/itemImage2"
             android:layout_marginLeft="24dp" android:textStyle="bold" android:textSize="20sp"
-            android:textColor="@android:color/secondary_text_light"/>
+            android:textColor="@android:color/secondary_text_light" style="@style/Widget.AppCompat.TextView"/>
     <EditText
             android:layout_width="76dp"
             android:layout_height="wrap_content"
@@ -120,7 +120,8 @@
             android:id="@+id/displayShared"
             app:layout_constraintBottom_toBottomOf="@id/itemImage2"
             app:layout_constraintLeft_toRightOf="@id/displayListName"
-            app:layout_constraintTop_toTopOf="@id/itemImage2" android:textStyle="bold"
-            app:layout_constraintVertical_bias="0.50" android:textSize="20sp"
-            android:textColor="@android:color/secondary_text_light"/>
+            app:layout_constraintTop_toTopOf="@id/itemImage2"
+            app:layout_constraintVertical_bias="0.9" android:textSize="16sp"
+            android:textColor="@android:color/secondary_text_light"
+            style="@style/Widget.AppCompat.TextView"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
