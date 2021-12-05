@@ -3,6 +3,7 @@ package com.cactus.ui;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.cactus.exceptions.InvalidParamException;
@@ -117,6 +118,12 @@ public class DisplayingItemsActivity extends AbstractActivity {
             // show the popup window
             // which view you pass in doesn't matter, it is only used for the window tolken
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            // dismiss the popup window when touched
+            popupView.setOnTouchListener((v, event) -> {
+                popupWindow.dismiss();
+                return true;
+            });
         });
     }
 

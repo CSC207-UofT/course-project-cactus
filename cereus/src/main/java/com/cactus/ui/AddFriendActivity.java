@@ -41,9 +41,13 @@ public class AddFriendActivity extends AbstractActivity {
             try {
                 this.userInteractFacade.addFriend(username);
 
-                friends.add(username);
-                ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-                friendUsername.getText().clear();
+                if (!friends.contains(username)) {
+                    friends.add(username);
+                    ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                    friendUsername.getText().clear();
+                } else {
+                    throw new InvalidParamException("This user is already your friend", "Attempted to add friend: " + username);
+                }
 
             } catch (InvalidParamException | ServerException e) {
                 Log.d(AddFriendActivity.LOG_TAG, e.getMessage());
