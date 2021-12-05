@@ -1,10 +1,10 @@
 package com.cactus.adapters;
 
-import com.cactus.entities.GroceryItem;
 import com.cactus.entities.GroceryList;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import java.util.List;
-import java.util.Map;
 
 public interface GroceryAdapter {
 
@@ -15,18 +15,7 @@ public interface GroceryAdapter {
      * @param token a string representing the user token to fetch lists for
      * @return a List of GroceryList objects that are of the User whose token is entered
      */
-    List<GroceryList> getGroceryListNamesByUser(String token);
-
-    /**
-     * Returns a GroceryList corresponding to the listID given.
-     * A user token is required for authorization.
-     * <p>
-     *
-     * @param listID a long representing the ID of the list to get
-     * @param token  a string representing the token of the user the list belongs to
-     * @return a GroceryList corresponding to the listID given
-     */
-    GroceryList getGroceryList(long listID, String token);
+    List<GroceryList> getGroceryListNamesByUser(String token) throws InvalidParamException, ServerException;
 
     /**
      * Returns a list of GroceryItem objects that belong to the given list
@@ -35,7 +24,7 @@ public interface GroceryAdapter {
      * @param token  token of the user who holds the list
      * @return a list of GroceryItems in the list
      */
-    List<GroceryItem> getGroceryItems(long listID, String token);
+    List<String> getGroceryItems(long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Create a new grocery list with the given name. Optionally mark the new list as a template,
@@ -52,7 +41,7 @@ public interface GroceryAdapter {
      * @param templateId a long representing the template ID to initialize this list with
      * @return a GroceryList that corresponds to the GroceryList created
      */
-    GroceryList createGroceryList(String nameList, String token, boolean template, long templateId);
+    GroceryList createGroceryList(String nameList, String token, boolean template, long templateId) throws InvalidParamException, ServerException;
 
     /**
      * Returns whether the list of grocery items are added to the GroceryList that corresponds
@@ -63,7 +52,7 @@ public interface GroceryAdapter {
      * @param token  a string representing the token of the list's owner
      * @return a boolean indicating whether the grocery items are appended to the list
      */
-    boolean setGroceryItems(List<String> items, long listID, String token);
+    void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.
@@ -73,6 +62,6 @@ public interface GroceryAdapter {
      * @param token  a string representing the token of the grocery list's owner
      * @return a Response to the grocery list deletion operation
      */
-    boolean deleteGroceryList(long listID, String token);
+    void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
 }

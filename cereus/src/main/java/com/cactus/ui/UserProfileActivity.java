@@ -88,9 +88,14 @@ public class UserProfileActivity extends AbstractActivity {
 
         Button logoutButton = this.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(view -> {
-            if (this.userInteractFacade.logout()){
+            try {
+                this.userInteractFacade.logout();
+
                 Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
                 startActivity(intent);
+            } catch (InvalidParamException | ServerException e) {
+                Log.d(UserProfileActivity.LOG_TAG, e.getMessage());
+                Toast.makeText(UserProfileActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

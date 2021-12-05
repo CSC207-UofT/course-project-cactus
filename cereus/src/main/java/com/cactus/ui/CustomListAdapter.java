@@ -2,10 +2,13 @@ package com.cactus.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import java.util.List;
 
@@ -13,6 +16,8 @@ import java.util.List;
  * List implementation of abstract super class CustomAdapter
  */
 public class CustomListAdapter extends CustomAdapter {
+
+    private final static String LOG_TAG = "CustomListAdapter";
 
     /***
      * Initializes a new CustomListAdapter
@@ -42,12 +47,16 @@ public class CustomListAdapter extends CustomAdapter {
         button = view.findViewById(R.id.deleteButton);
 
         button.setOnClickListener(thisView -> {
-            if (this.userInteractFacade.deleteGroceryList(this.objects.get(position))) {
-                this.objects.remove(this.objects.get(position));
-                this.notifyDataSetChanged();
-            } else {
-                Toast.makeText(getContext(), "Failed to delete list", Toast.LENGTH_LONG).show();
+            try {
+                this.userInteractFacade.deleteGroceryList(this.objects.get(position));
+
+            } catch (InvalidParamException | ServerException e) {
+                Log.d(CustomListAdapter.LOG_TAG, e.getMessage());
+                Toast.makeText(this.context, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
+
+            this.objects.remove(this.objects.get(position));
+            this.notifyDataSetChanged();
         });
 
         view.setOnClickListener(thisView -> {

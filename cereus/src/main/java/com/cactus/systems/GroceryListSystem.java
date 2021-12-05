@@ -1,12 +1,16 @@
 package com.cactus.systems;
 
-import com.cactus.adapters.*;
-import com.cactus.entities.GroceryItem;
+import com.cactus.adapters.GroceryAdapter;
 import com.cactus.entities.GroceryList;
+import com.cactus.exceptions.InvalidParamException;
+import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /***
  * Represents the system that controls grocery lists and grocery items
@@ -44,9 +48,10 @@ public class GroceryListSystem {
      * @param templateName the String name of the template to initialize this list with, if it is not a template
      * @return true if a new groceryList was created, false otherwise
      */
-    public boolean newGroceryList(String name, String token, boolean template, String templateName) {
+    public void newGroceryList(String name, String token, boolean template, String templateName) throws InvalidParamException, ServerException {
         if (currentListNamesMap.containsKey(name)) {
-            return false;
+            throw new InvalidParamException("List name already taken",
+                    "List name already taken. Input was: " + name);
         }
 
         GroceryList newGroceryList;
@@ -58,25 +63,20 @@ public class GroceryListSystem {
 
 
             } else {
-                return false;
+                throw new InvalidParamException("Template name already taken",
+                        "Template name already taken. Input was: " + name);
             }
         } else {
             newGroceryList = this.groceryAdapter.createGroceryList(name, token, template, -1);
         }
 
-        if (newGroceryList != null) {
-            this.currentGroceryListName = name;
+        this.currentGroceryListName = name;
 
-            if (template) {
-                this.currentTemplateNamesMap.put(name, newGroceryList);
-            } else {
-                this.currentListNamesMap.put(name, newGroceryList);
-            }
-
-            return true;
+        if (template) {
+            this.currentTemplateNamesMap.put(name, newGroceryList);
+        } else {
+            this.currentListNamesMap.put(name, newGroceryList);
         }
-
-        return false;
     }
 
     /***
@@ -87,11 +87,12 @@ public class GroceryListSystem {
      * @param template a boolean specifying if the created list should be a template
      * @return groceryListNameMap
      */
-    public List<String> getGroceryListNames(String token, boolean template) {
+    public List<String> getGroceryListNames(String token, boolean template) throws InvalidParamException, ServerException {
         // if one of them is null, but not the other, somethings wrong so just fetch all anew
         if (this.currentListNamesMap == null || this.currentTemplateNamesMap == null) {
             this.currentListNamesMap = new HashMap<>();
             this.currentTemplateNamesMap = new HashMap<>();
+
             List<GroceryList> lists = groceryAdapter.getGroceryListNamesByUser(token);
 
             for (GroceryList list : lists) {
@@ -115,17 +116,8 @@ public class GroceryListSystem {
      * @param token token of user
      * @return groceryItemNames
      * */
-    public ArrayList<String> getGroceryItemNames(String token) {
-        ArrayList<String> groceryItemNames = new ArrayList<>();
-
-        List<GroceryItem> groceryItems =
-                this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
-
-        for (GroceryItem groceryItem : groceryItems) {
-            groceryItemNames.add(groceryItem.getName());
-        }
-
-        return groceryItemNames;
+    public List<String> getGroceryItemNames(String token) throws InvalidParamException, ServerException {
+        return this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
     }
 
     /**
@@ -149,9 +141,9 @@ public class GroceryListSystem {
      * @param token the token of the user that it is being added to
      * @return true of items were added successfully
      **/
-    public boolean addGroceryItems(List<String> items, String token) {
+    public void addGroceryItems(List<String> items, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
-        return this.groceryAdapter.setGroceryItems(items, id, token);
+        this.groceryAdapter.setGroceryItems(items, id, token);
     }
 
 
@@ -161,7 +153,7 @@ public class GroceryListSystem {
      * @param token the id of the user that the to be deleted list belongs to
      * @return true if the list was successfully deleted and false if list DNE
      */
-    public boolean deleteGroceryList(String token, String listName) {
+    public boolean deleteGroceryList(String token, String listName) throws InvalidParamException, ServerException {
 
         GroceryList removed = this.currentListNamesMap.remove(listName);
         if (removed == null) {
@@ -170,7 +162,7 @@ public class GroceryListSystem {
 
         if (removed != null) {
             this.exitGroceryList();
-            return groceryAdapter.deleteGroceryList(removed.getId(), token);
+            groceryAdapter.deleteGroceryList(removed.getId(), token);
         }
 
         return false;
