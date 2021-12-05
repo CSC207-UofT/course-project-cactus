@@ -126,7 +126,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
      * on delete, the items are saved to the database
      */
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         try {
             userInteractFacade.addGroceryItems(items);
 
@@ -135,7 +135,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
             Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
         }
 
-        super.onDestroy();
+        super.onStop();
     }
 
 }
