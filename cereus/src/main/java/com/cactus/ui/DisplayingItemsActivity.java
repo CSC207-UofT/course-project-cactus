@@ -10,6 +10,8 @@ import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /***
@@ -58,6 +60,12 @@ public class DisplayingItemsActivity extends AbstractActivity {
         EditText itemName = findViewById(R.id.itemName);
         Button addItemButton = findViewById(R.id.addItemButton);
         Button shareButton = findViewById(R.id.share_link);
+        Button sortButton = findViewById(R.id.sortButton);
+
+        sortButton.setOnClickListener(view -> {
+            items.sort(Comparator.comparing(String::toString));
+            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        });
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
