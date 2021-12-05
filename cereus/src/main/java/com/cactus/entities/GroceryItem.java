@@ -14,7 +14,7 @@ public class GroceryItem {
      * Creates a new GroceryItem with the given name and id number and
      * capacity.
      *
-     * @param name A String containing the User's name.
+     * @param name A String containing the grocery's name.
      */
     public GroceryItem(String name) {
         this.name = name;
