@@ -26,8 +26,6 @@ public class GroceryListSystem {
 
     private Map<String, GroceryList> currentTemplateNamesMap;
 
-    private GroceryList cache;
-
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
@@ -73,7 +71,6 @@ public class GroceryListSystem {
         }
 
         this.currentGroceryListName = name;
-        this.cache = newGroceryList;
 
         if (template) {
             this.currentTemplateNamesMap.put(name, newGroceryList);
@@ -126,12 +123,7 @@ public class GroceryListSystem {
      * @return groceryItemNames
      * */
     public GroceryList getGroceryCurrentList(String token) throws InvalidParamException, ServerException {
-        if (cache != null && this.currentGroceryListName.equals(this.cache.getName())) {
-            return cache;
-        }
-
-        cache = this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
-        return cache;
+        return this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
     }
 
     /**
@@ -157,7 +149,7 @@ public class GroceryListSystem {
      **/
     public void addGroceryItems(List<String> items, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
-        this.cache = this.groceryAdapter.setGroceryItems(items, id, token);
+        this.groceryAdapter.setGroceryItems(items, id, token);
     }
 
 
@@ -177,7 +169,6 @@ public class GroceryListSystem {
         if (removed != null) {
             this.exitGroceryList();
             groceryAdapter.deleteGroceryList(removed.getId(), token);
-            cache = null;
         }
 
         return false;
@@ -217,19 +208,18 @@ public class GroceryListSystem {
 
     public void shareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
-        this.cache = this.groceryAdapter.shareList(id, username, token);
+        this.groceryAdapter.shareList(id, username, token);
     }
 
     public void unshareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
-        this.cache = this.groceryAdapter.unshareList(id, username, token);
+        this.groceryAdapter.unshareList(id, username, token);
     }
 
     public void clearData() {
         this.currentGroceryListName = null;
         this.currentListNamesMap = null;
         this.currentTemplateNamesMap = null;
-        this.cache = null;
     }
 }
 
