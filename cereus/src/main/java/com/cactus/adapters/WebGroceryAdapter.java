@@ -7,9 +7,7 @@ import com.cactus.exceptions.ServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import okhttp3.*;
 
 import javax.inject.Inject;
@@ -122,7 +120,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
             GroceryList list = new GroceryList();
             list.setId(entry.getKey());
             list.setName(entry.getValue());
-            list.setOwned(owned);
             list.setTemplate(template);
 
             result.add(list);
@@ -214,12 +211,10 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String responseBody = makeRequest(this.client, request, "Cannot create list with these settings");
 
         try {
-            GroceryList list = new ObjectMapper()
+            return new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .readValue(responseBody, GroceryList.class);
-            list.setOwned(true);
 
-            return list;
         } catch (JsonProcessingException e) {
             throw new InternalException(e);
         }

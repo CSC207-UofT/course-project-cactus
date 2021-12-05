@@ -161,7 +161,7 @@ public class UserInteractFacade {
     }
 
     public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
-        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getFriends();
+        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getSharedUsers();
     }
 
     /**

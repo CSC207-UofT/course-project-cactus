@@ -17,9 +17,9 @@ public class GroceryList {
 
     private boolean isTemplate;
 
-    private boolean owned;
+    private String owner;
 
-    private List<String> friends;
+    private List<String> sharedUsers;
 
     private List<String> items;
 
@@ -55,20 +55,20 @@ public class GroceryList {
         isTemplate = template;
     }
 
-    public boolean isOwned() {
-        return owned;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setOwned(boolean owned) {
-        this.owned = owned;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public List<String> getFriends() {
-        return friends;
+    public List<String> getSharedUsers() {
+        return sharedUsers;
     }
 
-    public void setFriends(List<String> friends) {
-        this.friends = friends;
+    public void setSharedUsers(List<String> sharedUsers) {
+        this.sharedUsers = sharedUsers;
     }
 
     public List<String> getItems() {

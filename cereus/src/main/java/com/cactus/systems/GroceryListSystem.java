@@ -120,11 +120,12 @@ public class GroceryListSystem {
      * @return groceryItemNames
      * */
     public GroceryList getGroceryCurrentList(String token) throws InvalidParamException, ServerException {
-        if (this.currentGroceryListName.equals(this.cache.getName())) {
+        if (cache != null && this.currentGroceryListName.equals(this.cache.getName())) {
             return cache;
         }
 
-        return this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
+        cache = this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
+        return cache;
     }
 
     /**

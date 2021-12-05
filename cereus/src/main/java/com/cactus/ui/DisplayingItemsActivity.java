@@ -17,6 +17,8 @@ public class DisplayingItemsActivity extends AbstractActivity {
     private List<String> items;
     private ListView listView;
 
+    private List<String> sharedUsers;
+
     @Override
     protected AbstractActivity activity() {
         return this;
@@ -31,6 +33,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
         try {
             items = userInteractFacade.getGroceryItemNames();
+            sharedUsers = userInteractFacade.getGroceryListSharedUsers();
 
         } catch (InvalidParamException | ServerException e) {
             Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
@@ -38,7 +41,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
         }
 
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
-        listView = findViewById(R.id.itemViewDisplayItem);
+        listView = findViewById(R.id.listViewDisplayItem);
         listView.setAdapter(customItemAdapter);
     }
 
