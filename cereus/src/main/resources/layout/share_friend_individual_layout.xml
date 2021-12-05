@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
->
+                android:layout_height="60dp">
 
     <TextView
             android:text="Sample Text"
@@ -14,8 +13,8 @@
             android:textStyle="bold"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="120dp"/>
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="150dp"/>
     <Button
             android:text="Delete"
             android:layout_width="wrap_content"
@@ -23,6 +22,6 @@
             android:id="@+id/unshare_button"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="55dp"
             android:backgroundTint="@color/red"/>
 </RelativeLayout>
