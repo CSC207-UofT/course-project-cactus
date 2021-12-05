@@ -6,6 +6,7 @@ import com.cactus.entities.GroceryList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /***
@@ -208,5 +209,17 @@ public class GroceryListSystem {
         return list;
     }
 
+    /***
+     * Sort the list of grocery list names alphabetically so that UI can display
+     * them to the user.
+     *
+     * @param token token of user
+     * */
+    public void sortGroceryItems(String token){
+
+        ArrayList<String> groceryItemNames = getGroceryItemNames(token);
+        groceryItemNames.sort(Comparator.comparing(String::toString));
+
+    }
 }
 
