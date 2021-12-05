@@ -95,14 +95,13 @@ public class DisplayingItemsActivity extends AbstractActivity {
                     try {
                         this.userInteractFacade.shareList(inputString);
 
+                        sharedUsers.add(inputString);
+                        ((BaseAdapter) sharedList.getAdapter()).notifyDataSetChanged();
+                        submitInput.getText().clear();
                     } catch (InvalidParamException | ServerException e) {
                         Log.d(DisplayingItemsActivity.LOG_TAG, e.getMessage());
                         Toast.makeText(DisplayingItemsActivity.this, e.getToastMessage(), Toast.LENGTH_LONG).show();
                     }
-
-                    items.add(inputString);
-                    ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-                    submitInput.getText().clear();
                 } else {
                     Toast.makeText(DisplayingItemsActivity.this, "List is already shared with this user", Toast.LENGTH_LONG).show();
                 }
