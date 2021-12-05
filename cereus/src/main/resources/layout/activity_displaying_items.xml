@@ -11,6 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:id="@+id/itemImageBack"
+            app:layout_constraintTop_toBottomOf="@id/itemImageBack2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/green_dark"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/itemImageBack2"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"
@@ -22,7 +30,26 @@
             app:layout_constraintTop_toTopOf="@id/itemImageBack"
             app:layout_constraintBottom_toBottomOf="@id/itemImageBack"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/green_light"/>
+            android:background="@color/green_light" app:layout_constraintVertical_bias="0.3"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/itemImage2"
+            app:layout_constraintTop_toTopOf="@id/itemImageBack2"
+            app:layout_constraintBottom_toBottomOf="@id/itemImageBack2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/green_light" app:layout_constraintVertical_bias="0.6"
+            android:layout_marginLeft="4dp"/>
+    <TextView
+            android:text="List Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listNameBox"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@id/itemImage2"
+            app:layout_constraintTop_toTopOf="@id/itemImage2"
+            app:layout_constraintBottom_toBottomOf="@id/itemImage2"
+            android:textSize="20sp" android:layout_marginLeft="16dp"/>
     <TextView
             android:text="Items"
             android:layout_width="wrap_content"
@@ -75,4 +102,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="32dp" android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"/>
+    <EditText
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/displayListName"
+            app:layout_constraintBottom_toBottomOf="@id/itemImage2"
+            app:layout_constraintLeft_toRightOf="@id/listNameBox" app:layout_constraintTop_toTopOf="@id/itemImage2"
+            android:layout_marginLeft="24dp" android:textStyle="bold" android:textSize="20sp"
+            android:textColor="@android:color/secondary_text_light"/>
+    <EditText
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/displayShared"
+            app:layout_constraintBottom_toBottomOf="@id/itemImage2"
+            app:layout_constraintLeft_toRightOf="@id/displayListName"
+            app:layout_constraintTop_toTopOf="@id/itemImage2" android:textStyle="bold"
+            app:layout_constraintVertical_bias="0.50" android:textSize="20sp"
+            android:textColor="@android:color/secondary_text_light"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
