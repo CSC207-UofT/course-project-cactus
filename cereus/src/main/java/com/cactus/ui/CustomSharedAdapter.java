@@ -31,13 +31,12 @@ public class CustomSharedAdapter extends CustomAdapter {
             try {
                 this.userInteractFacade.unshareList(this.objects.get(position));
 
+                this.objects.remove(this.objects.get(position));
+                this.notifyDataSetChanged();
             } catch (InvalidParamException | ServerException e) {
                 Log.d(CustomSharedAdapter.LOG_TAG, e.getMessage());
                 Toast.makeText(this.context, e.getToastMessage(), Toast.LENGTH_LONG).show();
             }
-
-            this.objects.remove(this.objects.get(position));
-            this.notifyDataSetChanged();
         });
     }
 }

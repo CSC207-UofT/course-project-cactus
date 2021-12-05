@@ -200,4 +200,12 @@ public class UserInteractFacade {
     public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
+
+    public void shareList(String username) throws InvalidParamException, ServerException {
+        this.groceryListSystem.shareList(username, this.getToken());
+    }
+
+    public void unshareList(String username) throws InvalidParamException, ServerException {
+        this.groceryListSystem.unshareList(username, this.getToken());
+    }
 }

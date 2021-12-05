@@ -209,5 +209,14 @@ public class GroceryListSystem {
         return list;
     }
 
+    public void shareList(String username, String token) throws InvalidParamException, ServerException {
+        long id = this.getCurrentList().getId();
+        this.cache = this.groceryAdapter.shareList(id, username, token);
+    }
+
+    public void unshareList(String username, String token) throws InvalidParamException, ServerException {
+        long id = this.getCurrentList().getId();
+        this.cache = this.groceryAdapter.unshareList(id, username, token);
+    }
 }
 

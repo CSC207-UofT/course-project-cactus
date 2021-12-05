@@ -295,4 +295,62 @@ public class WebGroceryAdapter implements GroceryAdapter {
 
         makeRequest(this.client, request, "Could not delete list");
     }
+
+    @Override
+    public GroceryList shareList(long id, String username, String token) throws InvalidParamException, ServerException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("api")
+                .addPathSegment("share-list")
+                .addQueryParameter("id", String.valueOf(id))
+                .addQueryParameter("username", username)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + token)
+                .post(RequestBody.create(new byte[0], null))
+                .build();
+
+        String responseBody = makeRequest(this.client, request, "Lists can only be shared with friends");
+
+        try {
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, GroceryList.class);
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
+        }
+    }
+
+    @Override
+    public GroceryList unshareList(long id, String username, String token) throws InvalidParamException, ServerException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(STATIC_IP)
+                .port(8080)
+                .addPathSegment("api")
+                .addPathSegment("unshare-list")
+                .addQueryParameter("id", String.valueOf(id))
+                .addQueryParameter("username", username)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + token)
+                .delete()
+                .build();
+
+        String responseBody = makeRequest(this.client, request);
+
+        try {
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .readValue(responseBody, GroceryList.class);
+        } catch (JsonProcessingException e) {
+            throw new InternalException(e);
+        }
+    }
 }

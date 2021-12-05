@@ -70,6 +70,13 @@ public class GroceryList {
 
     public void setSharedUsers(List<String> sharedUsers) {
         this.sharedUsers = sharedUsers;
+
+        // some weirdness occurs with empty lists returning with null inside them
+        for (int i = sharedUsers.size() - 1; i >= 0; i--) {
+            if (this.sharedUsers.get(i) == null) {
+                this.sharedUsers.remove(i);
+            }
+        }
     }
 
     public List<String> getItems() {
@@ -79,5 +86,12 @@ public class GroceryList {
 
     public void setItems(List<GroceryItem> items) {
         this.items = items;
+
+        // some weirdness occurs with empty lists returning with null inside them
+        for (int i = items.size() - 1; i >= 0; i--) {
+            if (this.items.get(i) == null) {
+                this.items.remove(i);
+            }
+        }
     }
 }

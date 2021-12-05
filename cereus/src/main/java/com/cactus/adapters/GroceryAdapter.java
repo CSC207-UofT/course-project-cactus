@@ -64,4 +64,7 @@ public interface GroceryAdapter {
      */
     void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
+    GroceryList shareList(long id, String username, String token) throws InvalidParamException, ServerException;
+
+    GroceryList unshareList(long id, String username, String token) throws InvalidParamException, ServerException;
 }
