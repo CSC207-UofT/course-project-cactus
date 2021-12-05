@@ -22,6 +22,10 @@ public class MainActivity extends AbstractActivity {
         return this;
     }
 
+    /**
+     * Responsible for setup of the activity
+     *
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_main);
