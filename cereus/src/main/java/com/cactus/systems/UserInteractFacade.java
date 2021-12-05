@@ -159,4 +159,12 @@ public class UserInteractFacade {
     public void setCurrentGroceryList(String listName) {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
+
+    /***
+     * Sort the list of grocery item names alphabetically so that UI can display
+     * them to the user.
+     *
+     * */
+    public void sortGroceryItems(){ this.groceryListSystem.sortGroceryItems(this.getToken()); }
+
 }
