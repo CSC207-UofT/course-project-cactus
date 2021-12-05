@@ -3,6 +3,8 @@
  */
 package com.cactus.entities;
 
+import java.util.List;
+
 /**
  * Grocery List Entity
  */
@@ -16,6 +18,10 @@ public class GroceryList {
     private boolean isTemplate;
 
     private boolean owned;
+
+    private List<String> friends;
+
+    private List<String> items;
 
     /**
      * Empty constructor for GroceryList, required for Jackson serialization
@@ -55,5 +61,21 @@ public class GroceryList {
 
     public void setOwned(boolean owned) {
         this.owned = owned;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 }

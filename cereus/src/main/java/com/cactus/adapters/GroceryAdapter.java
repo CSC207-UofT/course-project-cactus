@@ -24,7 +24,7 @@ public interface GroceryAdapter {
      * @param token  token of the user who holds the list
      * @return a list of GroceryItems in the list
      */
-    List<String> getGroceryItems(long listID, String token) throws InvalidParamException, ServerException;
+    GroceryList getGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Create a new grocery list with the given name. Optionally mark the new list as a template,

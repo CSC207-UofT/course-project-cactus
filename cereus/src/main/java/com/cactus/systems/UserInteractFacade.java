@@ -157,7 +157,11 @@ public class UserInteractFacade {
      * @return a list of grocery item names belonging to the current list
      */
     public List<String> getGroceryItemNames() throws InvalidParamException, ServerException {
-        return this.groceryListSystem.getGroceryItemNames(this.getToken());
+        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getItems();
+    }
+
+    public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getFriends();
     }
 
     /**

@@ -26,6 +26,8 @@ public class GroceryListSystem {
 
     private Map<String, GroceryList> currentTemplateNamesMap;
 
+    private GroceryList cache;
+
     /***
      * Create a new GroceryListSystem with groceryList managers
      */
@@ -71,6 +73,7 @@ public class GroceryListSystem {
         }
 
         this.currentGroceryListName = name;
+        this.cache = newGroceryList;
 
         if (template) {
             this.currentTemplateNamesMap.put(name, newGroceryList);
@@ -116,8 +119,12 @@ public class GroceryListSystem {
      * @param token token of user
      * @return groceryItemNames
      * */
-    public List<String> getGroceryItemNames(String token) throws InvalidParamException, ServerException {
-        return this.groceryAdapter.getGroceryItems(this.getCurrentList().getId(), token);
+    public GroceryList getGroceryCurrentList(String token) throws InvalidParamException, ServerException {
+        if (this.currentGroceryListName.equals(this.cache.getName())) {
+            return cache;
+        }
+
+        return this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
     }
 
     /**

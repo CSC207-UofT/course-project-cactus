@@ -141,7 +141,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @return a list of GroceryItems in the list
      */
     @Override
-    public List<String> getGroceryItems(long listID, String token) throws InvalidParamException, ServerException {
+    public GroceryList getGroceryList(long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -159,18 +159,8 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String responseBody = makeRequest(this.client, request, "Grocery list could not be found");
 
         try {
-            JsonNode root = new ObjectMapper()
-                    .readTree(responseBody);
-
-            ArrayNode items = (ArrayNode) root.get("items");
-            List<String> output = new ArrayList<>();
-
-            for (JsonNode item : items) {
-                String itemName = item.get("name").asText();
-                output.add(itemName);
-            }
-
-            return output;
+            return new ObjectMapper()
+                    .readValue(responseBody, GroceryList.class);
         } catch (JsonProcessingException e) {
             throw new InternalException(e);
         }
