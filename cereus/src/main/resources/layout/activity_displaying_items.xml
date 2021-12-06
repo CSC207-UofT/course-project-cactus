@@ -123,6 +123,12 @@
             app:layout_constraintLeft_toRightOf="@id/displayListName"
             app:layout_constraintTop_toTopOf="@id/displayListName"
             app:layout_constraintVertical_bias="0.62" android:textSize="16sp"
-            android:textColor="@android:color/secondary_text_light"
-    />
+            android:textColor="@android:color/secondary_text_light"/>
+    <Button
+            android:text="Sort A - Z"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/sortButton"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp" android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/green_norm"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

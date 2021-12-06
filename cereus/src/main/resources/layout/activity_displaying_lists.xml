@@ -99,5 +99,25 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
             app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+            android:text="Sort A - Z"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortListButton"
+            app:layout_constraintBottom_toBottomOf="@id/listImageBack"
+            app:layout_constraintTop_toTopOf="@id/listImageBack"
+            app:layout_constraintRight_toLeftOf="@id/addListButton"
+            app:layout_constraintLeft_toRightOf="@id/listText"
+            android:backgroundTint="@color/blue_dark"/>
+    <Button
+            android:text="Sort A - Z"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortTemplateButton"
+            app:layout_constraintBottom_toBottomOf="@id/templateImageBack"
+            app:layout_constraintTop_toTopOf="@id/templateImageBack"
+            app:layout_constraintRight_toLeftOf="@id/addTemplateButton"
+            app:layout_constraintLeft_toRightOf="@id/templateText"
+            android:backgroundTint="@color/blue_dark"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

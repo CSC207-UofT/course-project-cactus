@@ -10,7 +10,7 @@ import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 import org.w3c.dom.Text;
 
-import java.util.List;
+import java.util.*;
 
 /***
  * Represents the activity responsible for displaying the grocery items
@@ -25,6 +25,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
     private String username;
     private String listOwner;
     private List<String> sharedUsers;
+    private boolean reverseSort;
 
     @Override
     protected AbstractActivity activity() {
@@ -80,6 +81,22 @@ public class DisplayingItemsActivity extends AbstractActivity {
         EditText itemName = findViewById(R.id.itemName);
         Button addItemButton = findViewById(R.id.addItemButton);
         Button shareButton = findViewById(R.id.share_link);
+        Button sortButton = findViewById(R.id.sortButton);
+
+        sortButton.setOnClickListener(view -> {
+
+            if (!this.reverseSort) {
+                items.sort(Comparator.comparing(String::toString));
+                sortButton.setText("Sort Z - A");
+                this.reverseSort = true;
+            }else{
+                items.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+                sortButton.setText("Sort A - Z");
+                this.reverseSort = false;
+            }
+
+            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        });
 
         addItemButton.setOnClickListener(view -> {
             String givenItemName = itemName.getText().toString();
