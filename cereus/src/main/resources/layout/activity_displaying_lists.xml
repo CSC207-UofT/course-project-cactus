@@ -99,5 +99,21 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp"
             app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+            android:text="Sort A-Z"
+            android:layout_width="121dp"
+            android:layout_height="39dp" android:id="@+id/sortListButton"
+            android:textColorHighlight="#FFFFFF" app:layout_constraintStart_toEndOf="@+id/listText"
+            app:layout_constraintEnd_toStartOf="@+id/addListButton" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="84dp" app:layout_constraintHorizontal_bias="0.462"
+            android:backgroundTint="@color/blue_dark"/>
+    <Button
+            android:text="Sort A-Z"
+            android:layout_width="111dp"
+            android:layout_height="37dp" android:id="@+id/sortTemplateButton"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="136dp" android:layout_marginBottom="276dp"
+            app:layout_constraintEnd_toStartOf="@+id/addTemplateButton" app:layout_constraintHorizontal_bias="0.0"
+            android:backgroundTint="@color/blue_dark"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
