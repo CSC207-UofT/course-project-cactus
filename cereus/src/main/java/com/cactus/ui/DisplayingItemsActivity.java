@@ -68,7 +68,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
             sharedText = "Editor";
         }
         shared.setText(sharedText);
-        this.disableFields(listNameText);
+        this.disableFields(shared);
 
 
     }
