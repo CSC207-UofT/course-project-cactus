@@ -128,7 +128,7 @@ public class DisplayingListsActivity extends AbstractActivity {
                 this.reverseSortTemplate = false;
             }
 
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+            ((BaseAdapter) templateView.getAdapter()).notifyDataSetChanged();
         });
 
     }
