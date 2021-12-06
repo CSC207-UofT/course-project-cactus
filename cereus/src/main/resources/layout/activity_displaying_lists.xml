@@ -100,7 +100,7 @@
             android:dividerHeight="10dp"
             app:layout_constraintStart_toStartOf="parent"/>
     <Button
-            android:text="Sort A-Z"
+            android:text="Sort A - Z"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sortListButton"
@@ -110,7 +110,7 @@
             app:layout_constraintLeft_toRightOf="@id/listText"
             android:backgroundTint="@color/blue_dark"/>
     <Button
-            android:text="Sort A-Z"
+            android:text="Sort A - Z"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sortTemplateButton"
