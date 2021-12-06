@@ -55,12 +55,12 @@ public class DisplayingItemsActivity extends AbstractActivity {
         listView.setAdapter(customItemAdapter);
 
         // Add title above the list
-        EditText listNameText = findViewById(R.id.displayListName);
+        TextView listNameText = findViewById(R.id.displayListName);
         listNameText.setText(listName);
-        this.disableFields(listNameText);
+
 
         // Add whether the User was an Editor or Owner of the List
-        EditText shared = findViewById(R.id.displayShared);
+        TextView shared = findViewById(R.id.displayShared);
         String sharedText;
         if (username.equals(listOwner)) {
             sharedText = "Owner";
@@ -68,7 +68,6 @@ public class DisplayingItemsActivity extends AbstractActivity {
             sharedText = "Editor";
         }
         shared.setText(sharedText);
-        this.disableFields(shared);
 
 
     }
@@ -169,8 +168,4 @@ public class DisplayingItemsActivity extends AbstractActivity {
         super.onStop();
     }
 
-    private void disableFields(EditText view) {
-        view.setEnabled(false);
-        view.setFocusable(false);
-    }
 }
