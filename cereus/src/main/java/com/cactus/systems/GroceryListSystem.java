@@ -115,15 +115,26 @@ public class GroceryListSystem {
         return new ArrayList<>(selectedLists.keySet());
     }
 
-    /***
+    /**
      * Return the list of grocery list item names for the current grocery list
      * so that UI can display them to the user.
      *
      * @param token token of user
      * @return groceryItemNames
-     * */
+     */
     public GroceryList getGroceryCurrentList(String token) throws InvalidParamException, ServerException {
         return this.groceryAdapter.getGroceryList(this.getCurrentList().getId(), token);
+    }
+
+    /**
+     * Return the username of the owner of the current grocery list
+     * so that UI can display them to the user.
+     *
+     * @param token token of user
+     * @return The Username of the Owner of the Current GroceryList
+     */
+    public String getGroceryCurrentListOwner(String token) throws InvalidParamException, ServerException {
+        return this.groceryAdapter.getGroceryListOwner(this.getCurrentList().getId(), token);
     }
 
     /**

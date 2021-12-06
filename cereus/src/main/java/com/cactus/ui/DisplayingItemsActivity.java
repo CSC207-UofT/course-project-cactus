@@ -21,7 +21,9 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
     private List<String> items;
     private ListView listView;
-
+    private String listName;
+    private String username;
+    private String listOwner;
     private List<String> sharedUsers;
     private boolean reverseSort;
 
@@ -39,6 +41,9 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
         try {
             items = userInteractFacade.getGroceryItemNames();
+            listName = userInteractFacade.getListName();
+            username = userInteractFacade.getUsername();
+            listOwner = userInteractFacade.getGroceryListOwnerUserName();
             sharedUsers = userInteractFacade.getGroceryListSharedUsers();
 
         } catch (InvalidParamException | ServerException e) {
@@ -49,6 +54,23 @@ public class DisplayingItemsActivity extends AbstractActivity {
         CustomItemAdapter customItemAdapter = new CustomItemAdapter(this, R.layout.item_layout, items, ((CereusApplication) getApplicationContext()).appComponent);
         listView = findViewById(R.id.listViewDisplayItem);
         listView.setAdapter(customItemAdapter);
+
+        // Add title above the list
+        TextView listNameText = findViewById(R.id.displayListName);
+        listNameText.setText(listName);
+
+
+        // Add whether the User was an Editor or Owner of the List
+        TextView shared = findViewById(R.id.displayShared);
+        String sharedText;
+        if (username.equals(listOwner)) {
+            sharedText = "Owner";
+        } else {
+            sharedText = "Editor";
+        }
+        shared.setText(sharedText);
+
+
     }
 
     /***
@@ -88,7 +110,7 @@ public class DisplayingItemsActivity extends AbstractActivity {
             }
         });
 
-        shareButton.setOnClickListener(view ->{
+        shareButton.setOnClickListener(view -> {
             // inflate popup
             LayoutInflater inflater = (LayoutInflater)
                     getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -96,7 +118,8 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
             // setup popup title
             TextView title = popupView.findViewById(R.id.share_title);
-            title.setText("Share list: " + this.userInteractFacade.getListName());
+            String shareTitleTextDisplay = "Share list: " + listName;
+            title.setText(shareTitleTextDisplay);
 
             // setup adapter
             ListView sharedList = popupView.findViewById(R.id.shared_friends);

@@ -87,7 +87,7 @@ public class UserInteractFacade {
      * of a user can be set. If a password of an empty string is provided, it is assumed that
      * the password remains unchanged. The submitted strings cannot be blank.
      *
-     * @param name the String name to change to
+     * @param name     the String name to change to
      * @param password the String password to change to
      * @throws InvalidParamException if the provided strings are invalid edits
      */
@@ -171,6 +171,16 @@ public class UserInteractFacade {
 
     public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getSharedUsers();
+    }
+
+    /**
+     * Return the username of the owner of the current grocery list
+     * so that UI can display them to the user.
+     *
+     * @return The Username of the Owner of the Current GroceryList
+     */
+    public String getGroceryListOwnerUserName() throws InvalidParamException, ServerException {
+        return this.groceryListSystem.getGroceryCurrentListOwner(this.getToken());
     }
 
     /**
