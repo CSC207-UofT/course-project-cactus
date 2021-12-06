@@ -65,8 +65,12 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
             if (!this.reverseSort) {
                 items.sort(Comparator.comparing(String::toString));
+                sortButton.setText("Sort Z - A");
+                this.reverseSort = true;
             }else{
                 items.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+                sortButton.setText("Sort A - Z");
+                this.reverseSort = false;
             }
 
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
