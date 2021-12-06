@@ -165,6 +165,24 @@ public class WebGroceryAdapter implements GroceryAdapter {
     }
 
     /**
+     * Returns the username of the Owner of the grocery list.
+     * <p>
+     * The token and listID are sent to the server to return the GroceryList, from which the owner is retrieved.
+     * <p>
+     * If the listID does not correspond to an existing list, then null is returned.
+     *
+     * @param listID id of the list which holds the items you are getting
+     * @param token  token of the user who holds the list
+     * @return the username of the Owner of the Grocery List
+     */
+    @Override
+    public String getGroceryListOwner(long listID, String token) throws InvalidParamException, ServerException {
+        GroceryList groceryList = getGroceryList(listID, token);
+        return groceryList.getOwner();
+
+    }
+
+    /**
      * Create a GroceryList with the name given. A user token is required for authorization.
      * <p>
      * nameList and token are sent to the server to create a GroceryList.

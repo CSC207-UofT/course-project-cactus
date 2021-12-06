@@ -27,6 +27,15 @@ public interface GroceryAdapter {
     GroceryList getGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
     /**
+     * Returns the username of the Owner of the grocery list.
+     *
+     * @param listID id of the list which holds the items you are getting
+     * @param token  token of the user who holds the list
+     * @return the username of the Owner of the Grocery List
+     */
+    String getGroceryListOwner(long listID, String token) throws InvalidParamException, ServerException;
+
+    /**
      * Create a new grocery list with the given name. Optionally mark the new list as a template,
      * or provide a template ID to initialize it with. Note that the template ID to initialize with is
      * ignored if the list is marked as a template. If a list is not a template, and should not be
