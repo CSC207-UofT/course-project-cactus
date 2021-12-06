@@ -74,5 +74,13 @@
             android:layout_height="wrap_content" android:id="@+id/share_link"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="32dp" android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/green_norm"/>
+    <Button
+            android:text="Sort A - Z"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/sortButton"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp" android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/green_norm"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,9 +11,7 @@ import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /***
  * Represents the activity responsible for displaying the grocery lists
@@ -27,6 +25,8 @@ public class DisplayingListsActivity extends AbstractActivity {
 
     ListView listView;
     ListView templateView;
+    boolean reverseSortList;
+    boolean reverseSortTemplate;
 
     @Override
     protected AbstractActivity activity(){
@@ -88,6 +88,8 @@ public class DisplayingListsActivity extends AbstractActivity {
     protected void displayOptions() {
         Button addListButton = findViewById(R.id.addListButton);
         Button addTemplateButton = findViewById(R.id.addTemplateButton);
+        Button sortListButton = findViewById(R.id.sortListButton);
+        Button sortTemplateButton = findViewById(R.id.sortTemplateButton);
 
         addListButton.setOnClickListener(view -> {
             Intent intent = new Intent(DisplayingListsActivity.this, CreateListActivity.class);
@@ -97,6 +99,36 @@ public class DisplayingListsActivity extends AbstractActivity {
         addTemplateButton.setOnClickListener(view -> {
             Intent intent = new Intent(DisplayingListsActivity.this, CreateTemplateActivity.class);
             startActivity(intent);
+        });
+
+        sortListButton.setOnClickListener(view -> {
+
+            if (!this.reverseSortList) {
+                listNames.sort(Comparator.comparing(String::toString));
+                sortListButton.setText("Sort Z - A");
+                this.reverseSortList = true;
+            }else{
+                listNames.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+                sortListButton.setText("Sort A - Z");
+                this.reverseSortList = false;
+            }
+
+            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        });
+
+        sortTemplateButton.setOnClickListener(view -> {
+
+            if (!this.reverseSortTemplate) {
+                templateNames.sort(Comparator.comparing(String::toString));
+                sortTemplateButton.setText("Sort Z - A");
+                this.reverseSortTemplate = true;
+            }else{
+                templateNames.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+                sortTemplateButton.setText("Sort A - Z");
+                this.reverseSortTemplate = false;
+            }
+
+            ((BaseAdapter) templateView.getAdapter()).notifyDataSetChanged();
         });
 
     }
