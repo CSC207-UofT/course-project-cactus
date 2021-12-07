@@ -79,6 +79,14 @@ public class GroceryListSystem {
         }
     }
 
+    /**
+     * Get a list of grocery list names that are associated with the given user
+     * @param token token for the current user
+     * @param template boolean to determine whether to return lists or templates
+     * @return a list of grocery lists that are associated with the given user
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public List<String> getGroceryListNames(String token, boolean template) throws InvalidParamException, ServerException {
         return this.getGroceryListNames(token, template, false);
     }
@@ -206,6 +214,10 @@ public class GroceryListSystem {
         this.currentGroceryListName = listName;
     }
 
+    /**
+     * Get the active grocery list
+     * @return current grocery list
+     */
     private GroceryList getCurrentList() {
         GroceryList list = this.currentListNamesMap.get(this.currentGroceryListName);
         if (list == null) {
@@ -217,16 +229,35 @@ public class GroceryListSystem {
         return list;
     }
 
+    /**
+     * Share the current list with the given user
+     *
+     * @param username username of the user to be shared with
+     * @param token token of the current user
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public void shareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
         this.groceryAdapter.shareList(id, username, token);
     }
 
+    /**
+     * Unshare the current list with the given user
+     *
+     * @param username username of the user to be unshared with
+     * @param token token of the current user
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public void unshareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
         this.groceryAdapter.unshareList(id, username, token);
     }
 
+    /**
+     * Reset the active lists / templates
+     */
     public void clearData() {
         this.currentGroceryListName = null;
         this.currentListNamesMap = null;

@@ -9,7 +9,7 @@ import com.cactus.exceptions.ServerException;
 import java.util.ArrayList;
 
 /***
- * Represents the activity responsible for creating templates
+ * Class responsible for the create templates page
  */
 public class CreateTemplateActivity extends AbstractActivity {
 
@@ -18,11 +18,18 @@ public class CreateTemplateActivity extends AbstractActivity {
     private ArrayList<String> items;
     private ListView listView;
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity() {
+    protected AbstractActivity getActivity() {
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup() {
         setContentView(R.layout.activity_creating_template);
@@ -35,8 +42,8 @@ public class CreateTemplateActivity extends AbstractActivity {
         listView.setAdapter(customItemAdapter);
     }
 
-    /***
-     * Display the add template text field and button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {

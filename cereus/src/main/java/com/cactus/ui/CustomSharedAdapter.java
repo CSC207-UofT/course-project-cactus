@@ -15,10 +15,24 @@ public class CustomSharedAdapter extends CustomAdapter {
 
     private final static String LOG_TAG = "CustomSharedAdapter";
 
+    /***
+     * Initializes a new CustomSharedAdapter
+     *
+     * @param context current context
+     * @param resource variable for the layout you wish to use
+     * @param objects the list object
+     * @param applicationComponent the applicationComponent variable
+     */
     public CustomSharedAdapter(Context context, int resource, List<String> objects, ApplicationComponent applicationComponent) {
         super(context, resource, objects, applicationComponent);
     }
 
+    /***
+     * Actions for custom shared adapter
+     *
+     * @param view the current android view
+     * @param position index of the chosen element
+     */
     @Override
     void ViewAction(View view, int position) {
         final TextView text = view.findViewById(R.id.shared_entry);

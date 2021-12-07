@@ -10,16 +10,26 @@ import androidx.appcompat.widget.Toolbar;
 import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
+/**
+ * Class responsible for the user profile page
+ */
 public class UserProfileActivity extends AbstractActivity {
 
     private final static String LOG_TAG = "UserProfileActivity";
     private boolean editing;
 
+    /**
+     * Getter for the current activity so this class can use it
+     * @return current activity
+     */
     @Override
-    AbstractActivity activity() {
+    AbstractActivity getActivity() {
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     void activitySetup() {
         setContentView(R.layout.activity_user_profile);
@@ -43,7 +53,7 @@ public class UserProfileActivity extends AbstractActivity {
     }
 
     /**
-     * Set all button listeners
+     * Set up for view elements like buttons and text
      */
     protected void displayOptions() {
 
@@ -100,11 +110,19 @@ public class UserProfileActivity extends AbstractActivity {
         });
     }
 
+    /**
+     * Enable a given edit text field (editable again)
+     * @param view view that is going to be enabled
+     */
     private void enableFields(EditText view) {
         view.setEnabled(true);
         view.setFocusableInTouchMode(true);
     }
 
+    /**
+     * Disable a given edit text field (no longer editable)
+     * @param view view that is going to be enabled
+     */
     private void disableFields(EditText view) {
         view.setEnabled(false);
         view.setFocusable(false);

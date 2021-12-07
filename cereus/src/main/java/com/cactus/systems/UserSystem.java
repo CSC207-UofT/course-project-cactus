@@ -151,6 +151,12 @@ public class UserSystem {
         return this.currentUser.getFriends();
     }
 
+    /**
+     * Adds the given user as a friend to the current user
+     * @param username username of the user to be added as a friend
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public void addFriend(String username) throws InvalidParamException, ServerException {
         this.currentUser = this.authAdapter.addFriend(username, this.getToken());
     }

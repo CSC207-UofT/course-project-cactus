@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 /***
- * Represents the activity responsible for displaying the grocery lists
+ * Class responsible for the display lists page
  */
 public class DisplayingListsActivity extends AbstractActivity {
 
@@ -28,11 +28,18 @@ public class DisplayingListsActivity extends AbstractActivity {
     boolean reverseSortList;
     boolean reverseSortTemplate;
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity getActivity(){
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_displaying_lists);
@@ -54,6 +61,9 @@ public class DisplayingListsActivity extends AbstractActivity {
         displayOptions();
     }
 
+    /**
+     * Method called when the view has started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -81,8 +91,8 @@ public class DisplayingListsActivity extends AbstractActivity {
         }
     }
 
-    /***
-     * Display the add list button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {

@@ -7,6 +7,9 @@ import com.cactus.exceptions.ServerException;
 
 import java.util.List;
 
+/**
+ * Class responsible for the add friends page
+ */
 public class AddFriendActivity extends AbstractActivity {
 
     private final static String LOG_TAG = "AddFriendActivity";
@@ -14,11 +17,18 @@ public class AddFriendActivity extends AbstractActivity {
     private List<String> friends;
     private ListView listView;
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity getActivity(){
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_add_friend);
@@ -30,6 +40,9 @@ public class AddFriendActivity extends AbstractActivity {
         listView.setAdapter(customFriendAdapter);
     }
 
+    /**
+     * Set up for view elements like buttons and text
+     */
     @Override
     protected void displayOptions(){
         EditText friendUsername = findViewById(R.id.friendUsername);

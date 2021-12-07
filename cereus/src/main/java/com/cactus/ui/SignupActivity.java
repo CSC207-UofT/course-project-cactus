@@ -11,17 +11,24 @@ import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
 /***
- * Represents the activity responsible for displaying the signup page
+ * Class responsible for displaying the signup page
  */
 public class SignupActivity extends AbstractActivity {
 
     private final static String LOG_TAG = "SignupActivity";
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity getActivity(){
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_sign_up);
@@ -37,8 +44,8 @@ public class SignupActivity extends AbstractActivity {
         userButton.setVisibility(View.INVISIBLE);
     }
 
-    /***
-     * Display the signup text boxes and button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {
@@ -70,6 +77,9 @@ public class SignupActivity extends AbstractActivity {
         });
     }
 
+    /**
+     * Define what the home button does
+     */
     @Override
     protected void homeButtonAction(){
         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
