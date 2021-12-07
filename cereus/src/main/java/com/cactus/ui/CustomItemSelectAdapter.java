@@ -30,7 +30,7 @@ public class CustomItemSelectAdapter extends CustomAdapter {
     }
 
     /***
-     * Actions for custom list adapter
+     * Actions for custom item select adapter
      *
      * @param view the current android view
      * @param position index of the chosen element

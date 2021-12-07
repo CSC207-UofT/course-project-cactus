@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 import java.util.*;
 
 /***
- * Represents the activity responsible for displaying the grocery items
+ * Class responsible for the displaying items page
  */
 public class DisplayingItemsActivity extends AbstractActivity {
 
@@ -27,17 +27,23 @@ public class DisplayingItemsActivity extends AbstractActivity {
     private List<String> sharedUsers;
     private boolean reverseSort;
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity() {
+    protected AbstractActivity getActivity() {
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup() {
         setContentView(R.layout.activity_displaying_items);
 
         setTitle(this.userInteractFacade.getListName());
-
 
         try {
             items = userInteractFacade.getGroceryItemNames();
@@ -73,8 +79,8 @@ public class DisplayingItemsActivity extends AbstractActivity {
 
     }
 
-    /***
-     * Display the add item text field and button along with logout button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {

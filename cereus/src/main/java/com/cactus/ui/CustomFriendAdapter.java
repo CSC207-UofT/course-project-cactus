@@ -23,6 +23,12 @@ public class CustomFriendAdapter extends CustomAdapter {
         super(context, resource, objects, applicationComponent);
     }
 
+    /**
+     * Actions for custom friend adapter
+     *
+     * @param view the current android view
+     * @param position index of the chosen element
+     */
     @Override
     void ViewAction(View view, int position) {
         final TextView text;

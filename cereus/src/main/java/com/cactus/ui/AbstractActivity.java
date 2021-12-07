@@ -10,14 +10,21 @@ import com.cactus.systems.UserInteractFacade;
 
 import javax.inject.Inject;
 
+/**
+ * Class responsible for the code that is shared for all activities
+ */
 abstract public class AbstractActivity extends AppCompatActivity {
 
     @Inject
     UserInteractFacade userInteractFacade;
 
+    /**
+     * Responsible for actions when the activity is created
+     * @param savedInstanceState state variable
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((CereusApplication) getApplicationContext()).appComponent.inject(activity());
+        ((CereusApplication) getApplicationContext()).appComponent.inject(getActivity());
         super.onCreate(savedInstanceState);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -33,12 +40,25 @@ abstract public class AbstractActivity extends AppCompatActivity {
         toolbarAction();
     }
 
-    abstract AbstractActivity activity();
+    /**
+     * Getter for the current activity so this class can use it
+     * @return current activity
+     */
+    abstract AbstractActivity getActivity();
 
+    /**
+     * Set up the activity before displaying
+     */
     abstract void activitySetup();
 
+    /**
+     * Set up for view elements like buttons and text
+     */
     abstract void displayOptions();
 
+    /**
+     * Define what the toolbar does
+     */
     private void toolbarAction(){
         Button homeButton = findViewById(R.id.home_button);
         Button userButton = findViewById(R.id.user_button);
@@ -52,11 +72,17 @@ abstract public class AbstractActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Define what the home button does
+     */
     protected void homeButtonAction(){
         Intent intent = new Intent(this, DisplayingListsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Define what the user button does
+     */
     protected void userButtonAction(){
         Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);

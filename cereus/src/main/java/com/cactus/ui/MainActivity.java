@@ -11,17 +11,24 @@ import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
 /***
- * Represents the activity responsible for the login screen
+ * Class responsible for the login page
  */
 public class MainActivity extends AbstractActivity {
 
     private final static String LOG_TAG = "MainActivity";
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity getActivity(){
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_main);
@@ -36,8 +43,8 @@ public class MainActivity extends AbstractActivity {
         homeButton.setVisibility(View.INVISIBLE);
     }
 
-    /***
-     * Display the login options and signup button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {

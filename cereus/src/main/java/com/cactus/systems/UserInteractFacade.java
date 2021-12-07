@@ -27,6 +27,10 @@ public class UserInteractFacade {
 
     // UserSystem methods
 
+    /**
+     * Getter for the current user's token
+     * @return string representation of the user's token
+     */
     private String getToken() {
         return this.userSystem.getToken();
     }
@@ -152,10 +156,26 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), true);
     }
 
+    /**
+     * Get grocery list names. Delegates to GroceryListSystem.
+     * Uses a force parameter that will reset the mapping in the GroceryListSystem.
+     *
+     * @return a list of grocery list names belonging to the current user
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public List<String> getGroceryListNamesForce() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), false, true);
     }
 
+    /**
+     * Get grocery template names. Delegates to GroceryListSystem.
+     * Uses a force parameter that will reset the mapping in the GroceryListSystem.
+     *
+     * @return a list of grocery template names belonging to the current user
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public List<String> getGroceryTemplateNamesForce() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), true, true);
     }
@@ -169,6 +189,13 @@ public class UserInteractFacade {
         return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getItems();
     }
 
+    /**
+     * Get the list of users that share the current list using GroceryListSystem
+     *
+     * @return a list of users that share the current list
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getSharedUsers();
     }
@@ -220,10 +247,24 @@ public class UserInteractFacade {
         this.groceryListSystem.setCurrentGroceryList(listName);
     }
 
+    /**
+     * Share the current with the given user
+     *
+     * @param username username of the user to share with
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public void shareList(String username) throws InvalidParamException, ServerException {
         this.groceryListSystem.shareList(username, this.getToken());
     }
 
+    /**
+     * Unshare the current list with the given user
+     *
+     * @param username username of the user to unshare with
+     * @throws InvalidParamException
+     * @throws ServerException
+     */
     public void unshareList(String username) throws InvalidParamException, ServerException {
         this.groceryListSystem.unshareList(username, this.getToken());
     }

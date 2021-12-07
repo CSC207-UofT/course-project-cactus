@@ -7,7 +7,7 @@ import com.cactus.exceptions.InvalidParamException;
 import com.cactus.exceptions.ServerException;
 
 /***
- * Represents the activity responsible for creating grocery lists
+ * Class responsible for the create list page
  */
 public class CreateListActivity extends AbstractActivity{
 
@@ -15,11 +15,18 @@ public class CreateListActivity extends AbstractActivity{
 
     private CustomItemSelectAdapter customItemSelectAdapter;
 
+    /**
+     * Getter for the current activity so the abstract class can use it
+     * @return current activity
+     */
     @Override
-    protected AbstractActivity activity(){
+    protected AbstractActivity getActivity(){
         return this;
     }
 
+    /**
+     * Set up the activity before displaying
+     */
     @Override
     protected void activitySetup(){
         setContentView(R.layout.activity_creating_grocery_list);
@@ -38,8 +45,8 @@ public class CreateListActivity extends AbstractActivity{
         }
     }
 
-    /***
-     * Display the add list text field and button
+    /**
+     * Set up for view elements like buttons and text
      */
     @Override
     protected void displayOptions() {
