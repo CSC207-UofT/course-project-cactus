@@ -10,7 +10,7 @@ public class InvalidParamException extends CereusException {
      * to the user, and a message to log for debugging.
      *
      * @param toastMessage a String message intended for the user
-     * @param logMessage a String message intended for logs
+     * @param logMessage   a String message intended for logs
      */
     public InvalidParamException(String toastMessage, String logMessage) {
         super(toastMessage, logMessage);

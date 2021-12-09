@@ -7,10 +7,7 @@ import com.cactus.exceptions.ServerException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /***
  * Represents the system that controls grocery lists and grocery items
@@ -46,7 +43,6 @@ public class GroceryListSystem {
      * @param token token of user
      * @param template a boolean specifying if the created list should be a template
      * @param templateName the String name of the template to initialize this list with, if it is not a template
-     * @return true if a new groceryList was created, false otherwise
      */
     public void newGroceryList(String name, String token, boolean template, String templateName) throws InvalidParamException, ServerException {
         if (currentListNamesMap.containsKey(name)) {
@@ -59,7 +55,7 @@ public class GroceryListSystem {
         if (!template && templateName != null) {
             if (currentTemplateNamesMap.containsKey(templateName)) {
                 newGroceryList = this.groceryAdapter.createGroceryList(name, token, false,
-                        this.currentTemplateNamesMap.get(templateName).getId());
+                        Objects.requireNonNull(this.currentTemplateNamesMap.get(templateName)).getId());
 
 
             } else {
@@ -81,11 +77,12 @@ public class GroceryListSystem {
 
     /**
      * Get a list of grocery list names that are associated with the given user
-     * @param token token for the current user
+     *
+     * @param token    token for the current user
      * @param template boolean to determine whether to return lists or templates
      * @return a list of grocery lists that are associated with the given user
-     * @throws InvalidParamException
-     * @throws ServerException
+     * @throws InvalidParamException can be called if parameters fail
+     * @throws ServerException       can be called if the server fails
      */
     public List<String> getGroceryListNames(String token, boolean template) throws InvalidParamException, ServerException {
         return this.getGroceryListNames(token, template, false);
@@ -147,15 +144,10 @@ public class GroceryListSystem {
 
     /**
      * Exit the list by setting the list id to null
-     *
-     * @return true if there existed a valid list id before exiting
      */
-    public boolean exitGroceryList() {
+    public void exitGroceryList() {
         if (this.currentGroceryListName != null) {
             this.currentGroceryListName = null;
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -164,7 +156,6 @@ public class GroceryListSystem {
      *
      * @param items list of items to be added
      * @param token the token of the user that it is being added to
-     * @return true of items were added successfully
      **/
     public void addGroceryItems(List<String> items, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
@@ -176,9 +167,8 @@ public class GroceryListSystem {
      * Delete the current list
      *
      * @param token the id of the user that the to be deleted list belongs to
-     * @return true if the list was successfully deleted and false if list DNE
      */
-    public boolean deleteGroceryList(String token, String listName) throws InvalidParamException, ServerException {
+    public void deleteGroceryList(String token, String listName) throws InvalidParamException, ServerException {
 
         GroceryList removed = this.currentListNamesMap.remove(listName);
         if (removed == null) {
@@ -190,7 +180,6 @@ public class GroceryListSystem {
             groceryAdapter.deleteGroceryList(removed.getId(), token);
         }
 
-        return false;
     }
 
     /***
@@ -216,6 +205,7 @@ public class GroceryListSystem {
 
     /**
      * Get the active grocery list
+     *
      * @return current grocery list
      */
     private GroceryList getCurrentList() {
@@ -233,9 +223,9 @@ public class GroceryListSystem {
      * Share the current list with the given user
      *
      * @param username username of the user to be shared with
-     * @param token token of the current user
-     * @throws InvalidParamException
-     * @throws ServerException
+     * @param token    token of the current user
+     * @throws InvalidParamException can be called if parameters fail
+     * @throws ServerException       can be called if the server fails
      */
     public void shareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
@@ -246,9 +236,9 @@ public class GroceryListSystem {
      * Unshare the current list with the given user
      *
      * @param username username of the user to be unshared with
-     * @param token token of the current user
-     * @throws InvalidParamException
-     * @throws ServerException
+     * @param token    token of the current user
+     * @throws InvalidParamException can be called if parameters fail
+     * @throws ServerException       can be called if the server fails
      */
     public void unshareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();

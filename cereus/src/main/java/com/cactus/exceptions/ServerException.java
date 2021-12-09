@@ -17,7 +17,7 @@ public class ServerException extends CereusException {
 
     /**
      * Get a nicely formatted exception message intended to be displayed as a Toast to the user.
-     *
+     * <p>
      * Specifically, a user does not need to know specifics about server errors, so a try again
      * is returned.
      *
