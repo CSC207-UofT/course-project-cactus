@@ -2,6 +2,8 @@ package com.saguaro.exception;
 
 /**
  * Exception thrown when invalid login credentials are received.
+ *
+ * @author Charles Wong
  */
 public class InvalidLoginException extends Exception {
 

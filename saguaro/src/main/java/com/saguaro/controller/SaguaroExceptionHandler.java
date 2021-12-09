@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /**
  * Exception handler for Saguaro. This class provides methods that intercept exceptions
  * thrown by controllers, and responds accordingly.
- *
+ * <p>
  * Handled exceptions include:
  * <ul>
  *     <li>InvalidLoginException
@@ -30,7 +30,7 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler for any InvalidLoginException that is thrown. This exception will be
      * thrown if invalid login credentials are provided.
-     *
+     * <p>
      * Returns a 401 UNAUTHORIZED response with the exception message.
      *
      * @param e       the InvalidLoginException to be handled
@@ -51,7 +51,7 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handler for any InvalidParamException that is thrown. Requests that thrown this
      * exception include, but are not limited to, those that contain invalid payloads.
-     *
+     * <p>
      * Returns a 409 CONFLICT response with the exception message.
      *
      * @param e       the InvalidParamException to be handled
@@ -72,7 +72,7 @@ public class SaguaroExceptionHandler extends ResponseEntityExceptionHandler {
      * Handler for any ResourceNotFoundException. This exception is thrown when a
      * requests attempts to access a resource that either does not exist, or is a
      * secret the client is not authorized to access.
-     *
+     * <p>
      * Returns a 404 NOT_FOUND with the exception message.
      *
      * @param e       the ResourceNotFoundException to be handled

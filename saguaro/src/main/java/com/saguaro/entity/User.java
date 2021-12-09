@@ -83,6 +83,9 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<GroceryList> lists;
 
+    /**
+     * The grocery lists that have been shared with this user
+     */
     @JsonIgnore
     @ManyToMany(mappedBy = "sharedUsers")
     private List<GroceryList> sharedLists;

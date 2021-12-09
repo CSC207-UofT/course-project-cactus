@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 /**
  * This class defines an AuthenticationProvider that provides token
  * authentication services.
+ *
+ * @author Charles Wong
  */
 @Component
 public class TokenAuthenticationProvider implements AuthenticationProvider {
@@ -47,7 +49,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     /**
      * Tests for whether the Authentication object passed into this provider is supported.
-     *
+     * <p>
      * This provider supports instances of UsernamePasswordAuthenticationToken, which is used
      * as a carrier for authentication tokens.
      *

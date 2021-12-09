@@ -37,7 +37,7 @@ public class GroceryController {
 
     /**
      * Constructs this grocery controller given a GroceryService.
-     *
+     * <p>
      * Notice that by default, Spring will attempt to autowire the only
      * constructor of a class.
      *

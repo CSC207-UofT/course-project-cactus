@@ -5,6 +5,8 @@ import com.saguaro.entity.User;
 /**
  * An exception thrown when attempting to perform some operation on an entity that
  * does not exist.
+ *
+ * @author Charles Wong
  */
 public class ResourceNotFoundException extends Exception {
 
