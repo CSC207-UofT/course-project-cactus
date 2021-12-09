@@ -120,7 +120,7 @@ public class UserSystem {
      * @param password the String password to set
      * @throws InvalidParamException if the name or password do not contain at least one non-whitespace
      *                               character, assuming the password is changing
-     * @throws ServerException if something went wrong during the request
+     * @throws ServerException       if something went wrong during the request
      */
     public void editUser(String name, String password) throws InvalidParamException, ServerException {
         if ((!password.isEmpty() && password.trim().isEmpty()) || name.trim().isEmpty()) {

@@ -205,6 +205,7 @@ public class GroceryListSystem {
 
     /**
      * Get the active grocery list
+     *
      * @return current grocery list
      */
     private GroceryList getCurrentList() {
@@ -222,9 +223,9 @@ public class GroceryListSystem {
      * Share the current list with the given user
      *
      * @param username username of the user to be shared with
-     * @param token token of the current user
+     * @param token    token of the current user
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public void shareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();
@@ -235,9 +236,9 @@ public class GroceryListSystem {
      * Unshare the current list with the given user
      *
      * @param username username of the user to be unshared with
-     * @param token token of the current user
+     * @param token    token of the current user
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public void unshareList(String username, String token) throws InvalidParamException, ServerException {
         long id = this.getCurrentList().getId();

@@ -29,6 +29,7 @@ public class UserInteractFacade {
 
     /**
      * Getter for the current user's token
+     *
      * @return string representation of the user's token
      */
     private String getToken() {
@@ -58,7 +59,6 @@ public class UserInteractFacade {
 
     /**
      * Logout a user using the UserSystem's logout method
-     *
      */
     public void logout() throws InvalidParamException, ServerException {
         this.userSystem.logout();
@@ -161,7 +161,7 @@ public class UserInteractFacade {
      *
      * @return a list of grocery template names belonging to the current user
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public List<String> getGroceryTemplateNamesForce() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryListNames(this.getToken(), true, true);
@@ -181,7 +181,7 @@ public class UserInteractFacade {
      *
      * @return a list of users that share the current list
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public List<String> getGroceryListSharedUsers() throws InvalidParamException, ServerException {
         return this.groceryListSystem.getGroceryCurrentList(this.getToken()).getSharedUsers();
@@ -236,7 +236,7 @@ public class UserInteractFacade {
      *
      * @param username username of the user to share with
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public void shareList(String username) throws InvalidParamException, ServerException {
         this.groceryListSystem.shareList(username, this.getToken());
@@ -247,7 +247,7 @@ public class UserInteractFacade {
      *
      * @param username username of the user to unshare with
      * @throws InvalidParamException can be called if parameters fail
-     * @throws ServerException can be called if the server fails
+     * @throws ServerException       can be called if the server fails
      */
     public void unshareList(String username) throws InvalidParamException, ServerException {
         this.groceryListSystem.unshareList(username, this.getToken());
