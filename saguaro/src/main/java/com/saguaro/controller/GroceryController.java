@@ -37,7 +37,7 @@ public class GroceryController {
 
     /**
      * Constructs this grocery controller given a GroceryService.
-     *
+     * <p>
      * Notice that by default, Spring will attempt to autowire the only
      * constructor of a class.
      *
@@ -108,7 +108,10 @@ public class GroceryController {
      * </ul>
      *
      * @param name the String to set the new grocery list's name to
+     * @param template a boolean specifying if the created list should be a grocery list template
+     * @param templateId a Long object representing the ID of the template to initialize the new list with
      * @return the newly created GroceryList object
+     * @throws ResourceNotFoundException if attempting to create a list using the provided template ID fails
      */
     @PostMapping("api/create-list")
     public GroceryList createNewList(@RequestParam("name") String name,

@@ -16,16 +16,40 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a service class providing all logic for grocery list related operations. It is responsible
+ * for interfacing with repository interfaces to fetch/persist User entities.
+ *
+ * @author Charles Wong
+ */
 @Service
 @Transactional(readOnly = true)
 public class GroceryService {
 
-    UserRepository userRepository;
+    /**
+     * Repository interface for user tables
+     */
+    private UserRepository userRepository;
 
-    GroceryListRepository groceryListRepository;
+    /**
+     * Repository interface for grocery list tables
+     */
+    private GroceryListRepository groceryListRepository;
 
-    GroceryItemRepository groceryItemRepository;
+    /**
+     * Repository interface for grocery item tables
+     */
+    private GroceryItemRepository groceryItemRepository;
 
+    /**
+     * Constructs a GroceryService, injecting all requires dependencies.
+     * <p>
+     * Note that this constructor is automatically picked up by Spring for autowiring.
+     *
+     * @param userRepository        a UserRepository instance to support this service
+     * @param groceryListRepository a GroceryListRepository instance to support this service
+     * @param groceryItemRepository a GroceryItemRepository instance to support this service
+     */
     public GroceryService(UserRepository userRepository,
                           GroceryListRepository groceryListRepository,
                           GroceryItemRepository groceryItemRepository) {
@@ -106,6 +130,17 @@ public class GroceryService {
                 .collect(Collectors.toMap(GroceryList::getId, GroceryList::getName));
     }
 
+    /**
+     * Fetch a grocery list, specified by its ID. The list corresponding to the ID, if it exists,
+     * is only returned if the provided username corresponds to the owner or one of the shared
+     * users of the list. Otherwise, a ResourceNotFoundException is thrown.
+     *
+     * @param id       a long representing the ID of the grocery list to fetch
+     * @param username the String username of the user making the request
+     * @return the found GroceryList object
+     * @throws ResourceNotFoundException if the provided ID does not match any existing list, or if the user
+     *                                   making the fetch request is not authorized to do so
+     */
     public GroceryList getListById(long id, String username)
             throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
@@ -122,7 +157,7 @@ public class GroceryService {
      * Create a new grocery list with the provided name, for the user specified by username. Additionally mark
      * this grocery list as being a template or not.
      *
-     * @param name a String to initialize the new GroceryList's name with
+     * @param name     a String to initialize the new GroceryList's name with
      * @param username the String username of the user to create this list for
      * @param template a boolean specifying whether this grocery list should be a template
      * @return the newly saved GroceryList object
@@ -143,11 +178,11 @@ public class GroceryService {
      * Create a new grocery list with the provided name, for the user specified by username.
      * Additionally initialize this grocery list with the items from a template. If the
      * template does not exist, a ResourceNotFoundException is thrown.
-     *
+     * <p>
      * Note that a grocery list cannot have been marked as a template if it is being initalized with a template.
      *
-     * @param name a String to initialize the new GroceryList's name with
-     * @param username the String username of the user to create this list for
+     * @param name       a String to initialize the new GroceryList's name with
+     * @param username   the String username of the user to create this list for
      * @param templateId a long representing the ID of the template to initialize this grocery list with
      * @return the newly saved GroceryList object
      * @throws ResourceNotFoundException if the provided template id to initialize this grocery list with does not
@@ -172,6 +207,27 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    /**
+     * Given a GroceryList object, attempt to save it as the new state of an existing grocery list. The new
+     * list is matched to an existing list using its ID. If a match is not found, or the user making the
+     * save request is not authorized to edit the list, a ResourceNotFoundException is thrown.
+     * <p>
+     * Otherwise, the grocery items in the new list overwrite those in the old list completely. Note that this
+     * method guarantees that should any items remain unchanged from old list to new list, that the same
+     * grocery item reference is kept in the list. Additionally, if a grocery item that already exists in the
+     * database needs to be saved to the list, then that instance will be the one saved to the list; new grocery
+     * list objects are created and persisted if and only if that grocery item does not already exist in the
+     * database.
+     * <p>
+     * If the new grocery list includes and non-null name field, the string contained in that field will
+     * overwrite the old list's existing name.
+     *
+     * @param list     the GroceryList to save as the new state
+     * @param username the String username of the user making the request
+     * @return the newly saved GroceryList object
+     * @throws ResourceNotFoundException if the new list's ID does not match an existing list that the user
+     *                                   is authorized to edit
+     */
     @Transactional
     public GroceryList saveList(GroceryList list, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);
@@ -250,6 +306,15 @@ public class GroceryService {
         return groceryListRepository.save(list);
     }
 
+    /**
+     * Given a grocery list ID, remove the corresponding grocery list if the user making this
+     * request is authorized to do so.
+     *
+     * @param id       a long representing the ID of the grocery list to remove
+     * @param username the String username of the user making the delete request
+     * @throws ResourceNotFoundException if the provided ID does not match an existing list that the user making
+     *                                   is an owner of
+     */
     @Transactional
     public void removeList(long id, String username) throws ResourceNotFoundException {
         User user = userRepository.findUserByUsername(username);

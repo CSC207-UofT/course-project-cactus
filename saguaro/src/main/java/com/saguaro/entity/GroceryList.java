@@ -156,11 +156,11 @@ public class GroceryList {
     /**
      * Set the owner of this list if one is not set already. Once initially set, the
      * owner of a list cannot be changed.
-     *
+     * <p>
      * The owner of a list is not deserialized, since a user must be authenticated
      * to interact with grocery lists anyways
      *
-     * @param user the User to set as the owner of this list
+     * @param owner the User to set as the owner of this list
      */
     @JsonIgnore
     public void setOwner(User owner) {

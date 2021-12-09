@@ -14,16 +14,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+/**
+ * This class is a service class providing all logic for user related operations. It is responsible
+ * for interfacing with repository interfaces to fetch/persist User entities.
+ *
+ * @author Charles Wong
+ */
 @Service
 @Transactional(readOnly = true)
 public class UserService {
 
-    UserRepository userRepository;
+    /**
+     * Repository interface for user tables
+     */
+    private UserRepository userRepository;
 
-    RoleRepository roleRepository;
+    /**
+     * Repository interface for role tables
+     */
+    private RoleRepository roleRepository;
 
-    PasswordEncoder passwordEncoder;
+    /**
+     * Bean that handles password hashing
+     */
+    private PasswordEncoder passwordEncoder;
 
+    /**
+     * Constructs a UserService, injecting all requires dependencies.
+     * <p>
+     * Note that this constructor is automatically picked up by Spring for autowiring.
+     *
+     * @param userRepository  a UserRepository instance to support this service
+     * @param roleRepository  a RoleRepository instance to support this service
+     * @param passwordEncoder a PasswordEncoder instance to support this service
+     */
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder) {
@@ -33,6 +57,19 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Given a username and password, attempt to log in the user. If successful, an authentication
+     * token is generated for the user, and attached to the returned User object. If the user already
+     * has an authentication token, a new one will be generated regardless, which will overwrite
+     * the old token.
+     * <p>
+     * If the provided combination does not match an existing user, then an InvalidLoginException is thrown.
+     *
+     * @param username the String username attempting to log in
+     * @param password the String password of the user attempting to log in
+     * @return the corresponding User object to the inputted username and password, with a login token
+     * @throws InvalidLoginException if the provided username and password does not match an existing user
+     */
     @Transactional
     public User login(String username, String password) throws InvalidLoginException {
         User user = userRepository.findUserByUsername(username);
@@ -49,6 +86,15 @@ public class UserService {
         throw new InvalidLoginException();
     }
 
+    /**
+     * Given a username, logout the corresponding user by invalidating their
+     * authentication token.
+     * <p>
+     * This method assumes that the provided username is one that belongs to an
+     * existing user, since a user must be authenticated with Saguaro to logout.
+     *
+     * @param username the String username of the user to logout
+     */
     @Transactional
     public void logout(String username) {
         User user = userRepository.findUserByUsername(username);
@@ -56,6 +102,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Register a new user with Saguaro, using the provided username, password, and name. The password is
+     * hashed using the PasswordEncoder bean injected into this service class, and saved. All users are given
+     * the role "ROLE_USER", which is assumed to exist in the role database table before any user is registered.
+     * <p>
+     * If a username attempting to register already belongs to an existing user, an InvalidParamException is thrown.
+     * <p>
+     * Note that registering a user does not log them in.
+     *
+     * @param username the String username to register
+     * @param password the String password of the user attempting to register
+     * @param name     the String name of the user attempting to register
+     * @return a fully populated User object containing the details of the newly registered user
+     * @throws InvalidParamException if the username provided already belongs to an existing user
+     */
     @Transactional
     public User registerNewUser(String username, String password, String name)
             throws InvalidParamException {
@@ -74,6 +135,14 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    /**
+     * Attempt to find the user that holds the provided authentication token. If none exist,
+     * then return null. Otherwise, populate a {@link UserDetails} object with the user's details
+     * and return that. This method is intended to be used as part of Saguaro's security flow.
+     *
+     * @param token the String authentication token to attempt to match
+     * @return a fully populated UserDetails object containing the found user, or null if none is found
+     */
     public UserDetails findByToken(String token) {
         User user = userRepository.findUserByToken(token);
 
@@ -84,6 +153,12 @@ public class UserService {
         return buildSpringUser(user);
     }
 
+    /**
+     * Build a UserDetails object using the provided Saguaro User object
+     *
+     * @param user the User to build the UserDetails from
+     * @return a UserDetails object populated with the details of the user
+     */
     private org.springframework.security.core.userdetails.User buildSpringUser(User user) {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

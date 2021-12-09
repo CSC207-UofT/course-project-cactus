@@ -34,7 +34,7 @@ public class UserController {
 
     /**
      * Constructs this user controller given a UserService.
-     *
+     * <p>
      * Notice that by default, Spring will attempt to autowire the only
      * constructor of a class.
      *
@@ -55,11 +55,11 @@ public class UserController {
      *     <li>roles
      *     <li>token
      * </ul>
-     *
+     * <p>
      * If the provided username does not exist, or the password does not match the
      * username, then the login operation is unsuccessful and an InvalidLoginException
      * is thrown.
-     *
+     * <p>
      * A new token is provided on every successful login, and any prior tokens are
      * invalidated; at most one token will be valid for a user at any given time.
      * Tokens are non-expiring.
@@ -86,7 +86,7 @@ public class UserController {
      * All fields must not be blank; they must be non-null and contain at least one
      * non-whitespace character. Invalid payloads will cause an InvalidParamException
      * to be thrown.
-     *
+     * <p>
      * On successful registration, the newly created User object is returned. Note that
      * registering a user does not log them in; the object returned will have a null
      * token attribute.
@@ -94,7 +94,7 @@ public class UserController {
      * @param payload a RegisterPayload containing information about the user to register
      * @return the User that was registered
      * @throws InvalidParamException if an invalid RegisterPayload was provided
-     * @see RegisterPayload
+     * @see UserPayload
      */
     @PostMapping("/register")
     public User register(@Validated(RegisterGroup.class) @RequestBody UserPayload payload) throws InvalidParamException {
@@ -176,12 +176,14 @@ public class UserController {
     /**
      * Used to specify the validation strategies for registration inputs
      */
-    private interface RegisterGroup {}
+    private interface RegisterGroup {
+    }
 
     /**
      * Used to specify the validation strategies for edit user info inputs
      */
-    private interface EditGroup {}
+    private interface EditGroup {
+    }
 
     /**
      * Data container class for the client specifiable user data, to deserialize

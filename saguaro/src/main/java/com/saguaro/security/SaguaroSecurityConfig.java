@@ -23,6 +23,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * authentication through Saguaro, but requires authentication with the database.
  *
  * This class also provides the password encryption bean to the application.
+ *
+ * @author Charles Wong
  */
 @Configuration
 public class SaguaroSecurityConfig extends WebSecurityConfigurerAdapter {
