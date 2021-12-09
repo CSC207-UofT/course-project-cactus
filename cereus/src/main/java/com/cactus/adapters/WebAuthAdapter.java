@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import okhttp3.Response;
+
 
 import javax.inject.Inject;
 
@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import static com.cactus.adapters.HttpUtil.*;
@@ -40,7 +40,7 @@ public class WebAuthAdapter implements AuthAdapter {
 
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-            InputStream input = classloader.getResourceAsStream("network.properties");
+            InputStream input = Objects.requireNonNull(classloader).getResourceAsStream("network.properties");
 
             if (input != null) {
                 Properties props = new Properties();
@@ -162,7 +162,6 @@ public class WebAuthAdapter implements AuthAdapter {
      * If the token corresponds to no User object, then the User is not logged out and the function returns false.
      *
      * @param token a String containing a token unique to every User, stored in the User class
-     * @return a boolean signifying whether the User corresponding to the token is logged out or not
      * @see User
      */
     @Override
@@ -179,6 +178,20 @@ public class WebAuthAdapter implements AuthAdapter {
         makeRequest(this.client, request);
     }
 
+    /**
+     * Edit a user's details. If null is provided for the password, then the password
+     * remains unchanged.
+     * <p>
+     * On server error, throws a ServerException. This method can also throw a InvalidParamException,
+     * but the caller is expected to sanitize inputs as much as possible.
+     *
+     * @param name     the String name to set
+     * @param password the String password to set
+     * @param token    a String authentication token
+     * @return the newly edited User object
+     * @throws InvalidParamException if invalid parameters were provided
+     * @throws ServerException       if the server response contains a 5xx response code
+     */
     @Override
     public User editUserDetails(String name, String password, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
@@ -213,6 +226,15 @@ public class WebAuthAdapter implements AuthAdapter {
         }
     }
 
+    /**
+     * Add a friend for an authenticated user
+     *
+     * @param username the String username of the friend to add
+     * @param token    a String authentication token
+     * @return the newly edited User object
+     * @throws InvalidParamException if the provided username is invalid
+     * @throws ServerException       if some unexpected server or request error occurs
+     */
     @Override
     public User addFriend(String username, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()

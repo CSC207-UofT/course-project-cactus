@@ -7,7 +7,6 @@ import com.cactus.exceptions.ServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
@@ -34,7 +33,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String tempIp = "192.168.0.127"; // default to this address
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-            InputStream input = classloader.getResourceAsStream("network.properties");
+            InputStream input = Objects.requireNonNull(classloader).getResourceAsStream("network.properties");
 
             if (input != null) {
                 Properties props = new Properties();
@@ -91,32 +90,27 @@ public class WebGroceryAdapter implements GroceryAdapter {
             throw new InternalException(e);
         }
 
-        assert fullListNames.get("lists") != null;
-        assert fullListNames.get("templates") != null;
-
-        assert fullListNames.get("lists").get("owned") != null;
-        assert fullListNames.get("lists").get("shared") != null;
-
-        assert fullListNames.get("templates").get("owned") != null;
-        assert fullListNames.get("templates").get("shared") != null;
-
         // O(1) appending
-        int size = fullListNames.get("lists").get("owned").size() +
-                fullListNames.get("lists").get("shared").size() +
-                fullListNames.get("templates").get("owned").size() +
-                fullListNames.get("templates").get("shared").size();
+        int size = Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("lists")).get("owned")).size() +
+                Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("lists")).get("shared")).size() +
+                Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("templates")).get("owned")).size() +
+                Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("templates")).get("shared")).size();
         List<GroceryList> result = new ArrayList<>(size);
 
-        this.parse(fullListNames.get("lists").get("owned"), true, false, result);
-        this.parse(fullListNames.get("lists").get("shared"), false, false, result);
+        this.parse(Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("lists")).get("owned")),
+                false, result);
+        this.parse(Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("lists")).get("shared")),
+                false, result);
 
-        this.parse(fullListNames.get("templates").get("owned"), true, true, result);
-        this.parse(fullListNames.get("templates").get("shared"), false, true, result);
+        this.parse(Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("templates")).get("owned")),
+                true, result);
+        this.parse(Objects.requireNonNull(Objects.requireNonNull(fullListNames.get("templates")).get("shared")),
+                true, result);
 
         return result;
     }
 
-    private void parse(Map<Long, String> lists, boolean owned, boolean template, List<GroceryList> result) {
+    private void parse(Map<Long, String> lists, boolean template, List<GroceryList> result) {
         for (Map.Entry<Long, String> entry : lists.entrySet()) {
             GroceryList list = new GroceryList();
             list.setId(entry.getKey());
@@ -249,10 +243,9 @@ public class WebGroceryAdapter implements GroceryAdapter {
      * @param items  a List of Strings containing the names of grocery items to set
      * @param listID a long representing the ID of the list to change
      * @param token  a string representing the token of the list's owner
-     * @return a boolean indicating whether the grocery items are appended to the list
      */
     @Override
-    public GroceryList setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException {
+    public void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -276,7 +269,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String responseBody = makeRequest(this.client, request, "Could not save to this list");
 
         try {
-            return new ObjectMapper()
+            new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .readValue(responseBody, GroceryList.class);
         } catch (JsonProcessingException e) {
@@ -292,7 +285,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
      *
      * @param listID a long representing the ID of the grocery list to delete
      * @param token  a string representing the token of the grocery list's owner
-     * @return a Response to the grocery list deletion operation
      */
     @Override
     public void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException {
@@ -314,8 +306,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
         makeRequest(this.client, request, "Could not delete list");
     }
 
+    /**
+     * Shares the List belonging to id to user represented by username.
+     * <p>
+     * The id and token are sent to the server to share the list corresponding to listID.
+     *
+     * @param id       a long representing the ID of the grocery list to share
+     * @param username The username of the User the list is being shared with
+     * @param token    a string representing the token of the grocery list's owner
+     */
     @Override
-    public GroceryList shareList(long id, String username, String token) throws InvalidParamException, ServerException {
+    public void shareList(long id, String username, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -335,7 +336,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String responseBody = makeRequest(this.client, request, "Lists can only be shared with friends");
 
         try {
-            return new ObjectMapper()
+            new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .readValue(responseBody, GroceryList.class);
         } catch (JsonProcessingException e) {
@@ -343,8 +344,17 @@ public class WebGroceryAdapter implements GroceryAdapter {
         }
     }
 
+    /**
+     * Unshares the List belonging to id to user represented by username.
+     * <p>
+     * The id and token are sent to the server to unshare the list corresponding to listID.
+     *
+     * @param id       a long representing the ID of the grocery list to share
+     * @param username The username of the User the list is being shared with
+     * @param token    a string representing the token of the grocery list's owner
+     */
     @Override
-    public GroceryList unshareList(long id, String username, String token) throws InvalidParamException, ServerException {
+    public void unshareList(long id, String username, String token) throws InvalidParamException, ServerException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(STATIC_IP)
@@ -364,7 +374,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
         String responseBody = makeRequest(this.client, request);
 
         try {
-            return new ObjectMapper()
+            new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .readValue(responseBody, GroceryList.class);
         } catch (JsonProcessingException e) {

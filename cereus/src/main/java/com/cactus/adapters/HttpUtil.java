@@ -9,19 +9,9 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpUtil {
-
-    public final static int HTTP_OK = 200;
-    public final static int HTTP_NO_CONTENT = 204;
-
-    public static boolean is2xx(int code) {
-        return 200 <= code && code < 300;
-    }
-
-    public static boolean is3xx(int code) {
-        return 300 <= code && code < 400;
-    }
 
     public static boolean is4xx(int code) {
         return 400 <= code && code < 500;
@@ -47,7 +37,7 @@ public class HttpUtil {
 
         if (is5xx(response.code())) {
             try {
-                throw new ServerException(response + "\n" + response.body().string());
+                throw new ServerException(response + "\n" + Objects.requireNonNull(response.body()).string());
             } catch (IOException e) {
                 // doubly bad
                 throw new InternalException(e);
@@ -55,9 +45,9 @@ public class HttpUtil {
         }
 
         if (is4xx(response.code())) {
-            String body = "";
+            String body;
             try {
-                body = response.body().string();
+                body = Objects.requireNonNull(response.body()).string();
             } catch (IOException e) {
                 // doubly bad
                 throw new InternalException(e);
@@ -72,7 +62,7 @@ public class HttpUtil {
         }
 
         try {
-            return response.body().string();
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             throw new InternalException(e);
         }

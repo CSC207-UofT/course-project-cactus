@@ -41,7 +41,6 @@ public interface AuthAdapter {
      * Returns whether the User object with the corresponding token is successfully logged out of the application.
      *
      * @param token a String containing a token unique to every User, stored in the User class
-     * @return whether the User corresponding to the token is logged out or not
      * @see User
      */
     void logout(String token) throws InvalidParamException, ServerException;

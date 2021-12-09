@@ -59,9 +59,8 @@ public interface GroceryAdapter {
      * @param items  a List of Strings containing the names of grocery items to set
      * @param listID a long representing the ID of the list to change
      * @param token  a string representing the token of the list's owner
-     * @return a boolean indicating whether the grocery items are appended to the list
      */
-    GroceryList setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
+    void setGroceryItems(List<String> items, long listID, String token) throws InvalidParamException, ServerException;
 
     /**
      * Returns whether the GroceryList corresponding to the listID is deleted.
@@ -69,11 +68,26 @@ public interface GroceryAdapter {
      *
      * @param listID a long representing the ID of the grocery list to delete
      * @param token  a string representing the token of the grocery list's owner
-     * @return a Response to the grocery list deletion operation
      */
     void deleteGroceryList(long listID, String token) throws InvalidParamException, ServerException;
 
-    GroceryList shareList(long id, String username, String token) throws InvalidParamException, ServerException;
+    /**
+     * Shares the List belonging to id to user represented by username.
+     * <p>
+     *
+     * @param id       a long representing the ID of the grocery list to share
+     * @param username The username of the User the list is being shared with
+     * @param token    a string representing the token of the grocery list's owner
+     */
+    void shareList(long id, String username, String token) throws InvalidParamException, ServerException;
 
-    GroceryList unshareList(long id, String username, String token) throws InvalidParamException, ServerException;
+    /**
+     * Unshares the List belonging to id to user represented by username.
+     * <p>
+     *
+     * @param id       a long representing the ID of the grocery list to share
+     * @param username The username of the User the list is being shared with
+     * @param token    a string representing the token of the grocery list's owner
+     */
+    void unshareList(long id, String username, String token) throws InvalidParamException, ServerException;
 }
