@@ -29,17 +29,17 @@ public class GroceryService {
     /**
      * Repository interface for user tables
      */
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     /**
      * Repository interface for grocery list tables
      */
-    private final GroceryListRepository groceryListRepository;
+    private GroceryListRepository groceryListRepository;
 
     /**
      * Repository interface for grocery item tables
      */
-    private final GroceryItemRepository groceryItemRepository;
+    private GroceryItemRepository groceryItemRepository;
 
     /**
      * Constructs a GroceryService, injecting all requires dependencies.

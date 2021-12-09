@@ -27,17 +27,17 @@ public class UserService {
     /**
      * Repository interface for user tables
      */
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     /**
      * Repository interface for role tables
      */
-    private final RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     /**
      * Bean that handles password hashing
      */
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Constructs a UserService, injecting all requires dependencies.
