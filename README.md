@@ -6,9 +6,9 @@ Grocery management application that currently provides the following functionali
 This project contains the Cereus Android application, and the Saguaro server.
 
 ## System Requirements
-Java 11 or later
+Java 11 (Amazon Coretto 11 recommended)
 
-Android 11 (API Level 30)
+Android 11 (API Level 30) SDK
 
 ## Setup
 
@@ -48,3 +48,7 @@ If Intellij was unable to create the correct run configurations, open the run co
 - Create a new "Android App" run configuration
 - Set "Module" to `course-project-cactus.cereus`
 - Apply changes and exit
+
+## Documentation
+
+Javadoc for Saguaro can be found at `javadoc/index.html`, as well as obviously in the codebase. Documentation for Cereus exists in the codebase only.
