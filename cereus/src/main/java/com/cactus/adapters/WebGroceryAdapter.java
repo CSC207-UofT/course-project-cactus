@@ -266,15 +266,8 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .put(requestBody)
                 .build();
 
-        String responseBody = makeRequest(this.client, request, "Could not save to this list");
+        makeRequest(this.client, request, "Could not save to this list");
 
-        try {
-            new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .readValue(responseBody, GroceryList.class);
-        } catch (JsonProcessingException e) {
-            throw new InternalException(e);
-        }
     }
 
     /**
@@ -333,15 +326,7 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .post(RequestBody.create(new byte[0], null))
                 .build();
 
-        String responseBody = makeRequest(this.client, request, "Lists can only be shared with friends");
-
-        try {
-            new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .readValue(responseBody, GroceryList.class);
-        } catch (JsonProcessingException e) {
-            throw new InternalException(e);
-        }
+        makeRequest(this.client, request, "Lists can only be shared with friends");
     }
 
     /**
@@ -371,14 +356,6 @@ public class WebGroceryAdapter implements GroceryAdapter {
                 .delete()
                 .build();
 
-        String responseBody = makeRequest(this.client, request);
-
-        try {
-            new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .readValue(responseBody, GroceryList.class);
-        } catch (JsonProcessingException e) {
-            throw new InternalException(e);
-        }
+        makeRequest(this.client, request);
     }
 }
